@@ -21,6 +21,7 @@ namespace RepositoryCleaner.Models
 
             var directoryInfo = new DirectoryInfo(directory);
 
+            IsIncluded = true;
             Name = directoryInfo.Name;
             Directory = directoryInfo.FullName;
             Cleaners = new List<ICleaner>();
@@ -30,6 +31,8 @@ namespace RepositoryCleaner.Models
                 Cleaners.AddRange(cleaners);
             }
         }
+
+        public bool IsIncluded { get; set; }
 
         public string Name { get; set; }
 

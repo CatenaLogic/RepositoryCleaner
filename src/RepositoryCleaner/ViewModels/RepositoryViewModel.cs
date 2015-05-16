@@ -30,6 +30,7 @@ namespace RepositoryCleaner.ViewModels
         [Model(SupportIEditableObject = false)]
         [Expose("Name")]
         [Expose("Directory")]
+        [Expose("IsIncluded")]
         public Repository Repository { get; private set; }
 
         public long CleanableSpace { get; private set; }

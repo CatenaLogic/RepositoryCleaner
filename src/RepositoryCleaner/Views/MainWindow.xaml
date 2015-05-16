@@ -7,13 +7,13 @@
               xmlns:views="clr-namespace:RepositoryCleaner.Views"
               xmlns:orc="http://www.wildgums.net.au/orc"
               xmlns:logging="clr-namespace:RepositoryCleaner.Logging"
-              mc:Ignorable="d">
+              mc:Ignorable="d" Width="600">
     
     <catel:StackGrid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -24,14 +24,16 @@
         
         <Label>
             <TextBlock TextWrapping="Wrap">
-                [description here]
+                This tool can help you clean up space when you have a lot of repositories. Select the repositories root below
+                and click the 'Analyze' button to check how much space can be cleaned up.
+                <LineBreak /><LineBreak />
+                Once the repositories have been analyzed, you can use the 'Clean up' button to actually clean up the repositories. 
+                To exclude repositories from the process, use the checkboxes to exclude them.
             </TextBlock>
         </Label>
         
         <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
-        
-        <!-- ListBox with checkboxes -->
-        
+
         <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False"
                       Visibility="{Binding Repositories, Converter={catel:ReferenceToCollapsingVisibilityConverter}, ConverterParameter=False}">
             <ItemsControl ItemsSource="{Binding Repositories}" Focusable="False">

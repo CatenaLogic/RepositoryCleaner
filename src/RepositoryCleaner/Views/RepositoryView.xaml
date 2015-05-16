@@ -20,9 +20,9 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!--<Image Grid.RowSpan="2" Grid.Column="0" Source="{Binding Icon}" HorizontalAlignment="Center" 
-               VerticalAlignment="Center" Width="64" Height="64" />-->
-
+        <CheckBox Grid.RowSpan="3" Grid.Column="0" IsChecked="{Binding IsIncluded}"
+                  Visibility="{Binding Name, Converter={catel:EmptyStringToHidingVisibilityConverter}}"/>
+        
         <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" FontSize="16" FontWeight="Bold" />
         <Label Grid.Row="1" Grid.Column="1" Content="{Binding Directory}" />
         <Label Grid.Row="2" Grid.Column="1" Content="{Binding CleanableSpace, Converter={converters:SpaceToTextConverter}}" />
