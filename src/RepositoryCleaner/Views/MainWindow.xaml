@@ -4,10 +4,57 @@
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:catel="http://catel.codeplex.com"
+              xmlns:views="clr-namespace:RepositoryCleaner.Views"
+              xmlns:orc="http://www.wildgums.net.au/orc"
+              xmlns:logging="clr-namespace:RepositoryCleaner.Logging"
               mc:Ignorable="d">
     
-    <Grid>
+    <catel:StackGrid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         
-    </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <Label>
+            <TextBlock TextWrapping="Wrap">
+                [description here]
+            </TextBlock>
+        </Label>
+        
+        <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
+        
+        <!-- ListBox with checkboxes -->
+        
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False"
+                      Visibility="{Binding Repositories, Converter={catel:ReferenceToCollapsingVisibilityConverter}, ConverterParameter=False}">
+            <ItemsControl ItemsSource="{Binding Repositories}" Focusable="False">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:RepositoryView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
+            <RichTextBox x:Name="logTextBox" Margin="0,6,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        </Expander>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <catel:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                               GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                               Width="24" Height="24" Margin="4,8,4,4" />
+
+            <Button Content="Analyze" Command="{Binding Analyze}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
+            <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
+        </StackPanel>
+    </catel:StackGrid>
     
 </catel:Window>
