@@ -7,12 +7,24 @@
 
 namespace RepositoryCleaner.Models
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
 
     public static class RepositoryExtensions
     {
+        private const int MaxRunningthreads = 5;
+
+        public static async Task CalculateCleanableSpaceAsyncAndMultithreaded(this List<Repository> repositories)
+        {
+            var itemsPerBatch = repositories.Count / MaxRunningthreads;
+
+            await Task.Factory.StartNew(() => ParallelHelper.ExecuteInParallel(repositories, 
+                repository => repository.CalculateCleanableSpace(), itemsPerBatch));
+        }
+
         public static async Task<long> CalculateCleanableSpaceAsync(this Repository repository)
         {
             Argument.IsNotNull(() => repository);

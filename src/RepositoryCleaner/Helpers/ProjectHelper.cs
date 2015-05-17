@@ -4,6 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable 0168
+// ReSharper disable UnusedVariable
+//#define LOG_WARNINGS
 
 namespace RepositoryCleaner
 {
@@ -91,7 +94,9 @@ namespace RepositoryCleaner
             }
             catch (Exception ex)
             {
+#if LOG_WARNINGS
                 Log.Warning(ex, "Failed to retrieve the configurations and platforms for solution '{0}'", solutionFile);
+#endif
             }
 
             return items;
@@ -146,7 +151,9 @@ namespace RepositoryCleaner
             }
             catch (Exception ex)
             {
+#if LOG_WARNINGS
                 Log.Warning(ex, "Failed to retrieve the projects for solution '{0}'", solutionFile);
+#endif
             }
 
             return projects;
@@ -180,7 +187,9 @@ namespace RepositoryCleaner
                 }
                 catch (Exception ex)
                 {
+#if LOG_WARNINGS
                     Log.Warning("Failed to load project '{0}': {1}", projectFile, ex.Message);
+#endif
                     return null;
                 }
             });

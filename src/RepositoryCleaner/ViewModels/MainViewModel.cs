@@ -151,7 +151,7 @@ namespace RepositoryCleaner.ViewModels
 
             using (CreateIsBusyScope())
             {
-                var repositories = await _repositoryService.FindRepositoriesAsync(repositoriesRoot);
+                var repositories = (await _repositoryService.FindRepositoriesAsync(repositoriesRoot)).ToList();
                 if (repositories.Count() > 0)
                 {
                     using (Repositories.SuspendChangeNotifications())
@@ -165,9 +165,11 @@ namespace RepositoryCleaner.ViewModels
                 }
 
                 _configurationService.SetValue(Settings.Application.LastRepositoriesRoot, repositoriesRoot);
-            }
 
-            FilterRepositories();
+                FilterRepositories();
+
+                await repositories.CalculateCleanableSpaceAsyncAndMultithreaded();
+            }
         }
 
         private async Task Clean(bool isFakeClean)
@@ -181,7 +183,10 @@ namespace RepositoryCleaner.ViewModels
                 ViewModelCommandManager.InvalidateCommands(true);
             }
 
-            Analyze.Execute(null);
+            if (!isFakeClean)
+            {
+                Analyze.Execute(null);
+            }
         }
 
         private void FilterRepositories()

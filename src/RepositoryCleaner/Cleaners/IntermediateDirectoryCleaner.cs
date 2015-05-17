@@ -7,6 +7,7 @@
 
 namespace RepositoryCleaner.Cleaners
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using Catel.Logging;
@@ -28,12 +29,18 @@ namespace RepositoryCleaner.Cleaners
             var size = 0L;
 
             var projects = GetAllProjects(repository);
+            var handledDirectories = new HashSet<string>();
 
             foreach (var project in projects)
             {
                 var intermediateDirectory = project.GetIntermediateDirectory();
 
-                size += GetDirectorySize(intermediateDirectory);
+                if (!handledDirectories.Contains(intermediateDirectory))
+                {
+                    handledDirectories.Add(intermediateDirectory);
+
+                    size += GetDirectorySize(intermediateDirectory);
+                }
             }
 
             return size;

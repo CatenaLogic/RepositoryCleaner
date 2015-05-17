@@ -27,22 +27,15 @@ namespace RepositoryCleaner.ViewModels
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly FastObservableCollection<Repository> _repositories;
-        private readonly ICleanerService _cleanerService;
-        private readonly IDispatcherService _dispatcherService;
         private readonly ChangeNotificationWrapper _changeNotificationWrapper;
 
         private bool _hasPendingUpdates;
 
-        public SummaryViewModel(FastObservableCollection<Repository> repositories, ICleanerService cleanerService,
-            IDispatcherService dispatcherService)
+        public SummaryViewModel(FastObservableCollection<Repository> repositories)
         {
             Argument.IsNotNull(() => repositories);
-            Argument.IsNotNull(() => cleanerService);
-            Argument.IsNotNull(() => dispatcherService);
 
             _repositories = repositories;
-            _cleanerService = cleanerService;
-            _dispatcherService = dispatcherService;
 
             _changeNotificationWrapper = new ChangeNotificationWrapper(repositories);
         }
@@ -104,7 +97,10 @@ namespace RepositoryCleaner.ViewModels
 
                 foreach (var repository in repositories)
                 {
-                    TotalSize += await repository.CalculateCleanableSpaceAsync();
+                    if (repository.CleanableSize.HasValue)
+                    {
+                        TotalSize += repository.CleanableSize.Value;
+                    }
                 }
             }
 

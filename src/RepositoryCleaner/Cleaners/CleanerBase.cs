@@ -94,6 +94,11 @@ namespace RepositoryCleaner.Cleaners
 
         protected void DeleteDirectory(string directory, bool isFakeClean)
         {
+            if (!Directory.Exists(directory))
+            {
+                return;
+            }
+
             Log.Debug("Deleting directory '{0}'", directory);
 
             if (!isFakeClean)
