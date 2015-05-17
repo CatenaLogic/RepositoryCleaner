@@ -7,6 +7,7 @@
 
 namespace RepositoryCleaner.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -51,7 +52,7 @@ namespace RepositoryCleaner.Services
             return await Task.Factory.StartNew(() => cleanerService.CanClean(repository));
         }
 
-        public static async Task CleanAsync(this ICleanerService cleanerService, IEnumerable<Repository> repositories, bool isFakeClean)
+        public static async Task CleanAsync(this ICleanerService cleanerService, IEnumerable<Repository> repositories, bool isFakeClean, Action completedCallback = null)
         {
             Argument.IsNotNull(() => cleanerService);
 
@@ -69,6 +70,11 @@ namespace RepositoryCleaner.Services
                 await Task.Factory.StartNew(() => cleanerService.Clean(repository, isFakeClean));
 
                 cleanedUpRepositories.Add(repository);
+
+                if (completedCallback != null)
+                {
+                    completedCallback();
+                }
             }
 
             Log.Info("Cleaned up '{0}' repositories", cleanedUpRepositories.Count);

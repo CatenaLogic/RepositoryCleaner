@@ -73,6 +73,8 @@ namespace RepositoryCleaner.ViewModels
         public FastObservableCollection<Repository> FilteredRepositories { get; private set; }
 
         public bool IsBusy { get; private set; }
+
+        public int Progress { get; private set; }
         #endregion
 
         #region Commands
@@ -149,10 +151,12 @@ namespace RepositoryCleaner.ViewModels
                 return;
             }
 
+            Progress = 0;
+
             using (CreateIsBusyScope())
             {
                 var repositories = (await _repositoryService.FindRepositoriesAsync(repositoriesRoot)).ToList();
-                if (repositories.Count() > 0)
+                if (repositories.Count > 0)
                 {
                     using (Repositories.SuspendChangeNotifications())
                     {
@@ -168,20 +172,45 @@ namespace RepositoryCleaner.ViewModels
 
                 FilterRepositories();
 
-                await repositories.CalculateCleanableSpaceAsyncAndMultithreaded();
+                var totalRepositories = repositories.Count;
+                var completedRepositories = 0;
+
+                await repositories.CalculateCleanableSpaceAsyncAndMultithreaded(() => _dispatcherService.BeginInvoke(() =>
+                {
+                    completedRepositories++;
+
+                    var percentage = ((double) completedRepositories / totalRepositories) * 100;
+                    Progress = (int)percentage;
+                }));
             }
+
+            Progress = 100;
         }
 
         private async Task Clean(bool isFakeClean)
         {
+            Progress = 0;
+
             using (CreateIsBusyScope())
             {
-                var repositories = Repositories.ToArray();
+                var repositories = Repositories.ToList();
 
-                await _cleanerService.CleanAsync(repositories, isFakeClean);
+                var totalRepositories = repositories.Count;
+                var completedRepositories = 0;
+
+                await _cleanerService.CleanAsync(repositories, isFakeClean,
+                    () => _dispatcherService.BeginInvoke(() =>
+                    {
+                        completedRepositories++;
+
+                        var percentage = ((double)completedRepositories / totalRepositories) * 100;
+                        Progress = (int)percentage;
+                    }));
 
                 ViewModelCommandManager.InvalidateCommands(true);
             }
+
+            Progress = 100;
 
             if (!isFakeClean)
             {

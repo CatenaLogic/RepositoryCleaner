@@ -17,12 +17,20 @@ namespace RepositoryCleaner.Models
     {
         private const int MaxRunningthreads = 5;
 
-        public static async Task CalculateCleanableSpaceAsyncAndMultithreaded(this List<Repository> repositories)
+        public static async Task CalculateCleanableSpaceAsyncAndMultithreaded(this List<Repository> repositories, Action completedCallback = null)
         {
             var itemsPerBatch = repositories.Count / MaxRunningthreads;
 
-            await Task.Factory.StartNew(() => ParallelHelper.ExecuteInParallel(repositories, 
-                repository => repository.CalculateCleanableSpace(), itemsPerBatch));
+            await Task.Factory.StartNew(() => ParallelHelper.ExecuteInParallel(repositories,
+                repository =>
+                {
+                    repository.CalculateCleanableSpace();
+
+                    if (completedCallback != null)
+                    {
+                        completedCallback();
+                    }
+                }, itemsPerBatch));
         }
 
         public static async Task<long> CalculateCleanableSpaceAsync(this Repository repository)

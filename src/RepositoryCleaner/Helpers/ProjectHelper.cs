@@ -167,10 +167,10 @@ namespace RepositoryCleaner
 
         public static Project LoadProject(string projectFile, string configurationName, string platformName, string solutionDirectory)
         {
-            Argument.IsNotNullOrWhitespace(() => projectFile);
-            Argument.IsNotNullOrWhitespace(() => configurationName);
-            Argument.IsNotNullOrWhitespace(() => platformName);
-            Argument.IsNotNullOrWhitespace(() => solutionDirectory);
+            Argument.IsNotNull(() => projectFile);
+            Argument.IsNotNull(() => configurationName);
+            Argument.IsNotNull(() => platformName);
+            Argument.IsNotNull(() => solutionDirectory);
 
             var key = string.Format("{0}_{1}_{2}", projectFile, configurationName, platformName);
 

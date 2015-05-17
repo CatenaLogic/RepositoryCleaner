@@ -19,6 +19,7 @@
             <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -97,6 +98,9 @@
         <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
             <RichTextBox x:Name="logTextBox" Margin="0,6,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         </Expander>
+
+        <ProgressBar Height="5" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                     Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" Margin="0,4,0,4"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <catel:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
