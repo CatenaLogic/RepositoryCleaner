@@ -54,8 +54,11 @@ namespace RepositoryCleaner
             var configuration = project.GetPropertyValue("Configuration");
             if (!string.IsNullOrWhiteSpace(configuration))
             {
-                projectIntermediateDirectory = string.Format("obj\\{0}", configuration);
-                return projectIntermediateDirectory;
+                // Note: assume obj, we want to clean that anyway
+                return "obj";
+
+                //projectIntermediateDirectory = string.Format("obj\\{0}", configuration);
+                //return projectIntermediateDirectory;
             }
 
             return null;
@@ -99,8 +102,11 @@ namespace RepositoryCleaner
             var configuration = project.GetPropertyValue("Configuration");
             if (!string.IsNullOrWhiteSpace(configuration))
             {
-                projectOutputDirectory = string.Format("bin\\{0}", configuration);
-                return projectOutputDirectory;
+                // Note: assume bin, we want to clean that anyway
+                return "bin";
+
+                //projectOutputDirectory = string.Format("bin\\{0}", configuration);
+                //return projectOutputDirectory;
             }
 
             return null;

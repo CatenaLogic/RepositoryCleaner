@@ -103,7 +103,14 @@ namespace RepositoryCleaner.Cleaners
 
             if (!isFakeClean)
             {
-                Directory.Delete(directory);
+                try
+                {
+                    Directory.Delete(directory, true);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to delete directory '{0}'", directory);
+                }
             }
         }
 
