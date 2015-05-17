@@ -11,11 +11,16 @@ namespace RepositoryCleaner.Converters
     using Catel.MVVM.Converters;
     using Humanizer;
 
-    public class SpaceToTextConverter : ValueConverterBase<long>
+    public class SpaceToTextConverter : ValueConverterBase<long?>
     {
-        protected override object Convert(long value, Type targetType, object parameter)
+        protected override object Convert(long? value, Type targetType, object parameter)
         {
-            return value.Bytes().Humanize("#.#");
+            if (!value.HasValue)
+            {
+                return string.Empty;
+            }
+
+            return value.Value.Bytes().Humanize("#.#");
         }
     }
 }

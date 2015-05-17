@@ -24,7 +24,12 @@ namespace RepositoryCleaner.Models
         {
             Argument.IsNotNull(() => repository);
 
-            return repository.Cleaners.Sum(x => x.CalculateCleanableSpace(repository));
+            if (!repository.CleanableSize.HasValue)
+            {
+                repository.CleanableSize = repository.Cleaners.Sum(x => x.CalculateCleanableSpace(repository));
+            }
+
+            return repository.CleanableSize ?? 0L;
         }
     }
 }

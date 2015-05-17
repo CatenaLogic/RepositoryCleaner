@@ -12,8 +12,9 @@ namespace RepositoryCleaner.Models
     using Cleaners;
     using System.Linq;
     using Catel;
+    using Catel.Data;
 
-    public class Repository
+    public class Repository : ModelBase
     {
         public Repository(string directory, IEnumerable<ICleaner> cleaners)
         {
@@ -39,6 +40,8 @@ namespace RepositoryCleaner.Models
         public string Directory { get; set; }
 
         public List<ICleaner> Cleaners { get; private set; }
+
+        public long? CleanableSize { get; set; }
 
         /// <summary>
         /// Returns a string that represents the current object.

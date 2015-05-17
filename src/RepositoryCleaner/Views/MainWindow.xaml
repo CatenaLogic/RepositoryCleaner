@@ -8,10 +8,12 @@
               xmlns:orc="http://www.wildgums.net.au/orc"
               xmlns:logging="clr-namespace:RepositoryCleaner.Logging"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+              xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
               mc:Ignorable="d" Width="600">
-    
+
     <catel:StackGrid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -19,11 +21,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <Label>
             <TextBlock TextWrapping="Wrap">
                 This tool can help you clean up space when you have a lot of repositories. Select the repositories root below
@@ -33,16 +35,49 @@
                 To exclude repositories from the process, use the checkboxes to exclude them.
             </TextBlock>
         </Label>
-        
+
         <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
 
-        <TextBox Text="{Binding RepositoryFilter}">
+        <views:SummaryView DataContext="{Binding Repositories}" />
+
+        <TextBox Text="{Binding RepositoryFilter}" Margin="0,4,0,4">
             <i:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged />
             </i:Interaction.Behaviors>
         </TextBox>
-        
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False"
+
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <Style TargetType="TextBlock" x:Key="MultiLineColumnViewStyle">
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                </Style>
+
+                <Style TargetType="TextBox" x:Key="MultiLineColumnEditStyle">
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="AcceptsReturn" Value="True" />
+                </Style>
+
+                <DataTemplate x:Key="IsIncludedCheckBoxDataTemplate">
+                    <CheckBox IsChecked="{Binding IsIncluded}" Unchecked="OnCheckBoxCheckedChanged" Checked="OnCheckBoxCheckedChanged"
+                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </DataTemplate>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Include" CellTemplate="{StaticResource IsIncludedCheckBoxDataTemplate}" />
+                <DataGridTemplateColumn Header="Name" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Directory}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding CleanableSize, Converter={converters:SpaceToTextConverter}}" Header="Cleanable space" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False"
                       Visibility="{Binding FilteredRepositories, Converter={catel:ReferenceToCollapsingVisibilityConverter}, ConverterParameter=False}">
             <ItemsControl ItemsSource="{Binding FilteredRepositories}" Focusable="False">
                 <ItemsControl.ItemTemplate>
@@ -51,12 +86,12 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
+        </ScrollViewer>-->
 
         <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
             <RichTextBox x:Name="logTextBox" Margin="0,6,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         </Expander>
-        
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <catel:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
                                GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
@@ -66,5 +101,5 @@
             <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
         </StackPanel>
     </catel:StackGrid>
-    
+
 </catel:Window>

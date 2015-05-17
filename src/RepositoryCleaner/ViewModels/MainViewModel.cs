@@ -153,7 +153,10 @@ namespace RepositoryCleaner.ViewModels
                 var repositories = await _repositoryService.FindRepositoriesAsync(repositoriesRoot);
                 if (repositories.Count() > 0)
                 {
-                    Repositories.AddRange(repositories);
+                    using (Repositories.SuspendChangeNotifications())
+                    {
+                        Repositories.AddRange(repositories);
+                    }
                 }
                 else
                 {
