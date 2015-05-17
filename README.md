@@ -24,7 +24,7 @@ To check out the details of a repository (to see what takes the most space), hov
 
 There are 2 ways to clean up a repository. The fake clean up allows one to test / check what will go on during a clean. This mode will not actually delete any files.
 
-# How to get RepositoryCleaner
+# How to get
 
 There are 2 general ways to get the software:
 
