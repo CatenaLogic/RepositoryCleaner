@@ -1,5 +1,7 @@
 # Repository Cleaner
 
+[![Join the chat at https://gitter.im/CatenaLogic/RepositoryCleaner](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/CatenaLogic/RepositoryCleaner?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![AzureStorageSync](design/logo/logo_64.png)
 
 Tool to easily clean repositories on a large scale. When you are developing on a lot of repositories, your computer might run out of disk space very easily. One can solve this by either providing more disk space (for example, expanding a virtual disk), but after expanding a disk twice with 10 GB, this tool was created.
