@@ -20,7 +20,7 @@ namespace RepositoryCleaner.Services
         #region Methods
         IEnumerable<ICleaner> GetAvailableCleaners();
 
-        void Clean(Repository repository);
+        void Clean(Repository repository, bool isFakeClean);
         #endregion
 
         bool CanClean(Repository repository);

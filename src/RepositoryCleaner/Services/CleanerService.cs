@@ -59,7 +59,7 @@ namespace RepositoryCleaner.Services
         }
 
         [Time]
-        public void Clean(Repository repository)
+        public void Clean(Repository repository, bool isFakeClean)
         {
             RepositoryCleaning.SafeInvoke(this, new RepositoryEventArgs(repository));
 
@@ -73,7 +73,7 @@ namespace RepositoryCleaner.Services
                 {
                     Log.Debug("Cleaning repository '{0}' using cleaner '{1}'", repository, cleaner);
 
-                    cleaner.Clean(repository);
+                    cleaner.Clean(repository, isFakeClean);
 
                     Log.Debug("Cleaned repository '{0}' using cleaner '{1}'", repository, cleaner);
                 }

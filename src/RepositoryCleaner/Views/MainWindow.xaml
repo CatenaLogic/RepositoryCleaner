@@ -77,17 +77,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!--<ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False"
-                      Visibility="{Binding FilteredRepositories, Converter={catel:ReferenceToCollapsingVisibilityConverter}, ConverterParameter=False}">
-            <ItemsControl ItemsSource="{Binding FilteredRepositories}" Focusable="False">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <views:RepositoryView />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>-->
-
         <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
             <RichTextBox x:Name="logTextBox" Margin="0,6,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         </Expander>
@@ -98,7 +87,10 @@
                                Width="24" Height="24" Margin="4,8,4,4" />
 
             <Button Content="Analyze" Command="{Binding Analyze}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
-            <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
+            <Button Content="Fake clean up" Command="{Binding FakeCleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
+                    ToolTip="Run the whole clean up in fake mode -> not actually cleaning up anything" />
+            <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" 
+                    ToolTip="Run the whole clean up in real mode -> actually cleaning up everything"/>
         </StackPanel>
     </catel:StackGrid>
 

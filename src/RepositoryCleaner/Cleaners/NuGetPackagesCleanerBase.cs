@@ -61,7 +61,7 @@ namespace RepositoryCleaner.Cleaners
             return space;
         }
 
-        protected override void CleanRepository(Repository repository)
+        protected override void CleanRepository(Repository repository, bool isFakeClean)
         {
             foreach (var directory in GetNuGetPackageDirectories(repository))
             {
@@ -69,7 +69,10 @@ namespace RepositoryCleaner.Cleaners
                 {
                     Log.Debug("Deleting directory '{0}'", directory);
 
-                    //Directory.Delete(directory);
+                    if (!isFakeClean)
+                    {
+                        Directory.Delete(directory);
+                    }
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace RepositoryCleaner.Cleaners
 
         long CalculateCleanableSpace(Repository repository);
 
-        void Clean(Repository repository);
+        void Clean(Repository repository, bool isFakeClean);
         #endregion
     }
 }

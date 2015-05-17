@@ -67,7 +67,7 @@ namespace RepositoryCleaner.Cleaners
             return cleanableSpace;
         }
 
-        public void Clean(Repository repository)
+        public void Clean(Repository repository, bool isFakeClean)
         {
             Argument.IsNotNull(() => repository);
 
@@ -78,7 +78,7 @@ namespace RepositoryCleaner.Cleaners
 
             Log.Info("Cleaning up repository '{0}' using cleaner '{1}'", repository, GetType());
 
-            CleanRepository(repository);
+            CleanRepository(repository, isFakeClean);
 
             Log.Info("Cleaned up repository '{0}' using cleaner '{1}'", repository, GetType());
         }
@@ -94,6 +94,6 @@ namespace RepositoryCleaner.Cleaners
 
         protected abstract long CalculateCleanableSpaceForRepository(Repository repository);
 
-        protected abstract void CleanRepository(Repository repository);
+        protected abstract void CleanRepository(Repository repository, bool isFakeClean);
     }
 }

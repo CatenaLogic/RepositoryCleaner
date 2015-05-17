@@ -55,6 +55,7 @@ namespace RepositoryCleaner.ViewModels
             FilteredRepositories = new FastObservableCollection<Repository>();
 
             Analyze = new Command(OnAnalyzeExecute, OnAnalyzeCanExecute);
+            FakeCleanUp = new Command(OnFakeCleanUpExecute, OnCleanUpCanExecute);
             CleanUp = new Command(OnCleanUpExecute, OnCleanUpCanExecute);
 
             var entryAssembly = AssemblyHelper.GetEntryAssembly();
@@ -97,6 +98,13 @@ namespace RepositoryCleaner.ViewModels
             await FindRepositories();
         }
 
+        public Command FakeCleanUp { get; private set; }
+
+        private async void OnFakeCleanUpExecute()
+        {
+            await Clean(true);
+        }
+
         public Command CleanUp { get; private set; }
 
         private bool OnCleanUpCanExecute()
@@ -116,14 +124,7 @@ namespace RepositoryCleaner.ViewModels
 
         private async void OnCleanUpExecute()
         {
-            using (CreateIsBusyScope())
-            {
-                var repositories = Repositories.ToArray();
-
-                await _cleanerService.CleanAsync(repositories);
-
-                ViewModelCommandManager.InvalidateCommands(true);
-            }
+            await Clean(false);
         }
         #endregion
 
@@ -167,6 +168,20 @@ namespace RepositoryCleaner.ViewModels
             }
 
             FilterRepositories();
+        }
+
+        private async Task Clean(bool isFakeClean)
+        {
+            using (CreateIsBusyScope())
+            {
+                var repositories = Repositories.ToArray();
+
+                await _cleanerService.CleanAsync(repositories, isFakeClean);
+
+                ViewModelCommandManager.InvalidateCommands(true);
+            }
+
+            Analyze.Execute(null);
         }
 
         private void FilterRepositories()
