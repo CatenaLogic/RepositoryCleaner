@@ -99,6 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Cleaners\OutputDirectoryCleaner.cs" />
     <Compile Include="Cleaners\IntermediateDirectoryCleaner.cs" />
     <Compile Include="Cleaners\MsProjectsCleanerBase.cs" />
     <Compile Include="Cleaners\NuGetPackagesCleanerBase.cs" />
@@ -124,6 +125,10 @@
     <Compile Include="Views\SummaryView.xaml.cs">
       <DependentUpon>SummaryView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DirectoryPickerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

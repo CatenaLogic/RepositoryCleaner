@@ -7,8 +7,6 @@
 
 namespace RepositoryCleaner
 {
-    // TODO: add app-wide constants here
-
     public static class Settings
     {
         public static class Application

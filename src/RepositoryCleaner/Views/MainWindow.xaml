@@ -5,14 +5,13 @@
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:catel="http://catel.codeplex.com"
               xmlns:views="clr-namespace:RepositoryCleaner.Views"
-              xmlns:orc="http://www.wildgums.net.au/orc"
-              xmlns:logging="clr-namespace:RepositoryCleaner.Logging"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
               mc:Ignorable="d" Width="600">
 
     <catel:StackGrid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -34,6 +33,12 @@
                 Once the repositories have been analyzed, you can use the 'Clean up' button to actually clean up the repositories. 
                 To exclude repositories from the process, use the checkboxes to exclude them.
             </TextBlock>
+        </Label>
+
+        <Label Style="{StaticResource LabelInfoStyle}" Tag="Warning">
+            We have tested this software, but you are using this at your own risk. Make sure that all repositories have been committed 
+            and there are no local pending changes before trying to use this software. Don't blame us when you lose your data, you are 
+            responsible for your own backups.
         </Label>
 
         <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
