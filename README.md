@@ -24,6 +24,20 @@ To check out the details of a repository (to see what takes the most space), hov
 
 There are 2 ways to clean up a repository. The fake clean up allows one to test / check what will go on during a clean. This mode will not actually delete any files.
 
+# How to get RepositoryCleaner
+
+There are 2 general ways to get the software:
+
+## Get it from GitHub
+
+The releases will be available as separate executable download on the [releases tab](https://github.com/CatenaLogic/RepositoryCleaner/releases) of the project.
+
+## Get it via Chocolatey
+
+If you want to install the tool on your (build) computer, the package is available via <a href="https://chocolatey.org/" target="_blank">Chocolatey</a>. To install, use the following command:
+
+    choco install repositorycleaner
+
 #Icon
 
 Broom by Anna Weiss from The Noun Project
