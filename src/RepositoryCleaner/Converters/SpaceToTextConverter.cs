@@ -9,17 +9,13 @@ namespace RepositoryCleaner.Converters
 {
     using System;
     using Catel.MVVM.Converters;
+    using Humanizer;
 
     public class SpaceToTextConverter : ValueConverterBase<long>
     {
         protected override object Convert(long value, Type targetType, object parameter)
         {
-            if (value > 0)
-            {
-                value = value / 1024;
-            }
-
-            return string.Format("{0} Kb", value);
+            return value.Bytes().Humanize("#.#");
         }
     }
 }
