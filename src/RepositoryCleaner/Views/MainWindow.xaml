@@ -51,7 +51,8 @@
             </i:Interaction.Behaviors>
         </TextBox>
 
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False">
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False"
+                  EnableRowVirtualization="False">
             <DataGrid.Resources>
                 <Style TargetType="TextBlock" x:Key="MultiLineColumnViewStyle">
                     <Setter Property="TextWrapping" Value="Wrap" />
