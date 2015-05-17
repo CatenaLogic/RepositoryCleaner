@@ -89,6 +89,12 @@ namespace RepositoryCleaner
                         var platform = PropertyHelper.GetPropertyValue<string>(item, "PlatformName");
 
                         items.Add(new KeyValuePair<string, string>(configuration, platform));
+
+                        if (string.Equals("Any CPU", platform))
+                        {
+                            // Somehow there is a bug where Any CPU and AnyCPU are not treated the same, fix this
+                            items.Add(new KeyValuePair<string, string>(configuration, "AnyCPU"));
+                        }
                     }
                 }
             }

@@ -19,25 +19,6 @@ namespace RepositoryCleaner
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public static bool ShouldBeIgnored(this Project project, IEnumerable<string> projectsToIgnore)
-        {
-            Argument.IsNotNull(() => project);
-
-            var projectName = GetProjectName(project).ToLower();
-
-            foreach (var projectToIgnore in projectsToIgnore)
-            {
-                var lowerCaseProjectToIgnore = projectToIgnore.ToLower();
-
-                if (string.Equals(projectName, lowerCaseProjectToIgnore))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public static string GetProjectName(this Project project)
         {
             Argument.IsNotNull(() => project);
@@ -51,6 +32,11 @@ namespace RepositoryCleaner
             Argument.IsNotNull(() => project);
 
             var relativeIntermediateDirectory = GetRelativeIntermediateDirectory(project);
+            if (relativeIntermediateDirectory == null)
+            {
+                return null;
+            }
+
             var intermediateDirectory = Path.Combine(project.DirectoryPath, relativeIntermediateDirectory);
             return intermediateDirectory;
         }
@@ -60,7 +46,19 @@ namespace RepositoryCleaner
             Argument.IsNotNull(() => project);
 
             var projectIntermediateDirectory = project.GetPropertyValue("IntermediateOutputPath");
-            return projectIntermediateDirectory;
+            if (!string.IsNullOrWhiteSpace(projectIntermediateDirectory))
+            {
+                return projectIntermediateDirectory;
+            }
+
+            var configuration = project.GetPropertyValue("Configuration");
+            if (!string.IsNullOrWhiteSpace(configuration))
+            {
+                projectIntermediateDirectory = string.Format("obj\\{0}", configuration);
+                return projectIntermediateDirectory;
+            }
+
+            return null;
         }
 
         public static string GetTargetDirectory(this Project project)
@@ -71,6 +69,11 @@ namespace RepositoryCleaner
             if (string.IsNullOrWhiteSpace(targetDirectory))
             {
                 var relativeTargetDirectory = GetRelativeTargetDirectory(project);
+                if (string.IsNullOrWhiteSpace(relativeTargetDirectory))
+                {
+                    return null;
+                }
+
                 targetDirectory = Path.Combine(project.DirectoryPath, relativeTargetDirectory);
             }
 
@@ -82,12 +85,40 @@ namespace RepositoryCleaner
             Argument.IsNotNull(() => project);
 
             var projectOutputDirectory = project.GetPropertyValue("OutputPath");
-            if (string.IsNullOrWhiteSpace(projectOutputDirectory))
+            if (!string.IsNullOrWhiteSpace(projectOutputDirectory))
             {
-                projectOutputDirectory = project.GetPropertyValue("OutDir");
+                return projectOutputDirectory;
             }
 
-            return projectOutputDirectory;
+            projectOutputDirectory = project.GetPropertyValue("OutDir");
+            if (!string.IsNullOrWhiteSpace(projectOutputDirectory))
+            {
+                return projectOutputDirectory;
+            }
+
+            var configuration = project.GetPropertyValue("Configuration");
+            if (!string.IsNullOrWhiteSpace(configuration))
+            {
+                projectOutputDirectory = string.Format("bin\\{0}", configuration);
+                return projectOutputDirectory;
+            }
+
+            return null;
+        }
+
+        public static void DumpProperties(this Project project)
+        {
+            Log.Debug("");
+            Log.Debug("Properties for project '{0}'", project.FullPath);
+            Log.Debug("-----------------------------------------------------------");
+
+            foreach (var property in project.Properties)
+            {
+                Log.Debug("  {0} => {1} ({2})", property.Name, property.EvaluatedValue, property.UnevaluatedValue);
+            }
+
+            Log.Debug("");
+            Log.Debug("");
         }
     }
 }

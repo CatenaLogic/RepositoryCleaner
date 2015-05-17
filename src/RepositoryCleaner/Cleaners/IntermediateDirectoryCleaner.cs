@@ -33,14 +33,20 @@ namespace RepositoryCleaner.Cleaners
 
             foreach (var project in projects)
             {
-                var intermediateDirectory = project.GetIntermediateDirectory();
-
-                if (!handledDirectories.Contains(intermediateDirectory))
+                var directory = project.GetIntermediateDirectory();
+                if (string.IsNullOrWhiteSpace(directory))
                 {
-                    handledDirectories.Add(intermediateDirectory);
-
-                    size += GetDirectorySize(intermediateDirectory);
+                    continue;
                 }
+
+                if (handledDirectories.Contains(directory))
+                {
+                    continue;
+                }
+
+                handledDirectories.Add(directory);
+
+                size += GetDirectorySize(directory);
             }
 
             return size;
