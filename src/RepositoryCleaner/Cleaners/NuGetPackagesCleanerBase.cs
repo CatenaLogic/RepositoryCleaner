@@ -47,15 +47,7 @@ namespace RepositoryCleaner.Cleaners
 
             foreach (var directory in GetNuGetPackageDirectories(repository))
             {
-                try
-                {
-                    space += (from fileName in Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
-                              select new FileInfo(fileName)).Sum(x => x.Length);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to calculate the cleanable space for directory '{0}'", directory);
-                }
+                space += GetDirectorySize(directory);
             }
 
             return space;
@@ -67,12 +59,7 @@ namespace RepositoryCleaner.Cleaners
             {
                 if (IsCleanablePath(directory))
                 {
-                    Log.Debug("Deleting directory '{0}'", directory);
-
-                    if (!isFakeClean)
-                    {
-                        Directory.Delete(directory);
-                    }
+                    DeleteDirectory(directory, isFakeClean);
                 }
             }
         }

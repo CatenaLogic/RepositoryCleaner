@@ -65,6 +65,7 @@
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Include" CellTemplate="{StaticResource IsIncludedCheckBoxDataTemplate}" />
+
                 <DataGridTemplateColumn Header="Name" Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -73,7 +74,17 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding CleanableSize, Converter={converters:SpaceToTextConverter}}" Header="Cleanable space" />
+                <DataGridTemplateColumn Header="Cleanable size" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding CleanableSize, Converter={converters:SpaceToTextConverter}}">
+                                <TextBlock.ToolTip>
+                                    <views:SizeToolTipView />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -7,7 +7,9 @@
 
 namespace RepositoryCleaner.Cleaners
 {
+    using System;
     using System.IO;
+    using System.Linq;
     using Catel;
     using Catel.Logging;
     using Catel.Reflection;
@@ -88,6 +90,36 @@ namespace RepositoryCleaner.Cleaners
             Argument.IsNotNull(() => repository);
 
             return Path.Combine(repository.Directory, path);
+        }
+
+        protected void DeleteDirectory(string directory, bool isFakeClean)
+        {
+            Log.Debug("Deleting directory '{0}'", directory);
+
+            if (!isFakeClean)
+            {
+                Directory.Delete(directory);
+            }
+        }
+
+        protected long GetDirectorySize(string directory)
+        {
+            var size = 0L;
+
+            try
+            {
+                if (Directory.Exists(directory))
+                {
+                    size += (from fileName in Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                             select new FileInfo(fileName)).Sum(x => x.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to calculate the cleanable space for directory '{0}'", directory);
+            }
+
+            return size;
         }
 
         protected abstract bool CanCleanRepository(Repository repository);

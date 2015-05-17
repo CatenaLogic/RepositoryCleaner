@@ -1,18 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IRepositoryService.cs" company="CatenaLogic">
+// <copyright file="SizeToolTipView.xaml.cs" company="CatenaLogic">
 //   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace RepositoryCleaner.Services
+namespace RepositoryCleaner.Views
 {
-    using System.Collections.Generic;
-    using Models;
-
-    internal interface IRepositoryService
+    public partial class SizeToolTipView
     {
-        IEnumerable<Repository> FindRepositories(string repositoriesRoot);
-        bool IsRepository(string directory);
+        public SizeToolTipView()
+        {
+            InitializeComponent();
+        }
     }
 }

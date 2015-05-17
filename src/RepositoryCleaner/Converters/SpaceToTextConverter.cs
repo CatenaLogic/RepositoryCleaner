@@ -15,7 +15,7 @@ namespace RepositoryCleaner.Converters
     {
         protected override object Convert(long? value, Type targetType, object parameter)
         {
-            if (!value.HasValue)
+            if (!value.HasValue || value.Value == 0L)
             {
                 return string.Empty;
             }

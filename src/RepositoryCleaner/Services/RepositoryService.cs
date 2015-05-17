@@ -29,7 +29,7 @@ namespace RepositoryCleaner.Services
         }
 
         [Time]
-        public IEnumerable<Repository> FindRepositories(string repositoriesRoot)
+        public virtual IEnumerable<Repository> FindRepositories(string repositoriesRoot)
         {
             Argument.IsNotNullOrWhitespace(() => repositoriesRoot);
 
@@ -41,16 +41,51 @@ namespace RepositoryCleaner.Services
                 return Enumerable.Empty<Repository>();
             }
 
-            var repositories = (from directory in Directory.GetDirectories(repositoriesRoot)
-                                select new Repository(directory, _cleanerService.GetAvailableCleaners()));
+            var cleanableRepositories = new List<Repository>();
 
-            var cleanableRepositories = (from repository in repositories
-                                         where _cleanerService.CanClean(repository)
-                                         select repository).ToList();
+            foreach (var directory in Directory.GetDirectories(repositoriesRoot))
+            {
+                if (IsRepository(directory))
+                {
+                    var repository = new Repository(directory, _cleanerService.GetAvailableCleaners());
+                    cleanableRepositories.Add(repository);
+                }
+            }
 
             Log.Info("Found {0} repositories in root '{1}'", cleanableRepositories.Count, repositoriesRoot);
 
             return cleanableRepositories;
-        } 
+        }
+
+        public virtual bool IsRepository(string directory)
+        {
+            // We have several rules out of the box to determine if a directory is a repository
+
+            Log.Debug("Checking if a '{0}' is a repository", directory);
+
+            var gitDirectory = Path.Combine(directory, ".git");
+            if (Directory.Exists(gitDirectory))
+            {
+                Log.Debug("Directory '{0}' is a repository because it contains an .git directory in the root", directory);
+                return true;
+            }
+
+            var srcDirectory = Path.Combine(directory, "src");
+            if (Directory.Exists(srcDirectory))
+            {
+                Log.Debug("Directory '{0}' is a repository because it contains an src directory in the root", directory);
+                return true;
+            }
+
+            if (Directory.GetFiles(directory, "*.sln").Any())
+            {
+                Log.Debug("Directory '{0}' is a repository because it contains a .sln file in the root", directory);
+                return true;
+            }
+
+            Log.Debug("Directory '{0}' is not considered a repository", directory);
+
+            return false;
+        }
     }
 }

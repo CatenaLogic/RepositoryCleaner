@@ -70,6 +70,7 @@
       <HintPath>..\..\lib\MethodTimer.Fody.1.15.2.0\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\MethodTimer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Build" />
     <Reference Include="Orc.Controls">
       <HintPath>..\..\lib\Orc.Controls.1.0.0-unstable0237\lib\net45\Orc.Controls.dll</HintPath>
       <Private>True</Private>
@@ -98,9 +99,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Cleaners\IntermediateDirectoryCleaner.cs" />
+    <Compile Include="Cleaners\MsProjectsCleanerBase.cs" />
     <Compile Include="Cleaners\NuGetPackagesCleanerBase.cs" />
     <Compile Include="Cleaners\NuGetPackagesInLibFolderCleaner.cs" />
     <Compile Include="Converters\SpaceToTextConverter.cs" />
+    <Compile Include="Extensions\ProjectExtensions.cs" />
+    <Compile Include="Helpers\ProjectHelper.cs" />
     <Compile Include="Logging\LogViewerControlLogListener.cs" />
     <Compile Include="Logging\RichTextBoxLogListener.cs" />
     <Compile Include="Models\Extensions\RepositoryExtensions.cs" />
@@ -108,9 +113,13 @@
     <Compile Include="Services\Interfaces\IRepositoryService.cs" />
     <Compile Include="Services\RepositoryService.cs" />
     <Compile Include="ViewModels\RepositoryViewModel.cs" />
+    <Compile Include="ViewModels\SizeToolTipViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="Views\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SizeToolTipView.xaml.cs">
+      <DependentUpon>SizeToolTipView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SummaryView.xaml.cs">
       <DependentUpon>SummaryView.xaml</DependentUpon>
@@ -159,6 +168,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SizeToolTipView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -174,9 +187,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Behaviors\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
