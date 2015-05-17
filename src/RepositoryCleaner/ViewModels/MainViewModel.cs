@@ -51,7 +51,8 @@ namespace RepositoryCleaner.ViewModels
             _configurationService = configurationService;
             _repositoryService = repositoryService;
 
-            Repositories = new ObservableCollection<Repository>();
+            Repositories = new FastObservableCollection<Repository>();
+            FilteredRepositories = new FastObservableCollection<Repository>();
 
             Analyze = new Command(OnAnalyzeExecute, OnAnalyzeCanExecute);
             CleanUp = new Command(OnCleanUpExecute, OnCleanUpCanExecute);
@@ -64,7 +65,11 @@ namespace RepositoryCleaner.ViewModels
         #region Properties
         public string RepositoriesRoot { get; set; }
 
-        public ObservableCollection<Repository> Repositories { get; private set; }
+        public string RepositoryFilter { get; set; }
+
+        public FastObservableCollection<Repository> Repositories { get; private set; }
+
+        public FastObservableCollection<Repository> FilteredRepositories { get; private set; }
 
         public bool IsBusy { get; private set; }
         #endregion
@@ -130,6 +135,11 @@ namespace RepositoryCleaner.ViewModels
             await FindRepositories();
         }
 
+        private void OnRepositoryFilterChanged()
+        {
+            FilterRepositories();
+        }
+
         private async Task FindRepositories()
         {
             var repositoriesRoot = RepositoriesRoot;
@@ -151,6 +161,37 @@ namespace RepositoryCleaner.ViewModels
                 }
 
                 _configurationService.SetValue(Settings.Application.LastRepositoriesRoot, repositoriesRoot);
+            }
+
+            FilterRepositories();
+        }
+
+        private void FilterRepositories()
+        {
+            var repositories = Repositories;
+            if (repositories == null)
+            {
+                using (FilteredRepositories.SuspendChangeNotifications())
+                {
+                    FilteredRepositories.Clear();
+                }
+
+                return;
+            }
+
+            using (FilteredRepositories.SuspendChangeNotifications())
+            {
+                var filteredRepositories = repositories.Where(x => true);
+
+                var filter = RepositoryFilter;
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    filter = filter.ToLower();
+
+                    filteredRepositories = filteredRepositories.Where(x => x.Name.ToLower().Contains(filter));
+                }
+
+                FilteredRepositories.ReplaceRange(filteredRepositories);
             }
         }
 

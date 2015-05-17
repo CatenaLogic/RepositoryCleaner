@@ -7,10 +7,12 @@
               xmlns:views="clr-namespace:RepositoryCleaner.Views"
               xmlns:orc="http://www.wildgums.net.au/orc"
               xmlns:logging="clr-namespace:RepositoryCleaner.Logging"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               mc:Ignorable="d" Width="600">
     
     <catel:StackGrid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="2*" />
@@ -34,9 +36,15 @@
         
         <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
 
+        <TextBox Text="{Binding RepositoryFilter}">
+            <i:Interaction.Behaviors>
+                <catel:UpdateBindingOnTextChanged />
+            </i:Interaction.Behaviors>
+        </TextBox>
+        
         <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False"
-                      Visibility="{Binding Repositories, Converter={catel:ReferenceToCollapsingVisibilityConverter}, ConverterParameter=False}">
-            <ItemsControl ItemsSource="{Binding Repositories}" Focusable="False">
+                      Visibility="{Binding FilteredRepositories, Converter={catel:ReferenceToCollapsingVisibilityConverter}, ConverterParameter=False}">
+            <ItemsControl ItemsSource="{Binding FilteredRepositories}" Focusable="False">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <views:RepositoryView />
