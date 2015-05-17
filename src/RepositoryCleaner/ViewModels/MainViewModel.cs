@@ -155,7 +155,7 @@ namespace RepositoryCleaner.ViewModels
                 {
                     using (Repositories.SuspendChangeNotifications())
                     {
-                        Repositories.AddRange(repositories);
+                        Repositories.ReplaceRange(repositories);
                     }
                 }
                 else
