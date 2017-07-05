@@ -36,7 +36,7 @@ namespace RepositoryCleaner.Services
             foreach (var repository in repositoriesToCleanUp)
             {
                 // Note: we can also do them all async (don't await), but the disk is probably the bottleneck anyway
-                await Task.Factory.StartNew(() => cleanerService.Clean(repository, isFakeClean));
+                await cleanerService.CleanAsync(repository, isFakeClean);
 
                 cleanedUpRepositories.Add(repository);
 

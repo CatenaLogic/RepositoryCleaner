@@ -11,6 +11,7 @@ namespace RepositoryCleaner.ViewModels
     using Catel;
     using Catel.Fody;
     using Catel.MVVM;
+    using Catel.Threading;
     using Models;
     using Services;
 
@@ -42,7 +43,7 @@ namespace RepositoryCleaner.ViewModels
             _cleanerService.RepositoryCleaning += OnCleanerServiceRepositoryCleaning;
             _cleanerService.RepositoryCleaned += OnCleanerServiceRepositoryCleaned;
 
-            CleanableSpace = await Repository.CalculateCleanableSpaceAsync();
+            CleanableSpace = await TaskShim.Run(() => Repository.CalculateCleanableSpace());
         }
 
         protected override async Task CloseAsync()

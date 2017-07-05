@@ -99,6 +99,8 @@ namespace RepositoryCleaner.ViewModels
                         TotalSize += repository.CleanableSize.Value;
                     }
                 }
+
+                Log.Debug("Updated summary");
             }
 
             if (_hasPendingUpdates)

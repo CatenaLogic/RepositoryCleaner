@@ -14,6 +14,7 @@ namespace RepositoryCleaner.Services
     using Catel;
     using Catel.Data;
     using Catel.Logging;
+    using Catel.Threading;
     using Cleaners;
     using MethodTimer;
     using Models;
@@ -31,7 +32,7 @@ namespace RepositoryCleaner.Services
         }
 
         [Time]
-        public bool CanClean(Repository repository)
+        public async Task<bool> CanCleanAsync(Repository repository)
         {
             var canClean = false;
 
@@ -39,18 +40,23 @@ namespace RepositoryCleaner.Services
             Log.Indent();
 
             var cleaners = GetAvailableCleaners();
-            foreach (var cleaner in cleaners)
+
+            await TaskShim.Run(() =>
             {
-                Log.Debug("Checking if repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
-
-                if (cleaner.CanClean(repository))
+                foreach (var cleaner in cleaners)
                 {
-                    Log.Debug("Repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
+                    Log.Debug("Checking if repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
 
-                    canClean = true;
-                    break;
+
+                    if (cleaner.CanClean(repository))
+                    {
+                        Log.Debug("Repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
+
+                        canClean = true;
+                        break;
+                    }
                 }
-            }
+            });
 
             Log.Unindent();
             Log.Debug("Checked if repository '{0}' can be cleaned, result = {1}", repository, canClean);
@@ -59,25 +65,28 @@ namespace RepositoryCleaner.Services
         }
 
         [Time]
-        public void Clean(Repository repository, bool isFakeClean)
+        public async Task CleanAsync(Repository repository, bool isFakeClean)
         {
             RepositoryCleaning.SafeInvoke(this, new RepositoryEventArgs(repository));
 
             Log.Info("Cleaning repository '{0}'", repository);
             Log.Indent();
 
-            var cleaners = GetAvailableCleaners();
-            foreach (var cleaner in cleaners)
+            await TaskHelper.RunAndWaitAsync(() =>
             {
-                if (cleaner.CanClean(repository))
+                var cleaners = GetAvailableCleaners();
+                foreach (var cleaner in cleaners)
                 {
-                    Log.Debug("Cleaning repository '{0}' using cleaner '{1}'", repository, cleaner);
+                    if (cleaner.CanClean(repository))
+                    {
+                        Log.Debug("Cleaning repository '{0}' using cleaner '{1}'", repository, cleaner);
 
-                    cleaner.Clean(repository, isFakeClean);
+                        cleaner.Clean(repository, isFakeClean);
 
-                    Log.Debug("Cleaned repository '{0}' using cleaner '{1}'", repository, cleaner);
+                        Log.Debug("Cleaned repository '{0}' using cleaner '{1}'", repository, cleaner);
+                    }
                 }
-            }
+            });
 
             Log.Unindent();
             Log.Info("Cleaned repository '{0}'", repository);

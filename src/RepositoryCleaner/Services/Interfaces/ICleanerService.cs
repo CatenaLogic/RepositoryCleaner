@@ -9,6 +9,7 @@ namespace RepositoryCleaner.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Cleaners;
     using Models;
 
@@ -20,9 +21,9 @@ namespace RepositoryCleaner.Services
         #region Methods
         IEnumerable<ICleaner> GetAvailableCleaners();
 
-        void Clean(Repository repository, bool isFakeClean);
+        Task CleanAsync(Repository repository, bool isFakeClean);
         #endregion
 
-        bool CanClean(Repository repository);
+        Task<bool> CanCleanAsync(Repository repository);
     }
 }
