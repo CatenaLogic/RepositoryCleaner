@@ -81,12 +81,12 @@ namespace RepositoryCleaner
                     var solutionConfigurations = SolutionConfigurationsPropertyInfo.GetValue(solutionParser, null);
                     var indexerPropertyInfo = solutionConfigurations.GetType().GetPropertyEx("Item");
 
-                    for (var i = 0; i < PropertyHelper.GetPropertyValue<int>(solutionConfigurations, "Count"); i++)
+                    for (var i = 0; i < PropertyHelper.GetPropertyValue<int>(solutionConfigurations, "Count", false); i++)
                     {
                         var item = indexerPropertyInfo.GetValue(solutionConfigurations, new object[] { i });
 
-                        var configuration = PropertyHelper.GetPropertyValue<string>(item, "ConfigurationName");
-                        var platform = PropertyHelper.GetPropertyValue<string>(item, "PlatformName");
+                        var configuration = PropertyHelper.GetPropertyValue<string>(item, "ConfigurationName", false);
+                        var platform = PropertyHelper.GetPropertyValue<string>(item, "PlatformName", false);
 
                         items.Add(new KeyValuePair<string, string>(configuration, platform));
 

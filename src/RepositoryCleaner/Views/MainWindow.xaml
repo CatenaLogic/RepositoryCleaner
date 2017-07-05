@@ -7,6 +7,7 @@
               xmlns:views="clr-namespace:RepositoryCleaner.Views"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
+              xmlns:orc="http://www.wildgums.net.au/orc"
               mc:Ignorable="d" Width="600">
 
     <catel:StackGrid>
@@ -103,9 +104,9 @@
                      Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" Margin="0,4,0,4"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <catel:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
-                               GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                               Width="24" Height="24" Margin="4,8,4,4" />
+            <orc:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                             GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                             Width="24" Height="24" Margin="4,8,4,4" />
 
             <Button Content="Analyze" Command="{Binding Analyze}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
             <Button Content="Fake clean up" Command="{Binding FakeCleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}"

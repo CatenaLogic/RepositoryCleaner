@@ -131,9 +131,9 @@ namespace RepositoryCleaner.ViewModels
         #endregion
 
         #region Methods
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            RepositoriesRoot = _configurationService.GetValue<string>(Settings.Application.LastRepositoriesRoot);
+            RepositoriesRoot = _configurationService.GetRoamingValue<string>(Settings.Application.LastRepositoriesRoot);
 
             await FindRepositories();
         }
@@ -160,7 +160,9 @@ namespace RepositoryCleaner.ViewModels
                 {
                     using (Repositories.SuspendChangeNotifications())
                     {
+#pragma warning disable 618
                         Repositories.ReplaceRange(repositories);
+#pragma warning restore 618
                     }
                 }
                 else
@@ -168,7 +170,7 @@ namespace RepositoryCleaner.ViewModels
                     Repositories = null;
                 }
 
-                _configurationService.SetValue(Settings.Application.LastRepositoriesRoot, repositoriesRoot);
+                _configurationService.SetRoamingValue(Settings.Application.LastRepositoriesRoot, repositoriesRoot);
 
                 FilterRepositories();
 
@@ -243,7 +245,9 @@ namespace RepositoryCleaner.ViewModels
                     filteredRepositories = filteredRepositories.Where(x => x.Name.ToLower().Contains(filter));
                 }
 
+#pragma warning disable 618
                 FilteredRepositories.ReplaceRange(filteredRepositories);
+#pragma warning restore 618
             }
         }
 

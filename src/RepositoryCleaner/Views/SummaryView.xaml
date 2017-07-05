@@ -5,6 +5,7 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:catel="http://catel.codeplex.com"
                    xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
+                   xmlns:orc="http://www.wildgums.net.au/orc"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <catel:StackGrid>
@@ -27,9 +28,9 @@
         <Label Content="Total size being saved" />
         <Label Content="{Binding TotalSize, Converter={converters:SpaceToTextConverter}}" />
 
-        <catel:AnimatedGif Grid.RowSpan="2" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
-                           GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                           Width="16" Height="16" Margin="4,8,4,4" />
+        <orc:AnimatedGif Grid.RowSpan="2" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                         GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                         Width="16" Height="16" Margin="4,8,4,4" />
     </catel:StackGrid>
 
 </catel:UserControl>

@@ -4,6 +4,7 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:catel="http://catel.codeplex.com"
+                   xmlns:orc="http://www.wildgums.net.au/orc"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid MinHeight="40">
@@ -23,9 +24,9 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <catel:AnimatedGif Grid.Column="1" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
-                           GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                           Width="24" Height="24" Margin="4" />
+        <orc:AnimatedGif Grid.Column="1" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                         GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                         Width="24" Height="24" Margin="4" />
     </Grid>
 
 </catel:UserControl>

@@ -7,6 +7,7 @@
 
 namespace RepositoryCleaner.Markup
 {
+    using System;
     using System.Windows.Controls;
     using System.Windows.Markup;
     using System.Windows.Media;
@@ -35,6 +36,12 @@ namespace RepositoryCleaner.Markup
         #endregion
 
         #region Methods
+        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
+        {
+            return GetImageSource();
+        }
+
+        [Obsolete]
         protected override object ProvideDynamicValue()
         {
             return GetImageSource();

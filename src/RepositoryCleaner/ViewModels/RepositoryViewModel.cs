@@ -37,7 +37,7 @@ namespace RepositoryCleaner.ViewModels
 
         public bool IsBusy { get; protected set; }
 
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
             _cleanerService.RepositoryCleaning += OnCleanerServiceRepositoryCleaning;
             _cleanerService.RepositoryCleaned += OnCleanerServiceRepositoryCleaned;
@@ -45,7 +45,7 @@ namespace RepositoryCleaner.ViewModels
             CleanableSpace = await Repository.CalculateCleanableSpaceAsync();
         }
 
-        protected override async Task Close()
+        protected override async Task CloseAsync()
         {
             _cleanerService.RepositoryCleaning -= OnCleanerServiceRepositoryCleaning;
             _cleanerService.RepositoryCleaned -= OnCleanerServiceRepositoryCleaned;

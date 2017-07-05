@@ -46,9 +46,9 @@ namespace RepositoryCleaner.ViewModels
 
         public bool IsBusy { get; private set; }
 
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            await base.Initialize();
+            await base.InitializeAsync();
 
             _changeNotificationWrapper.CollectionChanged += OnRepositoriesChanged;
             _changeNotificationWrapper.CollectionItemPropertyChanged += OnRepositoryPropertyChanged;
@@ -56,15 +56,12 @@ namespace RepositoryCleaner.ViewModels
             await Update();
         }
 
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="M:Catel.MVVM.ViewModelBase.Cancel"/> of <see cref="M:Catel.MVVM.ViewModelBase.Save"/> method.
-        /// </summary>
-        protected override async Task Close()
+        protected override async Task CloseAsync()
         {
             _changeNotificationWrapper.CollectionChanged -= OnRepositoriesChanged;
             _changeNotificationWrapper.CollectionItemPropertyChanged -= OnRepositoryPropertyChanged;
 
-            await base.Close();
+            await base.CloseAsync();
         }
 
         private async void OnRepositoriesChanged(object sender, NotifyCollectionChangedEventArgs e)

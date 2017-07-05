@@ -36,9 +36,9 @@ namespace RepositoryCleaner.ViewModels
 
         public ObservableCollection<string> Items { get; private set; }
 
-        protected override async Task Initialize()
+        protected override async Task InitializeAsync()
         {
-            await base.Initialize();
+            await base.InitializeAsync();
 
             await Update();
         }

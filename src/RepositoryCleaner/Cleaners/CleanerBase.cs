@@ -22,7 +22,7 @@ namespace RepositoryCleaner.Cleaners
         protected CleanerBase()
         {
             CleanerAttribute cleanerAttribute = null;
-            if (AttributeHelper.TryGetAttribute(GetType(), out cleanerAttribute))
+            if (GetType().TryGetAttribute(out cleanerAttribute))
             {
                 Name = cleanerAttribute.Name;
                 Description = cleanerAttribute.Description;
