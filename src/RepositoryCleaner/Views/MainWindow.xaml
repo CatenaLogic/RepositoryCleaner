@@ -3,14 +3,14 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:catel="http://catel.codeplex.com"
+              xmlns:catel="http://schemas.catelproject.com"
               xmlns:views="clr-namespace:RepositoryCleaner.Views"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
-              xmlns:orc="http://www.wildgums.net.au/orc"
+              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
               mc:Ignorable="d" Width="600">
 
-    <catel:StackGrid>
+    <orccontrols:StackGrid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -104,7 +104,7 @@
                      Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" Margin="0,4,0,4"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <orc:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+            <orccontrols:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
                              GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
                              Width="24" Height="24" Margin="4,8,4,4" />
 
@@ -114,6 +114,7 @@
             <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" 
                     ToolTip="Run the whole clean up in real mode -> actually cleaning up everything"/>
         </StackPanel>
-    </catel:StackGrid>
+    </orccontrols:StackGrid>
 
 </catel:Window>
+

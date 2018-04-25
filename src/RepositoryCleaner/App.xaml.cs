@@ -15,6 +15,7 @@ namespace RepositoryCleaner
     using Catel.Reflection;
     using Catel.Windows;
     using Catel.Windows.Threading;
+    using Orchestra;
     using Services;
     using Views;
 

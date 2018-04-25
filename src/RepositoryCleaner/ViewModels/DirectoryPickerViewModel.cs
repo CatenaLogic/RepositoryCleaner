@@ -8,6 +8,7 @@
 namespace RepositoryCleaner.ViewModels
 {
     using System.IO;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;
     using Catel.Services;
@@ -23,8 +24,8 @@ namespace RepositoryCleaner.ViewModels
             _selectDirectoryService = selectDirectoryService;
             _processService = processService;
 
-            OpenDirectory = new Command(OnOpenDirectoryExecute, OnOpenDirectoryCanExecute);
-            SelectDirectory = new Command(OnSelectDirectoryExecute);
+            OpenDirectory = new TaskCommand(OnOpenDirectoryExecuteAsync, OnOpenDirectoryCanExecute);
+            SelectDirectory = new TaskCommand(OnSelectDirectoryExecuteAsync);
         }
         #endregion
 
@@ -45,7 +46,7 @@ namespace RepositoryCleaner.ViewModels
         /// <summary>
         /// Gets the OpenDirectory command.
         /// </summary>
-        public Command OpenDirectory { get; private set; }
+        public TaskCommand OpenDirectory { get; private set; }
 
         /// <summary>
         /// Method to check whether the OpenDirectory command can be executed.
@@ -70,7 +71,7 @@ namespace RepositoryCleaner.ViewModels
         /// <summary>
         /// Method to invoke when the OpenDirectory command is executed.
         /// </summary>
-        private void OnOpenDirectoryExecute()
+        private async Task OnOpenDirectoryExecuteAsync()
         {
             var fullPath = Path.GetFullPath(SelectedDirectory);
             _processService.StartProcess(fullPath);
@@ -79,19 +80,19 @@ namespace RepositoryCleaner.ViewModels
         /// <summary>
         /// Gets the SelectDirectory command.
         /// </summary>
-        public Command SelectDirectory { get; private set; }
+        public TaskCommand SelectDirectory { get; private set; }
 
         /// <summary>
         /// Method to invoke when the SelectOutputDirectory command is executed.
         /// </summary>
-        private void OnSelectDirectoryExecute()
+        private async Task OnSelectDirectoryExecuteAsync()
         {
             if (!string.IsNullOrEmpty(SelectedDirectory))
             {
                 _selectDirectoryService.InitialDirectory = Path.GetFullPath(SelectedDirectory);
             }
 
-            if (_selectDirectoryService.DetermineDirectory())
+            if (await _selectDirectoryService.DetermineDirectoryAsync())
             {
                 SelectedDirectory = _selectDirectoryService.DirectoryName;
             }

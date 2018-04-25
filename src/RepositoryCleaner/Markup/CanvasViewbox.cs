@@ -41,12 +41,6 @@ namespace RepositoryCleaner.Markup
             return GetImageSource();
         }
 
-        [Obsolete]
-        protected override object ProvideDynamicValue()
-        {
-            return GetImageSource();
-        }
-
         private Viewbox GetImageSource()
         {
             var viewbox = new Viewbox();
