@@ -76,13 +76,13 @@
       <HintPath>..\..\lib\ModuleInit.Fody.1.8.0\lib\net452\ModuleInit.dll</HintPath>
     </Reference>
     <Reference Include="Orc.Controls, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Orc.Controls.3.0.0-alpha0015\lib\net46\Orc.Controls.dll</HintPath>
+      <HintPath>..\..\lib\Orc.Controls.3.0.0-alpha0019\lib\net46\Orc.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Orc.FileSystem, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Orc.FileSystem.3.0.0-alpha0014\lib\net46\Orc.FileSystem.dll</HintPath>
+      <HintPath>..\..\lib\Orc.FileSystem.3.0.0-alpha0018\lib\net46\Orc.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="Orc.SystemInfo, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Orc.SystemInfo.3.0.0-alpha0007\lib\net46\Orc.SystemInfo.dll</HintPath>
+      <HintPath>..\..\lib\Orc.SystemInfo.3.0.0-alpha0009\lib\net46\Orc.SystemInfo.dll</HintPath>
     </Reference>
     <Reference Include="Orchestra.Core, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orchestra.Core.5.0.0-alpha0008\lib\net46\Orchestra.Core.dll</HintPath>

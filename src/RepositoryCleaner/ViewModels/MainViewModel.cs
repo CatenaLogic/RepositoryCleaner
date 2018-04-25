@@ -21,7 +21,10 @@ namespace RepositoryCleaner.ViewModels
     using Catel.MVVM;
     using Catel.Reflection;
     using Catel.Services;
+    using Catel.Threading;
+    using Humanizer;
     using Models;
+    using Orc.SystemInfo;
     using Services;
 
     internal class MainViewModel : ViewModelBase
@@ -177,13 +180,23 @@ namespace RepositoryCleaner.ViewModels
                 var totalRepositories = repositories.Count;
                 var completedRepositories = 0;
 
-                await repositories.CalculateCleanableSpaceAsyncAndMultithreaded(() => _dispatcherService.BeginInvoke(() =>
+                Log.Info($"Initializing {repositories.Count} repositories");
+
+                for (var i = 0; i < repositories.Count; i++)
                 {
+                    var repository = repositories[i];
+                    var prefix = $"[{i + 1} / {repositories.Count}] ";
+
+                    Log.Info($"{prefix}Initializing repository {repository}");
+
+                    var spaceToClean = await repository.CalculateCleanableSpaceAsync();
+                    Log.Info($"{prefix}Potential disk space savings for {repository}: {spaceToClean.Bytes().Humanize("#.#")}");
+
                     completedRepositories++;
 
-                    var percentage = ((double) completedRepositories / totalRepositories) * 100;
+                    var percentage = ((double)completedRepositories / totalRepositories) * 100;
                     Progress = (int)percentage;
-                }));
+                }
             }
 
             Progress = 100;

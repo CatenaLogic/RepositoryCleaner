@@ -27,15 +27,18 @@ namespace RepositoryCleaner.ViewModels
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly FastObservableCollection<Repository> _repositories;
+        private readonly IDispatcherService _dispatcherService;
         private readonly ChangeNotificationWrapper _changeNotificationWrapper;
 
         private bool _hasPendingUpdates;
 
-        public SummaryViewModel(FastObservableCollection<Repository> repositories)
+        public SummaryViewModel(FastObservableCollection<Repository> repositories, IDispatcherService dispatcherService)
         {
             Argument.IsNotNull(() => repositories);
+            Argument.IsNotNull(() => dispatcherService);
 
             _repositories = repositories;
+            _dispatcherService = dispatcherService;
 
             _changeNotificationWrapper = new ChangeNotificationWrapper(repositories);
         }
@@ -53,7 +56,7 @@ namespace RepositoryCleaner.ViewModels
             _changeNotificationWrapper.CollectionChanged += OnRepositoriesChanged;
             _changeNotificationWrapper.CollectionItemPropertyChanged += OnRepositoryPropertyChanged;
 
-            await Update();
+            await UpdateAsync();
         }
 
         protected override async Task CloseAsync()
@@ -66,15 +69,15 @@ namespace RepositoryCleaner.ViewModels
 
         private async void OnRepositoriesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            await Update();
+            await UpdateAsync();
         }
 
         private async void OnRepositoryPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            await Update();
+            _dispatcherService.BeginInvoke(async () => await UpdateAsync());
         }
 
-        private async Task Update()
+        private async Task UpdateAsync()
         {
             if (IsBusy)
             {
@@ -90,15 +93,17 @@ namespace RepositoryCleaner.ViewModels
 
                 RepositoriesToClean = repositories.Count;
 
-                TotalSize = 0L;
+                var totalSize = 0L;
 
                 foreach (var repository in repositories)
                 {
                     if (repository.CleanableSize.HasValue)
                     {
-                        TotalSize += repository.CleanableSize.Value;
+                        totalSize += repository.CleanableSize.Value;
                     }
                 }
+
+                TotalSize = totalSize;
 
                 Log.Debug("Updated summary");
             }
@@ -106,7 +111,7 @@ namespace RepositoryCleaner.ViewModels
             if (_hasPendingUpdates)
             {
                 _hasPendingUpdates = false;
-                await Update();
+                await UpdateAsync();
             }
         }
 

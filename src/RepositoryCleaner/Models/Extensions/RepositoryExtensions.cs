@@ -7,42 +7,29 @@
 
 namespace RepositoryCleaner.Models
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Logging;
     using Catel.Threading;
+    using MethodTimer;
 
     public static class RepositoryExtensions
     {
-        private const int MaxRunningthreads = 5;
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public static async Task CalculateCleanableSpaceAsyncAndMultithreaded(this List<Repository> repositories, Action completedCallback = null)
-        {
-            var itemsPerBatch = repositories.Count / MaxRunningthreads;
-
-            foreach (var repository in repositories)
-            {
-                await TaskShim.Run(() =>
-                {
-                    repository.CalculateCleanableSpace();
-
-                    if (completedCallback != null)
-                    {
-                        completedCallback();
-                    }
-                });
-            }
-        }
-
-        public static long CalculateCleanableSpace(this Repository repository)
+        [Time]
+        public static async Task<long> CalculateCleanableSpaceAsync(this Repository repository)
         {
             Argument.IsNotNull(() => repository);
 
+            Log.Debug($"Calculating cleanable space for {repository}");
+
             if (!repository.CleanableSize.HasValue)
             {
-                repository.CleanableSize = repository.Cleaners.Sum(x => x.CalculateCleanableSpace(repository));
+                // Actual caclulation goes on a separate thread
+                var cleanableSize = await TaskShim.Run(() => repository.Cleaners.Sum(x => x.CalculateCleanableSpace(repository)));
+                repository.CleanableSize = cleanableSize;
             }
 
             return repository.CleanableSize ?? 0L;

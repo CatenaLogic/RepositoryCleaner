@@ -14,18 +14,22 @@ namespace RepositoryCleaner.Services
     using Catel.Logging;
     using MethodTimer;
     using Models;
+    using Orc.FileSystem;
 
     internal class RepositoryService : IRepositoryService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ICleanerService _cleanerService;
+        private readonly IDirectoryService _directoryService;
 
-        public RepositoryService(ICleanerService cleanerService)
+        public RepositoryService(ICleanerService cleanerService, IDirectoryService directoryService)
         {
             Argument.IsNotNull(() => cleanerService);
+            Argument.IsNotNull(() => directoryService);
 
             _cleanerService = cleanerService;
+            _directoryService = directoryService;
         }
 
         [Time]
@@ -35,7 +39,7 @@ namespace RepositoryCleaner.Services
 
             Log.Info("Searching for repositories in root '{0}'", repositoriesRoot);
 
-            if (!Directory.Exists(repositoriesRoot))
+            if (!_directoryService.Exists(repositoriesRoot))
             {
                 Log.Warning("Directory '{0}' does not exist, cannot find any repositories", repositoriesRoot);
                 return Enumerable.Empty<Repository>();
@@ -43,7 +47,7 @@ namespace RepositoryCleaner.Services
 
             var cleanableRepositories = new List<Repository>();
 
-            foreach (var directory in Directory.GetDirectories(repositoriesRoot))
+            foreach (var directory in _directoryService.GetDirectories(repositoriesRoot))
             {
                 if (IsRepository(directory))
                 {
@@ -64,20 +68,20 @@ namespace RepositoryCleaner.Services
             Log.Debug("Checking if a '{0}' is a repository", directory);
 
             var gitDirectory = Path.Combine(directory, ".git");
-            if (Directory.Exists(gitDirectory))
+            if (_directoryService.Exists(gitDirectory))
             {
                 Log.Debug("Directory '{0}' is a repository because it contains an .git directory in the root", directory);
                 return true;
             }
 
             var srcDirectory = Path.Combine(directory, "src");
-            if (Directory.Exists(srcDirectory))
+            if (_directoryService.Exists(srcDirectory))
             {
                 Log.Debug("Directory '{0}' is a repository because it contains an src directory in the root", directory);
                 return true;
             }
 
-            if (Directory.GetFiles(directory, "*.sln").Any())
+            if (_directoryService.GetFiles(directory, "*.sln").Any())
             {
                 Log.Debug("Directory '{0}' is a repository because it contains a .sln file in the root", directory);
                 return true;

@@ -13,6 +13,7 @@ namespace RepositoryCleaner.Cleaners
     using Catel;
     using Catel.Logging;
     using Catel.Reflection;
+    using MethodTimer;
     using Models;
 
     public abstract class CleanerBase : ICleaner
@@ -51,6 +52,7 @@ namespace RepositoryCleaner.Cleaners
             return canClean;
         }
 
+        [Time]
         public long CalculateCleanableSpace(Repository repository)
         {
             Argument.IsNotNull(() => repository);
@@ -69,6 +71,7 @@ namespace RepositoryCleaner.Cleaners
             return cleanableSpace;
         }
 
+        [Time]
         public void Clean(Repository repository, bool isFakeClean)
         {
             Argument.IsNotNull(() => repository);

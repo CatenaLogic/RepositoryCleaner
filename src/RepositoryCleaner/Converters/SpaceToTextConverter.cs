@@ -17,7 +17,7 @@ namespace RepositoryCleaner.Converters
         {
             if (!value.HasValue || value.Value == 0L)
             {
-                return string.Empty;
+                return "-";
             }
 
             return value.Value.Bytes().Humanize("#.#");

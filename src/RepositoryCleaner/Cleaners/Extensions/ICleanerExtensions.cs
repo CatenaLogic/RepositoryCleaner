@@ -9,6 +9,7 @@ namespace RepositoryCleaner.Cleaners
 {
     using System.Threading.Tasks;
     using Catel;
+    using MethodTimer;
     using Models;
 
     internal static class ICleanerExtensions

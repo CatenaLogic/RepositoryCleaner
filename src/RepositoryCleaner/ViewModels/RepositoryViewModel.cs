@@ -43,7 +43,7 @@ namespace RepositoryCleaner.ViewModels
             _cleanerService.RepositoryCleaning += OnCleanerServiceRepositoryCleaning;
             _cleanerService.RepositoryCleaned += OnCleanerServiceRepositoryCleaned;
 
-            CleanableSpace = await TaskShim.Run(() => Repository.CalculateCleanableSpace());
+            CleanableSpace = await Repository.CalculateCleanableSpaceAsync();
         }
 
         protected override async Task CloseAsync()
