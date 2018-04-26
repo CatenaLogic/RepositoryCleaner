@@ -11,7 +11,6 @@ namespace RepositoryCleaner.Views
     using System.Windows;
     using System.Windows.Controls;
     using Catel.Logging;
-    using Logging;
     using Models;
 
     /// <summary>
@@ -24,10 +23,6 @@ namespace RepositoryCleaner.Views
         public MainWindow()
         {
             InitializeComponent();
-
-            var logListener = new RichTextBoxLogListener(logTextBox);
-
-            LogManager.AddListener(logListener);
         }
 
         private void OnCheckBoxCheckedChanged(object sender, RoutedEventArgs e)

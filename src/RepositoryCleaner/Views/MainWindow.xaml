@@ -8,6 +8,7 @@
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
               xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer"
               mc:Ignorable="d" Width="600">
 
     <orccontrols:StackGrid>
@@ -17,8 +18,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="3*" />
             <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -97,7 +98,7 @@
         </DataGrid>
 
         <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
-            <RichTextBox x:Name="logTextBox" Margin="0,6,0,0" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+            <orclogviewer:AdvancedLogViewerControl IgnoreCatelLogging="True" />
         </Expander>
 
         <ProgressBar Height="5" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 

@@ -81,6 +81,9 @@
     <Reference Include="Orc.FileSystem, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orc.FileSystem.3.0.0-alpha0020\lib\net46\Orc.FileSystem.dll</HintPath>
     </Reference>
+    <Reference Include="Orc.LogViewer, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Orc.LogViewer.3.0.0-alpha0004\lib\net46\Orc.LogViewer.dll</HintPath>
+    </Reference>
     <Reference Include="Orc.SystemInfo, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orc.SystemInfo.3.0.0-alpha0009\lib\net46\Orc.SystemInfo.dll</HintPath>
     </Reference>
@@ -127,8 +130,6 @@
     <Compile Include="Converters\SpaceToTextConverter.cs" />
     <Compile Include="Extensions\ProjectExtensions.cs" />
     <Compile Include="Helpers\ProjectHelper.cs" />
-    <Compile Include="Logging\LogViewerControlLogListener.cs" />
-    <Compile Include="Logging\RichTextBoxLogListener.cs" />
     <Compile Include="Models\CleanContext.cs" />
     <Compile Include="Models\Extensions\RepositoryExtensions.cs" />
     <Compile Include="Services\Extensions\IRepositoryServiceExtensions.cs" />
