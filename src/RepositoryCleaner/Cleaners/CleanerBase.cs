@@ -59,7 +59,7 @@ namespace RepositoryCleaner.Cleaners
         }
 
         [Time]
-        public long CalculateCleanableSpace(CleanContext context)
+        public ulong CalculateCleanableSpace(CleanContext context)
         {
             Argument.IsNotNull(() => context);
 
@@ -123,29 +123,14 @@ namespace RepositoryCleaner.Cleaners
             }
         }
 
-        protected long GetDirectorySize(string directory)
+        protected ulong GetDirectorySize(string directory)
         {
-            var size = 0L;
-
-            try
-            {
-                if (_directoryService.Exists(directory))
-                {
-                    size += (from fileName in _directoryService.GetFiles(directory, "*", SearchOption.AllDirectories)
-                             select new FileInfo(fileName)).Sum(x => x.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to calculate the cleanable space for directory '{0}'", directory);
-            }
-
-            return size;
+            return _directoryService.GetSize(directory);
         }
 
         protected abstract bool CanCleanRepository(CleanContext context);
 
-        protected abstract long CalculateCleanableSpaceForRepository(CleanContext context);
+        protected abstract ulong CalculateCleanableSpaceForRepository(CleanContext context);
 
         protected abstract void CleanRepository(CleanContext context);
     }

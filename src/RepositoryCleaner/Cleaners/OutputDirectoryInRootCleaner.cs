@@ -7,15 +7,13 @@
 
 namespace RepositoryCleaner.Cleaners
 {
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     [Cleaner("OutputDirectoryInRootCleaner", Description = "Delete output directory in the root (thus [repository]\\output")]
-    public class OutputDirectoryInRootCleaner : MsProjectsCleanerBase
+    public class OutputDirectoryInRootCleaner : CleanerBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -26,48 +24,30 @@ namespace RepositoryCleaner.Cleaners
 
         protected override bool CanCleanRepository(CleanContext context)
         {
-            var projects = GetAllProjects(context.Repository);
-            return projects.Any();
+            var path = GetOutputDirectory(context.Repository);
+
+            return _directoryService.Exists(path);
         }
 
-        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
+        protected override ulong CalculateCleanableSpaceForRepository(CleanContext context)
         {
-            var size = 0L;
+            var path = GetOutputDirectory(context.Repository);
 
-            var projects = GetAllProjects(context.Repository);
-            var handledDirectories = new HashSet<string>();
-
-            foreach (var project in projects)
-            {
-                var directory = project.GetTargetDirectory();
-                if (string.IsNullOrWhiteSpace(directory))
-                {
-                    continue;
-                }
-
-                if (handledDirectories.Contains(directory))
-                {
-                    continue;
-                }
-
-                handledDirectories.Add(directory);
-
-                size += GetDirectorySize(directory);
-            }
-
+            var size = GetDirectorySize(path);
             return size;
         }
 
         protected override void CleanRepository(CleanContext context)
         {
-            var projects = GetAllProjects(context.Repository);
+            var path = GetOutputDirectory(context.Repository);
 
-            foreach (var project in projects)
-            {
-                var intermediateDirectory = project.GetTargetDirectory();
+            DeleteDirectory(path, context);
+        }
 
-                DeleteDirectory(intermediateDirectory, context);
-            }
+        private string GetOutputDirectory(Repository repository)
+        {
+            var path = Path.Combine(repository.Directory, "output");
+            return path;
         }
     }
 }

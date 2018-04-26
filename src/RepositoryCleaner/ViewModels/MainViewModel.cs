@@ -190,7 +190,7 @@ namespace RepositoryCleaner.ViewModels
                     Log.Info($"{prefix}Initializing repository {repository}");
 
                     var spaceToClean = await repository.CalculateCleanableSpaceAsync();
-                    Log.Info($"{prefix}Potential disk space savings for {repository}: {spaceToClean.Bytes().Humanize("#.#")}");
+                    Log.Info($"{prefix}Potential disk space savings for {repository}: {((long)spaceToClean).Bytes().Humanize("#.#")}");
 
                     completedRepositories++;
 

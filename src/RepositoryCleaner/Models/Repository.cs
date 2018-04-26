@@ -41,7 +41,7 @@ namespace RepositoryCleaner.Models
 
         public List<ICleaner> Cleaners { get; private set; }
 
-        public long? CleanableSize { get; set; }
+        public ulong? CleanableSize { get; set; }
 
         /// <summary>
         /// Returns a string that represents the current object.

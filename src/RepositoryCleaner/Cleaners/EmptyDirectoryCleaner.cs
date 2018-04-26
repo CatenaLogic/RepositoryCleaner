@@ -30,11 +30,11 @@ namespace RepositoryCleaner.Cleaners
             return directories.Any();
         }
 
-        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
+        protected override ulong CalculateCleanableSpaceForRepository(CleanContext context)
         {
             // Treat every folder as 1 byte
             var directories = GetEmptyDirectories(context.Repository);
-            return directories.Count;
+            return (ulong)directories.Count;
         }
 
         protected override void CleanRepository(CleanContext context)

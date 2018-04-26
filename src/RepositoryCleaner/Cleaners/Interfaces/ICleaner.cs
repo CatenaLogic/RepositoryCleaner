@@ -20,7 +20,7 @@ namespace RepositoryCleaner.Cleaners
         #region Methods
         bool CanClean(CleanContext context);
 
-        long CalculateCleanableSpace(CleanContext context);
+        ulong CalculateCleanableSpace(CleanContext context);
 
         void Clean(CleanContext context);
         #endregion

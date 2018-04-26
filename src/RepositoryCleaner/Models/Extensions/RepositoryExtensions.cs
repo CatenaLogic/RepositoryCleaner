@@ -19,7 +19,7 @@ namespace RepositoryCleaner.Models
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         [Time]
-        public static async Task<long> CalculateCleanableSpaceAsync(this Repository repository)
+        public static async Task<ulong> CalculateCleanableSpaceAsync(this Repository repository)
         {
             Argument.IsNotNull(() => repository);
 
@@ -28,7 +28,7 @@ namespace RepositoryCleaner.Models
             if (!repository.CleanableSize.HasValue)
             {
                 // Actual caclulation goes on a separate thread
-                var cleanableSize = await TaskShim.Run(() => repository.Cleaners.Sum(x => x.CalculateCleanableSpace(new CleanContext(repository))));
+                var cleanableSize = await TaskShim.Run(() => (ulong)repository.Cleaners.Sum(x => (long)x.CalculateCleanableSpace(new CleanContext(repository))));
                 repository.CleanableSize = cleanableSize;
             }
 

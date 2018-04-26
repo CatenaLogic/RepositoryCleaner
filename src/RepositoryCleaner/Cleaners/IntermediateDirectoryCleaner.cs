@@ -27,12 +27,12 @@ namespace RepositoryCleaner.Cleaners
         protected override bool CanCleanRepository(CleanContext context)
         {
             var projects = GetAllProjects(context.Repository);
-            return projects.Count() > 0;
+            return projects.Any();
         }
 
-        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
+        protected override ulong CalculateCleanableSpaceForRepository(CleanContext context)
         {
-            var size = 0L;
+            ulong size = 0L;
 
             var projects = GetAllProjects(context.Repository);
             var handledDirectories = new HashSet<string>();

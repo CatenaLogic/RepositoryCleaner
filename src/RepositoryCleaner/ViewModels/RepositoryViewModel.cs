@@ -34,7 +34,7 @@ namespace RepositoryCleaner.ViewModels
         [Expose("IsIncluded")]
         public Repository Repository { get; private set; }
 
-        public long CleanableSpace { get; private set; }
+        public ulong CleanableSpace { get; private set; }
 
         public bool IsBusy { get; protected set; }
 

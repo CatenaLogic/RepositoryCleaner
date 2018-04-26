@@ -47,9 +47,9 @@ namespace RepositoryCleaner.Cleaners
             return false;
         }
 
-        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
+        protected override ulong CalculateCleanableSpaceForRepository(CleanContext context)
         {
-            var space = 0L;
+            ulong space = 0L;
 
             foreach (var directory in GetNuGetPackageDirectories(context.Repository))
             {

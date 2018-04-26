@@ -45,7 +45,7 @@ namespace RepositoryCleaner.ViewModels
 
         public int RepositoriesToClean { get; private set; }
 
-        public long TotalSize { get; private set; }
+        public ulong TotalSize { get; private set; }
 
         public bool IsBusy { get; private set; }
 
@@ -93,7 +93,7 @@ namespace RepositoryCleaner.ViewModels
 
                 RepositoriesToClean = repositories.Count;
 
-                var totalSize = 0L;
+                ulong totalSize = 0L;
 
                 foreach (var repository in repositories)
                 {
