@@ -21,7 +21,7 @@ namespace RepositoryCleaner.Services
         #region Methods
         IEnumerable<ICleaner> GetAvailableCleaners();
 
-        Task CleanAsync(Repository repository, bool isFakeClean);
+        Task CleanAsync(CleanContext context);
         #endregion
 
         Task<bool> CanCleanAsync(Repository repository);

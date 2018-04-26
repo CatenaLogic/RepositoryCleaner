@@ -127,6 +127,7 @@
     <Compile Include="Helpers\ProjectHelper.cs" />
     <Compile Include="Logging\LogViewerControlLogListener.cs" />
     <Compile Include="Logging\RichTextBoxLogListener.cs" />
+    <Compile Include="Models\CleanContext.cs" />
     <Compile Include="Models\Extensions\RepositoryExtensions.cs" />
     <Compile Include="Services\Extensions\IRepositoryServiceExtensions.cs" />
     <Compile Include="Services\Interfaces\IRepositoryService.cs" />

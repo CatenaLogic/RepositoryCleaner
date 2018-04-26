@@ -12,14 +12,20 @@ namespace RepositoryCleaner.Cleaners
     using Catel.Caching;
     using Microsoft.Build.Evaluation;
     using Models;
+    using Orc.FileSystem;
 
     public abstract class MsProjectsCleanerBase : CleanerBase
     {
-        private static readonly ICacheStorage<string, IEnumerable<Project>> _solutionsCache = new CacheStorage<string, IEnumerable<Project>>(); 
+        private static readonly ICacheStorage<string, IEnumerable<Project>> _solutionsCache = new CacheStorage<string, IEnumerable<Project>>();
+
+        protected MsProjectsCleanerBase(IDirectoryService directoryService) 
+            : base(directoryService)
+        {
+        }
 
         protected virtual IEnumerable<Project> GetAllProjects(Repository repository)
         {
-            var solutionFiles = Directory.GetFiles(repository.Directory, "*.sln", SearchOption.AllDirectories);
+            var solutionFiles = _directoryService.GetFiles(repository.Directory, "*.sln", SearchOption.AllDirectories);
 
             var projects = new List<Project>();
 

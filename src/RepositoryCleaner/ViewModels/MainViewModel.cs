@@ -138,7 +138,7 @@ namespace RepositoryCleaner.ViewModels
         {
             RepositoriesRoot = _configurationService.GetRoamingValue<string>(Settings.Application.LastRepositoriesRoot);
 
-            await FindRepositories();
+            //await FindRepositories();
         }
 
         private void OnRepositoryFilterChanged()

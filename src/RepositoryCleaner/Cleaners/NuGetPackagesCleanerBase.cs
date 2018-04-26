@@ -14,23 +14,29 @@ namespace RepositoryCleaner.Cleaners
     using System.Linq;
     using Catel.Logging;
     using Models;
+    using Orc.FileSystem;
 
     public abstract class NuGetPackagesCleanerBase : CleanerBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        protected NuGetPackagesCleanerBase(IDirectoryService directoryService) 
+            : base(directoryService)
+        {
+        }
+
         protected abstract string GetPackagesDirectory(Repository repository);
 
-        protected override bool CanCleanRepository(Repository repository)
+        protected override bool CanCleanRepository(CleanContext context)
         {
-            var libPath = GetPackagesDirectory(repository);
+            var libPath = GetPackagesDirectory(context.Repository);
 
-            if (!Directory.Exists(libPath))
+            if (!_directoryService.Exists(libPath))
             {
                 return false;
             }
 
-            foreach (var directory in Directory.GetDirectories(libPath))
+            foreach (var directory in _directoryService.GetDirectories(libPath))
             {
                 if (IsCleanablePath(directory))
                 {
@@ -41,11 +47,11 @@ namespace RepositoryCleaner.Cleaners
             return false;
         }
 
-        protected override long CalculateCleanableSpaceForRepository(Repository repository)
+        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
         {
             var space = 0L;
 
-            foreach (var directory in GetNuGetPackageDirectories(repository))
+            foreach (var directory in GetNuGetPackageDirectories(context.Repository))
             {
                 space += GetDirectorySize(directory);
             }
@@ -53,13 +59,13 @@ namespace RepositoryCleaner.Cleaners
             return space;
         }
 
-        protected override void CleanRepository(Repository repository, bool isFakeClean)
+        protected override void CleanRepository(CleanContext context)
         {
-            foreach (var directory in GetNuGetPackageDirectories(repository))
+            foreach (var directory in GetNuGetPackageDirectories(context.Repository))
             {
                 if (IsCleanablePath(directory))
                 {
-                    DeleteDirectory(directory, isFakeClean);
+                    DeleteDirectory(directory, context);
                 }
             }
         }

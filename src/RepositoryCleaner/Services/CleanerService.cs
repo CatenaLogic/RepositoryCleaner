@@ -47,8 +47,7 @@ namespace RepositoryCleaner.Services
                 {
                     Log.Debug("Checking if repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
 
-
-                    if (cleaner.CanClean(repository))
+                    if (cleaner.CanClean(new CleanContext(repository)))
                     {
                         Log.Debug("Repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
 
@@ -65,11 +64,11 @@ namespace RepositoryCleaner.Services
         }
 
         [Time]
-        public async Task CleanAsync(Repository repository, bool isFakeClean)
+        public async Task CleanAsync(CleanContext context)
         {
-            RepositoryCleaning.SafeInvoke(this, new RepositoryEventArgs(repository));
+            RepositoryCleaning.SafeInvoke(this, new RepositoryEventArgs(context.Repository));
 
-            Log.Info("Cleaning repository '{0}'", repository);
+            Log.Info("Cleaning repository '{0}'", context.Repository);
             Log.Indent();
 
             await TaskHelper.RunAndWaitAsync(() =>
@@ -77,21 +76,21 @@ namespace RepositoryCleaner.Services
                 var cleaners = GetAvailableCleaners();
                 foreach (var cleaner in cleaners)
                 {
-                    if (cleaner.CanClean(repository))
+                    if (cleaner.CanClean(context))
                     {
-                        Log.Debug("Cleaning repository '{0}' using cleaner '{1}'", repository, cleaner);
+                        Log.Debug("Cleaning repository '{0}' using cleaner '{1}'", context.Repository, cleaner);
 
-                        cleaner.Clean(repository, isFakeClean);
+                        cleaner.Clean(context);
 
-                        Log.Debug("Cleaned repository '{0}' using cleaner '{1}'", repository, cleaner);
+                        Log.Debug("Cleaned repository '{0}' using cleaner '{1}'", context.Repository, cleaner);
                     }
                 }
             });
 
             Log.Unindent();
-            Log.Info("Cleaned repository '{0}'", repository);
+            Log.Info("Cleaned repository '{0}'", context.Repository);
 
-            RepositoryCleaned.SafeInvoke(this, new RepositoryEventArgs(repository));
+            RepositoryCleaned.SafeInvoke(this, new RepositoryEventArgs(context.Repository));
         }
     }
 }

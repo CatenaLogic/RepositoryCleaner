@@ -18,11 +18,11 @@ namespace RepositoryCleaner.Cleaners
         #endregion
 
         #region Methods
-        bool CanClean(Repository repository);
+        bool CanClean(CleanContext context);
 
-        long CalculateCleanableSpace(Repository repository);
+        long CalculateCleanableSpace(CleanContext context);
 
-        void Clean(Repository repository, bool isFakeClean);
+        void Clean(CleanContext context);
         #endregion
     }
 }

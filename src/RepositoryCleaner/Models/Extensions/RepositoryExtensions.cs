@@ -28,7 +28,7 @@ namespace RepositoryCleaner.Models
             if (!repository.CleanableSize.HasValue)
             {
                 // Actual caclulation goes on a separate thread
-                var cleanableSize = await TaskShim.Run(() => repository.Cleaners.Sum(x => x.CalculateCleanableSpace(repository)));
+                var cleanableSize = await TaskShim.Run(() => repository.Cleaners.Sum(x => x.CalculateCleanableSpace(new CleanContext(repository))));
                 repository.CleanableSize = cleanableSize;
             }
 

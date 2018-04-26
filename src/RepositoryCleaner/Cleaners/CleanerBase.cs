@@ -15,15 +15,21 @@ namespace RepositoryCleaner.Cleaners
     using Catel.Reflection;
     using MethodTimer;
     using Models;
+    using Orc.FileSystem;
 
     public abstract class CleanerBase : ICleaner
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        protected CleanerBase()
+        protected readonly IDirectoryService _directoryService;
+
+        protected CleanerBase(IDirectoryService directoryService)
         {
-            CleanerAttribute cleanerAttribute = null;
-            if (GetType().TryGetAttribute(out cleanerAttribute))
+            Argument.IsNotNull(() => directoryService);
+
+            _directoryService = directoryService;
+
+            if (GetType().TryGetAttribute(out CleanerAttribute cleanerAttribute))
             {
                 Name = cleanerAttribute.Name;
                 Description = cleanerAttribute.Description;
@@ -39,53 +45,53 @@ namespace RepositoryCleaner.Cleaners
             return Name;
         }
 
-        public bool CanClean(Repository repository)
+        public bool CanClean(CleanContext context)
         {
-            Argument.IsNotNull(() => repository);
+            Argument.IsNotNull(() => context);
 
-            Log.Debug("Checking if cleaner '{0}' can clean repository '{1}'", GetType(), repository);
+            Log.Debug("Checking if cleaner '{0}' can clean repository '{1}'", GetType(), context.Repository);
 
-            var canClean = CanCleanRepository(repository);
+            var canClean = CanCleanRepository(context);
 
-            Log.Debug("Cleaner '{0}' can clean repository '{1}': {2}", GetType(), repository, canClean);
+            Log.Debug("Cleaner '{0}' can clean repository '{1}': {2}", GetType(), context.Repository, canClean);
 
             return canClean;
         }
 
         [Time]
-        public long CalculateCleanableSpace(Repository repository)
+        public long CalculateCleanableSpace(CleanContext context)
         {
-            Argument.IsNotNull(() => repository);
+            Argument.IsNotNull(() => context);
 
-            if (!CanClean(repository))
+            if (!CanClean(context))
             {
                 return 0L;
             }
 
-            Log.Debug("Calculating cleanable space using cleaner '{0}' and repository '{1}'", GetType(), repository);
+            Log.Debug("Calculating cleanable space using cleaner '{0}' and repository '{1}'", GetType(), context.Repository);
 
-            var cleanableSpace = CalculateCleanableSpaceForRepository(repository);
+            var cleanableSpace = CalculateCleanableSpaceForRepository(context);
 
-            Log.Debug("Calculated cleanable space using cleaner '{0}' and repository '{1}': {2}", GetType(), repository, cleanableSpace);
+            Log.Debug("Calculated cleanable space using cleaner '{0}' and repository '{1}': {2}", GetType(), context.Repository, cleanableSpace);
 
             return cleanableSpace;
         }
 
         [Time]
-        public void Clean(Repository repository, bool isFakeClean)
+        public void Clean(CleanContext context)
         {
-            Argument.IsNotNull(() => repository);
+            Argument.IsNotNull(() => context);
 
-            if (!CanClean(repository))
+            if (!CanClean(context))
             {
                 return;
             }
 
-            Log.Info("Cleaning up repository '{0}' using cleaner '{1}'", repository, GetType());
+            Log.Info("Cleaning up repository '{0}' using cleaner '{1}'", context.Repository, GetType());
 
-            CleanRepository(repository, isFakeClean);
+            CleanRepository(context);
 
-            Log.Info("Cleaned up repository '{0}' using cleaner '{1}'", repository, GetType());
+            Log.Info("Cleaned up repository '{0}' using cleaner '{1}'", context.Repository, GetType());
         }
 
         protected string GetRelativePath(Repository repository, string path)
@@ -95,20 +101,20 @@ namespace RepositoryCleaner.Cleaners
             return Path.Combine(repository.Directory, path);
         }
 
-        protected void DeleteDirectory(string directory, bool isFakeClean)
+        protected void DeleteDirectory(string directory, CleanContext context)
         {
-            if (!Directory.Exists(directory))
+            if (!_directoryService.Exists(directory))
             {
                 return;
             }
 
             Log.Debug("Deleting directory '{0}'", directory);
 
-            if (!isFakeClean)
+            if (!context.IsDryRun)
             {
                 try
                 {
-                    Directory.Delete(directory, true);
+                    _directoryService.Delete(directory);
                 }
                 catch (Exception ex)
                 {
@@ -123,9 +129,9 @@ namespace RepositoryCleaner.Cleaners
 
             try
             {
-                if (Directory.Exists(directory))
+                if (_directoryService.Exists(directory))
                 {
-                    size += (from fileName in Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                    size += (from fileName in _directoryService.GetFiles(directory, "*", SearchOption.AllDirectories)
                              select new FileInfo(fileName)).Sum(x => x.Length);
                 }
             }
@@ -137,10 +143,10 @@ namespace RepositoryCleaner.Cleaners
             return size;
         }
 
-        protected abstract bool CanCleanRepository(Repository repository);
+        protected abstract bool CanCleanRepository(CleanContext context);
 
-        protected abstract long CalculateCleanableSpaceForRepository(Repository repository);
+        protected abstract long CalculateCleanableSpaceForRepository(CleanContext context);
 
-        protected abstract void CleanRepository(Repository repository, bool isFakeClean);
+        protected abstract void CleanRepository(CleanContext context);
     }
 }

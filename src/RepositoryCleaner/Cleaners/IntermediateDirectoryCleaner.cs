@@ -12,23 +12,29 @@ namespace RepositoryCleaner.Cleaners
     using System.Linq;
     using Catel.Logging;
     using Models;
+    using Orc.FileSystem;
 
     [Cleaner("IntermediateDirectoryCleaner", Description = "Delete intermediate directories such as the obj\\debug directory")]
     public class IntermediateDirectoryCleaner : MsProjectsCleanerBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        protected override bool CanCleanRepository(Repository repository)
+        public IntermediateDirectoryCleaner(IDirectoryService directoryService) 
+            : base(directoryService)
         {
-            var projects = GetAllProjects(repository);
+        }
+
+        protected override bool CanCleanRepository(CleanContext context)
+        {
+            var projects = GetAllProjects(context.Repository);
             return projects.Count() > 0;
         }
 
-        protected override long CalculateCleanableSpaceForRepository(Repository repository)
+        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
         {
             var size = 0L;
 
-            var projects = GetAllProjects(repository);
+            var projects = GetAllProjects(context.Repository);
             var handledDirectories = new HashSet<string>();
 
             foreach (var project in projects)
@@ -52,15 +58,15 @@ namespace RepositoryCleaner.Cleaners
             return size;
         }
 
-        protected override void CleanRepository(Repository repository, bool isFakeClean)
+        protected override void CleanRepository(CleanContext context)
         {
-            var projects = GetAllProjects(repository);
+            var projects = GetAllProjects(context.Repository);
 
             foreach (var project in projects)
             {
                 var intermediateDirectory = project.GetIntermediateDirectory();
 
-                DeleteDirectory(intermediateDirectory, isFakeClean);
+                DeleteDirectory(intermediateDirectory, context);
             }
         }
     }

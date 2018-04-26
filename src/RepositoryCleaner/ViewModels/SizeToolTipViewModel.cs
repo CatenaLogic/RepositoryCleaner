@@ -8,14 +8,11 @@
 namespace RepositoryCleaner.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Text;
     using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;
-    using Catel.Text;
-    using Cleaners;
+    using Catel.Threading;
     using Humanizer;
     using Models;
 
@@ -49,10 +46,12 @@ namespace RepositoryCleaner.ViewModels
             {
                 Items.Clear();
 
+                var cleanContext = new CleanContext(_repository);
+
                 foreach (var cleaner in _repository.Cleaners)
                 {
-                    var size = await cleaner.CalculateCleanableSpaceAsync(_repository);
-                    var line = string.Format("{0} => {1}", cleaner.Name, (size == 0L) ? "0 bytes" : size.Bytes().Humanize("#.#"));
+                    var size = await TaskHelper.Run(() => cleaner.CalculateCleanableSpace(cleanContext));
+                    var line = $"{cleaner.Name} => {((size == 0L) ? "0 bytes" : size.Bytes().Humanize("#.#"))}";
 
                     Items.Add(line);
                 }

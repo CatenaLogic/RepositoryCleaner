@@ -12,23 +12,29 @@ namespace RepositoryCleaner.Cleaners
     using System.Linq;
     using Catel.Logging;
     using Models;
+    using Orc.FileSystem;
 
     [Cleaner("OutputDirectoryCleaner", Description = "Delete output directories such as the bin\\debug directory")]
     public class OutputDirectoryCleaner : MsProjectsCleanerBase
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        protected override bool CanCleanRepository(Repository repository)
+        public OutputDirectoryCleaner(IDirectoryService directoryService) 
+            : base(directoryService)
         {
-            var projects = GetAllProjects(repository);
-            return projects.Count() > 0;
         }
 
-        protected override long CalculateCleanableSpaceForRepository(Repository repository)
+        protected override bool CanCleanRepository(CleanContext context)
+        {
+            var projects = GetAllProjects(context.Repository);
+            return projects.Any();
+        }
+
+        protected override long CalculateCleanableSpaceForRepository(CleanContext context)
         {
             var size = 0L;
 
-            var projects = GetAllProjects(repository);
+            var projects = GetAllProjects(context.Repository);
             var handledDirectories = new HashSet<string>();
 
             foreach (var project in projects)
@@ -52,15 +58,15 @@ namespace RepositoryCleaner.Cleaners
             return size;
         }
 
-        protected override void CleanRepository(Repository repository, bool isFakeClean)
+        protected override void CleanRepository(CleanContext context)
         {
-            var projects = GetAllProjects(repository);
+            var projects = GetAllProjects(context.Repository);
 
             foreach (var project in projects)
             {
                 var intermediateDirectory = project.GetTargetDirectory();
 
-                DeleteDirectory(intermediateDirectory, isFakeClean);
+                DeleteDirectory(intermediateDirectory, context);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace RepositoryCleaner.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public static async Task CleanAsync(this ICleanerService cleanerService, IEnumerable<Repository> repositories, bool isFakeClean, Action completedCallback = null)
+        public static async Task CleanAsync(this ICleanerService cleanerService, IEnumerable<Repository> repositories, bool isDryRun, Action completedCallback = null)
         {
             Argument.IsNotNull(nameof(cleanerService), cleanerService);
 
@@ -35,8 +35,13 @@ namespace RepositoryCleaner.Services
 
             foreach (var repository in repositoriesToCleanUp)
             {
+                var cleanContext = new CleanContext(repository)
+                {
+                    IsDryRun = isDryRun
+                };
+
                 // Note: we can also do them all async (don't await), but the disk is probably the bottleneck anyway
-                await cleanerService.CleanAsync(repository, isFakeClean);
+                await cleanerService.CleanAsync(cleanContext);
 
                 cleanedUpRepositories.Add(repository);
 

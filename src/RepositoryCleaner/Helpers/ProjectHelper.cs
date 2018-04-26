@@ -25,7 +25,7 @@ namespace RepositoryCleaner
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static ICacheStorage<string, Project> _projectsCache = new CacheStorage<string, Project>(storeNullValues: true);
+        private static readonly ICacheStorage<string, Project> _projectsCache = new CacheStorage<string, Project>(storeNullValues: true);
 
         private static readonly Type SolutionParserType;
         private static readonly PropertyInfo SolutionReaderPropertyInfo;
@@ -74,7 +74,6 @@ namespace RepositoryCleaner
             {
                 using (var streamReader = new StreamReader(solutionFile))
                 {
-
                     SolutionReaderPropertyInfo.SetValue(solutionParser, streamReader, null);
                     ParseSolutionMethodInfo.Invoke(solutionParser, null);
 
@@ -131,7 +130,6 @@ namespace RepositoryCleaner
             {
                 using (var streamReader = new StreamReader(solutionFile))
                 {
-
                     SolutionReaderPropertyInfo.SetValue(solutionParser, streamReader, null);
                     ParseSolutionMethodInfo.Invoke(solutionParser, null);
                     var solutionDirectory = Path.GetDirectoryName(solutionFile);
@@ -172,7 +170,7 @@ namespace RepositoryCleaner
             Argument.IsNotNull(() => platformName);
             Argument.IsNotNull(() => solutionDirectory);
 
-            var key = string.Format("{0}_{1}_{2}", projectFile, configurationName, platformName);
+            var key = $"{projectFile}_{configurationName}_{platformName}";
 
             return _projectsCache.GetFromCacheOrFetch(key, () =>
             {
