@@ -109,7 +109,7 @@
                              Width="24" Height="24" Margin="4,8,4,4" />
 
             <Button Content="Analyze" Command="{Binding Analyze}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
-            <Button Content="Fake clean up" Command="{Binding FakeCleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
+            <Button Content="Clean up (dry run)" Command="{Binding FakeCleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
                     ToolTip="Run the whole clean up in fake mode -> not actually cleaning up anything" />
             <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" 
                     ToolTip="Run the whole clean up in real mode -> actually cleaning up everything"/>

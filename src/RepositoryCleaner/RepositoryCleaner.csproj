@@ -79,7 +79,8 @@
       <HintPath>..\..\lib\Orc.Controls.3.0.0-alpha0019\lib\net46\Orc.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Orc.FileSystem, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Orc.FileSystem.3.0.0-alpha0018\lib\net46\Orc.FileSystem.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Orc.FileSystem\src\Orc.FileSystem\bin\Debug\net46\Orc.FileSystem.dll</HintPath>
     </Reference>
     <Reference Include="Orc.SystemInfo, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orc.SystemInfo.3.0.0-alpha0009\lib\net46\Orc.SystemInfo.dll</HintPath>
@@ -117,6 +118,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Cleaners\EmptyDirectoryCleaner.cs" />
+    <Compile Include="Cleaners\OutputDirectoryInRootCleaner.cs" />
     <Compile Include="Cleaners\OutputDirectoryCleaner.cs" />
     <Compile Include="Cleaners\IntermediateDirectoryCleaner.cs" />
     <Compile Include="Cleaners\MsProjectsCleanerBase.cs" />
