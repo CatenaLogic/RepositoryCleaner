@@ -76,7 +76,7 @@
       <HintPath>..\..\lib\ModuleInit.Fody.1.8.0\lib\net452\ModuleInit.dll</HintPath>
     </Reference>
     <Reference Include="Orc.Controls, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Orc.Controls.3.0.0-alpha0020\lib\net46\Orc.Controls.dll</HintPath>
+      <HintPath>..\..\lib\Orc.Controls.3.0.0-alpha0025\lib\net46\Orc.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Orc.FileSystem, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Orc.FileSystem.3.0.0-alpha0020\lib\net46\Orc.FileSystem.dll</HintPath>

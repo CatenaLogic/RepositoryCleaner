@@ -9,7 +9,7 @@
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
               xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
               xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer"
-              mc:Ignorable="d" Width="600">
+              mc:Ignorable="d" MinWidth="800">
 
     <orccontrols:StackGrid>
         <Grid.RowDefinitions>
