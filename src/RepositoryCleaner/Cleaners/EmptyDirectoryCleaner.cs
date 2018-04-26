@@ -52,7 +52,7 @@ namespace RepositoryCleaner.Cleaners
             // Separate so we can skip root directories
             var emptyDirectories = new List<string>();
 
-            var directories = _directoryService.GetDirectories("*", repository.Directory);
+            var directories = _directoryService.GetDirectories(repository.Directory);
 
             foreach (var directory in directories)
             {

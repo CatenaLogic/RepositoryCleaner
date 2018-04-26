@@ -61,7 +61,7 @@ namespace RepositoryCleaner.Logging
         {
             _textBox.Dispatcher.Invoke(new Action(() =>
             {
-                string finalMessage = string.Format("{0} {1}", time.ToString("hh:mm:ss.fff"), message);
+                var finalMessage = $"{time.ToString("hh:mm:ss.fff")} {message}";
 
                 var paragraph = new Paragraph(new Run(finalMessage));
 
