@@ -10,6 +10,7 @@ namespace RepositoryCleaner
     using System;
     using System.IO;
     using System.Windows;
+    using System.Windows.Controls;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
@@ -39,6 +40,9 @@ namespace RepositoryCleaner
 #if DEBUG
             LogManager.AddDebugListener(true);
 #endif
+
+            // Show tooltips for 30 seconds
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(30 * 1000));
 
             var dependencyResolver = this.GetDependencyResolver();
             var applicationInitializationService = dependencyResolver.Resolve<IApplicationInitializationService>();
