@@ -47,7 +47,7 @@ namespace RepositoryCleaner.Services
 
             var cleanableRepositories = new List<Repository>();
 
-            foreach (var directory in _directoryService.GetDirectories(repositoriesRoot))
+            foreach (var directory in _directoryService.GetDirectories(repositoriesRoot, "*", SearchOption.AllDirectories))
             {
                 if (IsRepository(directory))
                 {
@@ -68,28 +68,35 @@ namespace RepositoryCleaner.Services
             Log.Debug("Checking if a '{0}' is a repository", directory);
 
             var gitDirectory = Path.Combine(directory, ".git");
-            if (_directoryService.Exists(gitDirectory))
+            if (!_directoryService.Exists(gitDirectory))
             {
-                Log.Debug("Directory '{0}' is a repository because it contains an .git directory in the root", directory);
-                return true;
+                Log.Debug("Directory '{0}' is not a repository because it does not contain a .git directory in the root", directory);
+                return false;
             }
 
             var srcDirectory = Path.Combine(directory, "src");
-            if (_directoryService.Exists(srcDirectory))
+            if (!_directoryService.Exists(srcDirectory))
             {
-                Log.Debug("Directory '{0}' is a repository because it contains an src directory in the root", directory);
-                return true;
+                Log.Debug("Directory '{0}' is not a repository because it does not contain a src directory in the root", directory);
+                return false;
             }
 
-            if (_directoryService.GetFiles(directory, "*.sln").Any())
+            if (!_directoryService.GetFiles(srcDirectory, "*.sln").Any())
             {
-                Log.Debug("Directory '{0}' is a repository because it contains a .sln file in the root", directory);
-                return true;
+                Log.Debug("Directory '{0}' is not a repository because it does not contain a .sln file in the src directory", directory);
+                return false;
             }
 
-            Log.Debug("Directory '{0}' is not considered a repository", directory);
+            var libDirectory = Path.Combine(directory, "lib");
+            if (!_directoryService.Exists(libDirectory))
+            {
+                Log.Debug("Directory '{0}' is not a repository because it does not contain a lib directory in the root", directory);
+                return false;
+            }
 
-            return false;
+            Log.Debug("Directory '{0}' is considered a repository", directory);
+
+            return true;
         }
     }
 }
