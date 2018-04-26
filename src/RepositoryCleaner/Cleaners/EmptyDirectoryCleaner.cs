@@ -10,6 +10,7 @@ namespace RepositoryCleaner.Cleaners
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Catel;
     using Catel.Logging;
     using Models;
     using Orc.FileSystem;
@@ -56,6 +57,12 @@ namespace RepositoryCleaner.Cleaners
 
             foreach (var directory in directories)
             {
+                // Only include a very specific set
+                if (!directory.EndsWithAnyIgnoreCase("output", "obj", "lib"))
+                {
+                    continue;
+                }
+
                 emptyDirectories.AddRange(GetEmptyDirectories(directory));
             }
 
