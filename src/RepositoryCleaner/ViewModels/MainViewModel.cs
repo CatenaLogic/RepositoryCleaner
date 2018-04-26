@@ -100,7 +100,7 @@ namespace RepositoryCleaner.ViewModels
 
         private async void OnAnalyzeExecute()
         {
-            await FindRepositories();
+            await FindRepositories(true);
         }
 
         public Command FakeCleanUp { get; private set; }
@@ -138,7 +138,7 @@ namespace RepositoryCleaner.ViewModels
         {
             RepositoriesRoot = _configurationService.GetRoamingValue<string>(Settings.Application.LastRepositoriesRoot);
 
-            //await FindRepositories();
+            await FindRepositories(false);
         }
 
         private void OnRepositoryFilterChanged()
@@ -146,7 +146,7 @@ namespace RepositoryCleaner.ViewModels
             FilterRepositories();
         }
 
-        private async Task FindRepositories()
+        private async Task FindRepositories(bool calculateSize)
         {
             var repositoriesRoot = RepositoriesRoot;
             if (string.IsNullOrWhiteSpace(repositoriesRoot))
@@ -180,22 +180,25 @@ namespace RepositoryCleaner.ViewModels
                 var totalRepositories = repositories.Count;
                 var completedRepositories = 0;
 
-                Log.Info($"Initializing {repositories.Count} repositories");
-
-                for (var i = 0; i < repositories.Count; i++)
+                if (calculateSize)
                 {
-                    var repository = repositories[i];
-                    var prefix = $"[{i + 1} / {repositories.Count}] ";
+                    Log.Info($"Initializing {repositories.Count} repositories");
 
-                    Log.Info($"{prefix}Initializing repository {repository}");
+                    for (var i = 0; i < repositories.Count; i++)
+                    {
+                        var repository = repositories[i];
+                        var prefix = $"[{i + 1} / {repositories.Count}] ";
 
-                    var spaceToClean = await repository.CalculateCleanableSpaceAsync();
-                    Log.Info($"{prefix}Potential disk space savings for {repository}: {((long)spaceToClean).Bytes().Humanize("#.#")}");
+                        Log.Info($"{prefix}Initializing repository {repository}");
 
-                    completedRepositories++;
+                        var spaceToClean = await repository.CalculateCleanableSpaceAsync();
+                        Log.Info($"{prefix}Potential disk space savings for {repository}: {((long) spaceToClean).Bytes().Humanize("#.#")}");
 
-                    var percentage = ((double)completedRepositories / totalRepositories) * 100;
-                    Progress = (int)percentage;
+                        completedRepositories++;
+
+                        var percentage = ((double) completedRepositories / totalRepositories) * 100;
+                        Progress = (int) percentage;
+                    }
                 }
             }
 
