@@ -18,6 +18,7 @@ namespace RepositoryCleaner
     using Orchestra;
     using Services;
     using Views;
+    using AssemblyHelper = Orchestra.AssemblyHelper;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -32,7 +33,8 @@ namespace RepositoryCleaner
         {
             base.OnStartup(e);
 
-            StyleHelper.CreateStyleForwardersForDefaultStyles();
+            ThemeHelper.EnsureApplicationThemes(AssemblyHelper.GetEntryAssembly(), true);
+            //StyleHelper.CreateStyleForwardersForDefaultStyles();
 
 #if DEBUG
             LogManager.AddDebugListener(true);
