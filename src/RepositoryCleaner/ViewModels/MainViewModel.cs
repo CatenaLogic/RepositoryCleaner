@@ -158,9 +158,20 @@ namespace RepositoryCleaner.ViewModels
 
             using (CreateIsBusyScope())
             {
+                var existingRepositories = Repositories.ToList();
+
                 var repositories = (await _repositoryService.FindRepositoriesAsync(repositoriesRoot)).ToList();
                 if (repositories.Count > 0)
                 {
+                    foreach (var repository in repositories)
+                    {
+                        var existingRepository = existingRepositories.FirstOrDefault(x => x.Directory.EqualsIgnoreCase(repository.Directory));
+                        if (existingRepository != null)
+                        {
+                            repository.IsIncluded = existingRepository.IsIncluded;
+                        }
+                    }
+
                     using (Repositories.SuspendChangeNotifications())
                     {
 #pragma warning disable 618
@@ -177,17 +188,19 @@ namespace RepositoryCleaner.ViewModels
 
                 FilterRepositories();
 
-                var totalRepositories = repositories.Count;
+                var includedRepositories = repositories.Where(x => x.IsIncluded).ToList();
+
+                var totalRepositories = includedRepositories.Count;
                 var completedRepositories = 0;
 
                 if (calculateSize)
                 {
-                    Log.Info($"Initializing {repositories.Count} repositories");
+                    Log.Info($"Initializing {includedRepositories.Count} repositories");
 
-                    for (var i = 0; i < repositories.Count; i++)
+                    for (var i = 0; i < includedRepositories.Count; i++)
                     {
-                        var repository = repositories[i];
-                        var prefix = $"[{i + 1} / {repositories.Count}] ";
+                        var repository = includedRepositories[i];
+                        var prefix = $"[{i + 1} / {includedRepositories.Count}] ";
 
                         Log.Info($"{prefix}Initializing repository {repository}");
 
