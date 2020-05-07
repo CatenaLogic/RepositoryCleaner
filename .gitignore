@@ -19,9 +19,11 @@ TestResult.xml
 [Rr]elease/
 [Oo]utput*/
 [Pp]ackages*/
+[Tt]emp/
 bin
 obj
-[Ll]ib/
+[Ll]ib/*
+![Ll]ib/repositories.config
 *.ide/
 *_i.c
 *_p.c
@@ -42,6 +44,7 @@ obj
 *.vspscc
 *.xap
 .builds
+*.log
 
 # Visual C++ cache files
 ipch/
@@ -120,6 +123,17 @@ Thumbs.db
 # Folder config file
 Desktop.ini
 
+# Cake - Uncomment if you are using it
+tools/**
+!tools/packages.config
+build.cakeoverrides
+
 # mstest test results
 TestResults
 .vs/
+.sonarqube/
+.github/
+BundleArtifacts/
+
+.vscode
+FodyWeavers.xsd
