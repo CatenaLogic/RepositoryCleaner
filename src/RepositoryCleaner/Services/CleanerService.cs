@@ -66,7 +66,7 @@ namespace RepositoryCleaner.Services
         [Time]
         public async Task CleanAsync(CleanContext context)
         {
-            RepositoryCleaning.SafeInvoke(this, new RepositoryEventArgs(context.Repository));
+            RepositoryCleaning?.Invoke(this, new RepositoryEventArgs(context.Repository));
 
             Log.Info("Cleaning repository '{0}'", context.Repository);
             Log.Indent();
@@ -90,7 +90,7 @@ namespace RepositoryCleaner.Services
             Log.Unindent();
             Log.Info("Cleaned repository '{0}'", context.Repository);
 
-            RepositoryCleaned.SafeInvoke(this, new RepositoryEventArgs(context.Repository));
+            RepositoryCleaned?.Invoke(this, new RepositoryEventArgs(context.Repository));
         }
     }
 }

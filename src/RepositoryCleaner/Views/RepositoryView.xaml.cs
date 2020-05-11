@@ -28,7 +28,7 @@ namespace RepositoryCleaner.Views
 
             if (layoutRoot.Visibility != Visibility.Visible)
             {
-                Dispatcher.BeginInvoke(() => layoutRoot.Visibility = Visibility.Visible);
+                Dispatcher.BeginInvoke(() => layoutRoot.SetCurrentValue(VisibilityProperty, Visibility.Visible));
             }
         }
     }

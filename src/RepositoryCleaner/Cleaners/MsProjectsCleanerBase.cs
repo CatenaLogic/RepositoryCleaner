@@ -16,7 +16,7 @@ namespace RepositoryCleaner.Cleaners
 
     public abstract class MsProjectsCleanerBase : CleanerBase
     {
-        private static readonly ICacheStorage<string, IEnumerable<Project>> _solutionsCache = new CacheStorage<string, IEnumerable<Project>>();
+        private static readonly ICacheStorage<string, IEnumerable<Project>> SolutionsCache = new CacheStorage<string, IEnumerable<Project>>();
 
         protected MsProjectsCleanerBase(IDirectoryService directoryService) 
             : base(directoryService)
@@ -40,7 +40,7 @@ namespace RepositoryCleaner.Cleaners
 
         protected virtual IEnumerable<Project> GetAllProjects(string solutionFile)
         {
-            return _solutionsCache.GetFromCacheOrFetch(solutionFile, () =>
+            return SolutionsCache.GetFromCacheOrFetch(solutionFile, () =>
             {
                 var projects = ProjectHelper.GetProjectsForAllConfigurations(solutionFile);
                 return projects;
