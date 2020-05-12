@@ -87,14 +87,14 @@ namespace RepositoryCleaner.ViewModels
         /// </summary>
         private async Task OnSelectDirectoryExecuteAsync()
         {
-            if (!string.IsNullOrEmpty(SelectedDirectory))
+            var result = await _selectDirectoryService.DetermineDirectoryAsync(new DetermineDirectoryContext
             {
-                _selectDirectoryService.InitialDirectory = Path.GetFullPath(SelectedDirectory);
-            }
+                InitialDirectory = !string.IsNullOrEmpty(SelectedDirectory) ? Path.GetFullPath(SelectedDirectory) : null
+            });
 
-            if (await _selectDirectoryService.DetermineDirectoryAsync())
+            if (result.Result)
             {
-                SelectedDirectory = _selectDirectoryService.DirectoryName;
+                SelectedDirectory = result.DirectoryName;
             }
         }
         #endregion
