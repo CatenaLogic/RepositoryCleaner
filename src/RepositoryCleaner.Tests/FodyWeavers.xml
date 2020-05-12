@@ -2,6 +2,10 @@
   <Obsolete />
   <ModuleInit />
   <MethodTimer />
-  <LoadAssembliesOnStartup />
+  <LoadAssembliesOnStartup>
+    <IncludeAssemblies>
+      
+    </IncludeAssemblies>
+  </LoadAssembliesOnStartup>
   <Catel />
 </Weavers>
