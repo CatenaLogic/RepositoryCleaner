@@ -37,7 +37,7 @@
     <PackageReference Include="Microsoft.Build" Version="16.5.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.1.0" PrivateAssets="all" />
-    <PackageReference Include="Orc.CommandLine" Version="3.1.0" />
+    <PackageReference Include="Orc.CommandLine" Version="3.3.1" />
     <PackageReference Include="Orc.Controls" Version="3.3.0-alpha0303" />
     <PackageReference Include="Orc.LogViewer" Version="3.3.0-alpha0190" />
     <PackageReference Include="Orc.Notifications" Version="3.2.0" />
