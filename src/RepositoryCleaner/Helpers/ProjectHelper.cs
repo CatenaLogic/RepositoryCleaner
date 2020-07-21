@@ -19,81 +19,76 @@ namespace RepositoryCleaner
     using Catel.Caching;
     using Catel.Logging;
     using Catel.Reflection;
+    using Microsoft.Build.Construction;
     using Microsoft.Build.Evaluation;
 
     internal static class ProjectHelper
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly ICacheStorage<string, Project> _projectsCache = new CacheStorage<string, Project>(storeNullValues: true);
+        private static readonly ICacheStorage<string, Project> ProjectsCache = new CacheStorage<string, Project>(storeNullValues: true);
 
-        private static readonly Type SolutionParserType;
-        private static readonly PropertyInfo SolutionReaderPropertyInfo;
-        private static readonly PropertyInfo ProjectsPropertyInfo;
-        private static readonly PropertyInfo SolutionConfigurationsPropertyInfo;
-        private static readonly MethodInfo ParseSolutionMethodInfo;
-        private static readonly PropertyInfo RelativePathPropertyInfo;
-        private static readonly PropertyInfo ProjectTypePropertyInfo;
-        private static readonly object KnownToBeMsBuildFormat;
+        //private static readonly Type SolutionFileType;
+        //private static readonly PropertyInfo SolutionReaderPropertyInfo;
+        //private static readonly PropertyInfo ProjectsPropertyInfo;
+        //private static readonly PropertyInfo SolutionConfigurationsPropertyInfo;
+        //private static readonly MethodInfo ParseSolutionMethodInfo;
+        //private static readonly PropertyInfo RelativePathPropertyInfo;
+        //private static readonly PropertyInfo ProjectTypePropertyInfo;
+        //private static readonly object KnownToBeMsBuildFormat;
 
-        static ProjectHelper()
-        {
-            const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
+        //static ProjectHelper()
+        //{
+        //    const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
-            SolutionParserType = TypeCache.GetType("Microsoft.Build.Construction.SolutionParser");
-            if (SolutionParserType != null)
-            {
-                SolutionReaderPropertyInfo = SolutionParserType.GetProperty("SolutionReader", bindingFlags);
-                SolutionConfigurationsPropertyInfo = SolutionParserType.GetProperty("SolutionConfigurations", bindingFlags);
+        //    SolutionFileType = TypeCache.GetType("Microsoft.Build.Construction.SolutionFile");
+        //    if (SolutionFileType != null)
+        //    {
+        //        SolutionReaderPropertyInfo = SolutionFileType.GetProperty("SolutionReader", bindingFlags);
+        //        SolutionConfigurationsPropertyInfo = SolutionFileType.GetProperty("SolutionConfigurations", bindingFlags);
 
-                ProjectsPropertyInfo = SolutionParserType.GetProperty("Projects", bindingFlags);
-                ParseSolutionMethodInfo = SolutionParserType.GetMethod("ParseSolution", bindingFlags);
-            }
+        //        ProjectsPropertyInfo = SolutionFileType.GetProperty("Projects", bindingFlags);
+        //        ParseSolutionMethodInfo = SolutionFileType.GetMethod("ParseSolution", bindingFlags);
+        //    }
 
-            var projectInSolutionType = TypeCache.GetType("Microsoft.Build.Construction.ProjectInSolution");
-            if (projectInSolutionType != null)
-            {
-                RelativePathPropertyInfo = projectInSolutionType.GetProperty("RelativePath", bindingFlags);
-                ProjectTypePropertyInfo = projectInSolutionType.GetProperty("ProjectType", bindingFlags);
-            }
+        //    var projectInSolutionType = TypeCache.GetType("Microsoft.Build.Construction.ProjectInSolution");
+        //    if (projectInSolutionType != null)
+        //    {
+        //        RelativePathPropertyInfo = projectInSolutionType.GetProperty("RelativePath", bindingFlags);
+        //        ProjectTypePropertyInfo = projectInSolutionType.GetProperty("ProjectType", bindingFlags);
+        //    }
 
-            var solutionProjectTypeType = TypeCache.GetType("Microsoft.Build.Construction.SolutionProjectType");
-            if (solutionProjectTypeType != null)
-            {
-                KnownToBeMsBuildFormat = Enum.Parse(solutionProjectTypeType, "KnownToBeMSBuildFormat");
-            }
-        }
+        //    var solutionProjectTypeType = TypeCache.GetType("Microsoft.Build.Construction.SolutionProjectType");
+        //    if (solutionProjectTypeType != null)
+        //    {
+        //        KnownToBeMsBuildFormat = Enum.Parse(solutionProjectTypeType, "KnownToBeMSBuildFormat");
+        //    }
+        //}
 
-        public static IEnumerable<KeyValuePair<string, string>> GetSolutionConfigurationsAndPlatforms(string solutionFile)
+        public static IEnumerable<KeyValuePair<string, string>> GetSolutionConfigurationsAndPlatforms(string solutionFileName)
         {
             var items = new List<KeyValuePair<string, string>>();
 
-            var solutionParser = SolutionParserType.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic).First().Invoke(null);
+            //if (SolutionFileType is null)
+            //{
+            //    return items;
+            //}
 
             try
             {
-                using (var streamReader = new StreamReader(solutionFile))
+                var solutionFile = SolutionFile.Parse(solutionFileName);
+               
+                foreach (var solutionConfiguration in solutionFile.SolutionConfigurations)
                 {
-                    SolutionReaderPropertyInfo.SetValue(solutionParser, streamReader, null);
-                    ParseSolutionMethodInfo.Invoke(solutionParser, null);
+                    var configuration = solutionConfiguration.ConfigurationName;
+                    var platform = solutionConfiguration.PlatformName;
 
-                    var solutionConfigurations = SolutionConfigurationsPropertyInfo.GetValue(solutionParser, null);
-                    var indexerPropertyInfo = solutionConfigurations.GetType().GetPropertyEx("Item");
+                    items.Add(new KeyValuePair<string, string>(configuration, platform));
 
-                    for (var i = 0; i < PropertyHelper.GetPropertyValue<int>(solutionConfigurations, "Count", false); i++)
+                    if (string.Equals("Any CPU", platform))
                     {
-                        var item = indexerPropertyInfo.GetValue(solutionConfigurations, new object[] { i });
-
-                        var configuration = PropertyHelper.GetPropertyValue<string>(item, "ConfigurationName", false);
-                        var platform = PropertyHelper.GetPropertyValue<string>(item, "PlatformName", false);
-
-                        items.Add(new KeyValuePair<string, string>(configuration, platform));
-
-                        if (string.Equals("Any CPU", platform))
-                        {
-                            // Somehow there is a bug where Any CPU and AnyCPU are not treated the same, fix this
-                            items.Add(new KeyValuePair<string, string>(configuration, "AnyCPU"));
-                        }
+                        // Somehow there is a bug where Any CPU and AnyCPU are not treated the same, fix this
+                        items.Add(new KeyValuePair<string, string>(configuration, "AnyCPU"));
                     }
                 }
             }
@@ -107,49 +102,43 @@ namespace RepositoryCleaner
             return items;
         }
 
-        public static IEnumerable<Project> GetProjectsForAllConfigurations(string solutionFile)
+        public static IEnumerable<Project> GetProjectsForAllConfigurations(string solutionFileName)
         {
             var projects = new List<Project>();
 
-            var configurationsAndPlatforms = GetSolutionConfigurationsAndPlatforms(solutionFile);
+            var configurationsAndPlatforms = GetSolutionConfigurationsAndPlatforms(solutionFileName);
 
             foreach (var configurationAndPlatform in configurationsAndPlatforms)
             {
-                projects.AddRange(GetProjects(solutionFile, configurationAndPlatform.Key, configurationAndPlatform.Value));
+                projects.AddRange(GetProjects(solutionFileName, configurationAndPlatform.Key, configurationAndPlatform.Value));
             }
 
             return projects;
         }
 
-        public static IEnumerable<Project> GetProjects(string solutionFile, string configurationName, string platformName)
+        public static IEnumerable<Project> GetProjects(string solutionFileName, string configurationName, string platformName)
         {
             var projects = new List<Project>();
-            var solutionParser = SolutionParserType.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic).First().Invoke(null);
 
             try
             {
-                using (var streamReader = new StreamReader(solutionFile))
+                var solutionFile = SolutionFile.Parse(solutionFileName);
+                var solutionDirectory = Path.GetDirectoryName(solutionFileName);
+
+                foreach (var projectInSolution in solutionFile.ProjectsInOrder)
                 {
-                    SolutionReaderPropertyInfo.SetValue(solutionParser, streamReader, null);
-                    ParseSolutionMethodInfo.Invoke(solutionParser, null);
-                    var solutionDirectory = Path.GetDirectoryName(solutionFile);
-                    var array = (Array)ProjectsPropertyInfo.GetValue(solutionParser, null);
-                    for (var i = 0; i < array.Length; i++)
+                    var relativePath = projectInSolution.RelativePath;
+                    var projectFile = Path.Combine(solutionDirectory, relativePath);
+
+                    if (projectInSolution.ProjectType != SolutionProjectType.KnownToBeMSBuildFormat)
                     {
-                        var projectInSolution = array.GetValue(i);
-                        if (!ObjectHelper.AreEqual(ProjectTypePropertyInfo.GetValue(projectInSolution), KnownToBeMsBuildFormat))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        var relativePath = (string)RelativePathPropertyInfo.GetValue(projectInSolution);
-                        var projectFile = Path.Combine(solutionDirectory, relativePath);
-
-                        var project = LoadProject(projectFile, configurationName, platformName, solutionDirectory);
-                        if (project != null)
-                        {
-                            projects.Add(project);
-                        }
+                    var project = LoadProject(projectFile, configurationName, platformName, solutionDirectory);
+                    if (project != null)
+                    {
+                        projects.Add(project);
                     }
                 }
             }
@@ -172,7 +161,7 @@ namespace RepositoryCleaner
 
             var key = $"{projectFile}_{configurationName}_{platformName}";
 
-            return _projectsCache.GetFromCacheOrFetch(key, () =>
+            return ProjectsCache.GetFromCacheOrFetch(key, () =>
             {
                 if (!solutionDirectory.EndsWith(@"\"))
                 {
