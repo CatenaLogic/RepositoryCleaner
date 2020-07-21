@@ -5,14 +5,16 @@
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:catel="http://schemas.catelproject.com"
               xmlns:views="clr-namespace:RepositoryCleaner.Views"
-              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+              xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors"
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
               xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
-              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer"
+              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer" 
+              xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
               mc:Ignorable="d" MinWidth="800">
 
     <orccontrols:StackGrid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -27,6 +29,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
+        <orctheming:ThemeSwitcherView />
 
         <Label>
             <TextBlock TextWrapping="Wrap">
@@ -49,9 +53,9 @@
         <views:SummaryView DataContext="{Binding Repositories}" />
 
         <TextBox Text="{Binding RepositoryFilter}" Margin="0,4,0,4">
-            <i:Interaction.Behaviors>
+            <xamlbehaviors:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged />
-            </i:Interaction.Behaviors>
+            </xamlbehaviors:Interaction.Behaviors>
         </TextBox>
 
         <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False"

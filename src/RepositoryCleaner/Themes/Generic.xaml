@@ -1,9 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Orc.LogViewer;component/themes/generic.xaml" />
+        <ResourceDictionary Source="/Orchestra.Core;component/themes/Orchestra.generic.wpf.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <SolidColorBrush x:Key="AccentColorBrush" Color="#D24726" />
 
-    <Geometry x:Key="RectngleGeometry">M0.5,0.5 L17.5,0.5 L17.5,17.5 L0.5,17.5 z</Geometry>
+    <Geometry x:Key="RectangleGeometry">M0.5,0.5 L17.5,0.5 L17.5,17.5 L0.5,17.5 z</Geometry>
     <Geometry x:Key="TriangleGeometry">M9.0,0.5 L17.5,17.5 L0.0,17.5 z</Geometry>
     <Geometry x:Key="EllipseGeometry">M17.5,9 C17.5,13.69442 13.69442,17.5 9,17.5 C4.3055796,17.5 0.5,13.69442 0.5,9 C0.5,4.3055796 
             4.3055796,0.5 9,0.5 C13.69442,0.5 17.5,4.3055796 17.5,9 z</Geometry>
