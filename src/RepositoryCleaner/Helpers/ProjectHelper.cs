@@ -14,11 +14,9 @@ namespace RepositoryCleaner
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using Catel;
     using Catel.Caching;
     using Catel.Logging;
-    using Catel.Reflection;
     using Microsoft.Build.Construction;
     using Microsoft.Build.Evaluation;
 
@@ -28,51 +26,9 @@ namespace RepositoryCleaner
 
         private static readonly ICacheStorage<string, Project> ProjectsCache = new CacheStorage<string, Project>(storeNullValues: true);
 
-        //private static readonly Type SolutionFileType;
-        //private static readonly PropertyInfo SolutionReaderPropertyInfo;
-        //private static readonly PropertyInfo ProjectsPropertyInfo;
-        //private static readonly PropertyInfo SolutionConfigurationsPropertyInfo;
-        //private static readonly MethodInfo ParseSolutionMethodInfo;
-        //private static readonly PropertyInfo RelativePathPropertyInfo;
-        //private static readonly PropertyInfo ProjectTypePropertyInfo;
-        //private static readonly object KnownToBeMsBuildFormat;
-
-        //static ProjectHelper()
-        //{
-        //    const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
-
-        //    SolutionFileType = TypeCache.GetType("Microsoft.Build.Construction.SolutionFile");
-        //    if (SolutionFileType != null)
-        //    {
-        //        SolutionReaderPropertyInfo = SolutionFileType.GetProperty("SolutionReader", bindingFlags);
-        //        SolutionConfigurationsPropertyInfo = SolutionFileType.GetProperty("SolutionConfigurations", bindingFlags);
-
-        //        ProjectsPropertyInfo = SolutionFileType.GetProperty("Projects", bindingFlags);
-        //        ParseSolutionMethodInfo = SolutionFileType.GetMethod("ParseSolution", bindingFlags);
-        //    }
-
-        //    var projectInSolutionType = TypeCache.GetType("Microsoft.Build.Construction.ProjectInSolution");
-        //    if (projectInSolutionType != null)
-        //    {
-        //        RelativePathPropertyInfo = projectInSolutionType.GetProperty("RelativePath", bindingFlags);
-        //        ProjectTypePropertyInfo = projectInSolutionType.GetProperty("ProjectType", bindingFlags);
-        //    }
-
-        //    var solutionProjectTypeType = TypeCache.GetType("Microsoft.Build.Construction.SolutionProjectType");
-        //    if (solutionProjectTypeType != null)
-        //    {
-        //        KnownToBeMsBuildFormat = Enum.Parse(solutionProjectTypeType, "KnownToBeMSBuildFormat");
-        //    }
-        //}
-
         public static IEnumerable<KeyValuePair<string, string>> GetSolutionConfigurationsAndPlatforms(string solutionFileName)
         {
             var items = new List<KeyValuePair<string, string>>();
-
-            //if (SolutionFileType is null)
-            //{
-            //    return items;
-            //}
 
             try
             {
@@ -107,10 +63,14 @@ namespace RepositoryCleaner
             var projects = new List<Project>();
 
             var configurationsAndPlatforms = GetSolutionConfigurationsAndPlatforms(solutionFileName);
-
-            foreach (var configurationAndPlatform in configurationsAndPlatforms)
+            if (configurationsAndPlatforms.Any())
             {
-                projects.AddRange(GetProjects(solutionFileName, configurationAndPlatform.Key, configurationAndPlatform.Value));
+                var solutionFile = SolutionFile.Parse(solutionFileName);
+
+                foreach (var configurationAndPlatform in configurationsAndPlatforms)
+                {
+                    projects.AddRange(GetProjects(solutionFileName, configurationAndPlatform.Key, configurationAndPlatform.Value));
+                }
             }
 
             return projects;
@@ -175,7 +135,12 @@ namespace RepositoryCleaner
                     collections["Platform"] = platformName;
                     collections["SolutionDir"] = solutionDirectory;
 
-                    var project = new Project(projectFile, collections, null);
+                    var projectCollection = new ProjectCollection
+                    {
+                        
+                    };
+
+                    var project = new Project(projectFile, collections, null, projectCollection, ProjectLoadSettings.IgnoreMissingImports | ProjectLoadSettings.IgnoreInvalidImports);
                     return project;
                 }
                 catch (Exception ex)
