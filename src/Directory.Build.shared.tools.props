@@ -1,0 +1,20 @@
+<Project>
+  <!-- 
+    This file applies to projects when it gets imported explicitly using the line below:
+
+    <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.tools.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.tools.props')" />
+  -->
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);GetToolsPackageFiles</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+
+  <Target Name="GetToolsPackageFiles">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)\*.*">
+          <TargetPath></TargetPath>
+      </BuildOutputInPackage>
+    </ItemGroup>
+  </Target>
+
+</Project>
