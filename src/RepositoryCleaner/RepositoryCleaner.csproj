@@ -7,6 +7,10 @@
     <AssemblyName>RepositoryCleaner</AssemblyName>
     <RootNamespace>RepositoryCleaner</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageId>repositorycleaner</PackageId>
+    <Title>Repository Cleaner</Title>
+    <Description>Cleans the packages and output files of large sets of repositories to save disk space.</Description>
+    <PackageTags>repository cleaner disk space</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>

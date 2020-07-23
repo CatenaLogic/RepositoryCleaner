@@ -180,6 +180,10 @@ public class WpfProcessor : ProcessorBase
                     BuildContext.General.CodeSign.CertificateSubjectName);
 
                 SignFiles(BuildContext, signToolCommand, projectFilesToSign);
+            }            
+            else
+            {
+                BuildContext.CakeContext.Warning("No signing certificate subject name provided, not signing any files");
             }
 
             foreach (var channel in channels)
