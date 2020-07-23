@@ -1,0 +1,11 @@
+﻿<Weavers VerifyAssembly="true" VerifyIgnoreCodes="0x80131869,0x801318F3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <Obsolete />
+  <ModuleInit />
+  <MethodTimer />
+  <LoadAssembliesOnStartup>
+    <IncludeAssemblies>
+      
+    </IncludeAssemblies>
+  </LoadAssembliesOnStartup>
+  <Catel />
+</Weavers>

@@ -1,0 +1,73 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <SelfContained>true</SelfContained>
+    <AssemblyName>RepositoryCleaner</AssemblyName>
+    <RootNamespace>RepositoryCleaner</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageId>repositorycleaner</PackageId>
+    <Title>Repository Cleaner</Title>
+    <Description>Cleans the packages and output files of large sets of repositories to save disk space.</Description>
+    <PackageTags>repository cleaner disk space</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <UseWpf>true</UseWpf>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <!-- SonarQube requires a project guid -->
+    <ProjectGuid>50E41855-2674-4723-BCD4-5AD8BC6449D5</ProjectGuid>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <StartupObject />
+    <NoWarn>$(NoWarn);SA1652</NoWarn>
+    <ApplicationIcon>Resources\Icons\logo.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Catel.MVVM" Version="5.12.7" />
+    <PackageReference Include="Catel.Fody" Version="4.4.4" PrivateAssets="all">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Fody" Version="6.2.0" PrivateAssets="all">
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Humanizer" Version="2.8.26" />
+    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" PrivateAssets="all">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="MethodTimer.Fody" Version="3.1.2" PrivateAssets="all">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Build" Version="16.6.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.6.0" />
+    <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Orc.CommandLine" Version="4.0.0" />
+    <PackageReference Include="Orc.Controls" Version="4.0.2" />
+    <PackageReference Include="Orc.LogViewer" Version="4.0.0" />
+    <PackageReference Include="Orc.Notifications" Version="4.0.0" />
+    <PackageReference Include="Orchestra.Core" Version="6.0.0-alpha0296" />
+    <PackageReference Include="semver" Version="2.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.shared.tools.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.shared.tools.props')" />
+</Project>

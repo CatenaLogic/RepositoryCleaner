@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryCleaner", "RepositoryCleaner\RepositoryCleaner.csproj", "{50E41855-2674-4723-BCD4-5AD8BC6449D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3FC2F6BF-A28C-474B-92A4-BEED6C98BAC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{8E1BFB30-E258-4E17-B83C-301F3D1E4071}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+		RepositoryCleaner.sln.DotSettings = RepositoryCleaner.sln.DotSettings
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{96ED8092-824F-48EF-9A51-D5AD1062BF22}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\repositories.config = ..\lib\repositories.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{F4EE9B75-6EDA-46D0-B3EC-45ADA5B69FE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F7987CAA-E9CC-4BAF-B693-491B7957E067}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryCleaner.Tests", "RepositoryCleaner.Tests\RepositoryCleaner.Tests.csproj", "{064B3657-F667-4D82-A691-B5823683F465}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50E41855-2674-4723-BCD4-5AD8BC6449D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50E41855-2674-4723-BCD4-5AD8BC6449D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50E41855-2674-4723-BCD4-5AD8BC6449D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50E41855-2674-4723-BCD4-5AD8BC6449D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{064B3657-F667-4D82-A691-B5823683F465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{064B3657-F667-4D82-A691-B5823683F465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{064B3657-F667-4D82-A691-B5823683F465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{064B3657-F667-4D82-A691-B5823683F465}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{50E41855-2674-4723-BCD4-5AD8BC6449D5} = {F4EE9B75-6EDA-46D0-B3EC-45ADA5B69FE8}
+		{F4EE9B75-6EDA-46D0-B3EC-45ADA5B69FE8} = {3FC2F6BF-A28C-474B-92A4-BEED6C98BAC6}
+		{F7987CAA-E9CC-4BAF-B693-491B7957E067} = {3FC2F6BF-A28C-474B-92A4-BEED6C98BAC6}
+		{064B3657-F667-4D82-A691-B5823683F465} = {F7987CAA-E9CC-4BAF-B693-491B7957E067}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A772F006-638F-49AC-BA62-5E3EE00BF77F}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

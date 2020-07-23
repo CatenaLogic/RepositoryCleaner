@@ -1,0 +1,125 @@
+﻿<catel:Window x:Class="RepositoryCleaner.Views.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:catel="http://schemas.catelproject.com"
+              xmlns:views="clr-namespace:RepositoryCleaner.Views"
+              xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors"
+              xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
+              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer" 
+              xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
+              mc:Ignorable="d" MinWidth="800">
+
+    <orccontrols:StackGrid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <orctheming:ThemeSwitcherView />
+
+        <Label>
+            <TextBlock TextWrapping="Wrap">
+                This tool can help you clean up space when you have a lot of repositories. Select the repositories root below
+                and click the 'Analyze' button to check how much space can be cleaned up.
+                <LineBreak /><LineBreak />
+                Once the repositories have been analyzed, you can use the 'Clean up' button to actually clean up the repositories. 
+                To exclude repositories from the process, use the checkboxes to exclude them.
+            </TextBlock>
+        </Label>
+
+        <Label Style="{StaticResource LabelInfoStyle}" Tag="Warning">
+            We have tested this software, but you are using this at your own risk. Make sure that all repositories have been committed 
+            and there are no local pending changes before trying to use this software. Don't blame us when you lose your data, you are 
+            responsible for your own backups.
+        </Label>
+
+        <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
+
+        <views:SummaryView DataContext="{Binding Repositories}" />
+
+        <TextBox Text="{Binding RepositoryFilter}" Margin="0,4,0,4">
+            <xamlbehaviors:Interaction.Behaviors>
+                <catel:UpdateBindingOnTextChanged />
+            </xamlbehaviors:Interaction.Behaviors>
+        </TextBox>
+
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False"
+                  EnableRowVirtualization="False">
+            <DataGrid.Resources>
+                <Style TargetType="TextBlock" x:Key="MultiLineColumnViewStyle">
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                </Style>
+
+                <Style TargetType="TextBox" x:Key="MultiLineColumnEditStyle">
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="AcceptsReturn" Value="True" />
+                </Style>
+
+                <DataTemplate x:Key="IsIncludedCheckBoxDataTemplate">
+                    <CheckBox IsChecked="{Binding IsIncluded}" Unchecked="OnCheckBoxCheckedChanged" Checked="OnCheckBoxCheckedChanged"
+                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </DataTemplate>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Include" CellTemplate="{StaticResource IsIncludedCheckBoxDataTemplate}" />
+
+                <DataGridTemplateColumn Header="Name" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Directory}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Cleanable size" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding CleanableSize, Converter={converters:SpaceToTextConverter}}">
+                                <TextBlock.ToolTip>
+                                    <views:SizeToolTipView />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
+            <orclogviewer:AdvancedLogViewerControl IgnoreCatelLogging="True" />
+        </Expander>
+
+        <ProgressBar Height="5" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                     Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" Margin="0,4,0,4"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <orccontrols:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
+                             GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                             Width="24" Height="24" Margin="4,8,4,4" />
+
+            <Button Content="Analyze" Command="{Binding Analyze}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
+            <Button Content="Clean up (dry run)" Command="{Binding FakeCleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
+                    ToolTip="Run the whole clean up in fake mode -> not actually cleaning up anything" />
+            <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" 
+                    ToolTip="Run the whole clean up in real mode -> actually cleaning up everything"/>
+        </StackPanel>
+    </orccontrols:StackGrid>
+
+</catel:Window>
+
