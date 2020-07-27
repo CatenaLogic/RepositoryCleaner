@@ -555,9 +555,9 @@ private static string GetProjectFileName(BuildContext buildContext, string proje
 
 //-------------------------------------------------------------
 
-private static string GetProjectSlug(string projectName)
+private static string GetProjectSlug(string projectName, string replacement = "")
 {
-    var slug = projectName.Replace(".", string.Empty).Replace(" ", string.Empty);
+    var slug = projectName.Replace(".", replacement).Replace(" ", replacement);
     return slug;
 }
 
@@ -714,7 +714,7 @@ private static bool IsDotNetCoreProject(BuildContext buildContext, string projec
 
 //-------------------------------------------------------------
 
-private static bool ShouldProcessProject(BuildContext buildContext, string projectName)
+private static bool ShouldProcessProject(BuildContext buildContext, string projectName, bool checkDeployment = true)
 {
     // Includes > Excludes
     var includes = buildContext.General.Includes;
@@ -753,7 +753,7 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
     // it can only work if they are not part of unit tests (but that should never happen)
     if (buildContext.Tests.Items.Count == 0)
     {
-        if (!ShouldDeployProject(buildContext, projectName))
+        if (checkDeployment && !ShouldDeployProject(buildContext, projectName))
         {
             buildContext.CakeContext.Warning("Project '{0}' should not be processed because this is not a CI build, does not contain tests and the project should not be deployed, removing from projects to process", projectName);
             return false;
@@ -772,8 +772,14 @@ private static bool ShouldDeployProject(BuildContext buildContext, string projec
     var keyToCheck = string.Format("Deploy{0}", slug);
 
     var shouldDeploy = buildContext.BuildServer.GetVariableAsBool(keyToCheck, true);
-    
-    buildContext.CakeContext.Information("Value for '{0}': {1}", keyToCheck, shouldDeploy);
+    if (shouldDeploy && !ShouldProcessProject(buildContext, projectName, false))
+    {
+        buildContext.CakeContext.Information($"Project '{projectName}' should not be processed, excluding it anyway");
+        
+        shouldDeploy = false;
+    }
+
+    buildContext.CakeContext.Information($"Value for '{keyToCheck}': {shouldDeploy}");
 
     return shouldDeploy;
 }
