@@ -4,6 +4,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <AssemblyName>RepositoryCleaner</AssemblyName>
     <RootNamespace>RepositoryCleaner</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -29,6 +30,7 @@
     <StartupObject />
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <ApplicationIcon>Resources\Icons\logo.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
