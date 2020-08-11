@@ -59,7 +59,7 @@
         </TextBox>
 
         <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False"
-                  EnableRowVirtualization="False">
+                  IsReadOnly="True" EnableRowVirtualization="False">
             <DataGrid.Resources>
                 <Style TargetType="TextBlock" x:Key="MultiLineColumnViewStyle">
                     <Setter Property="TextWrapping" Value="Wrap" />
