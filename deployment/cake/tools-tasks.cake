@@ -21,8 +21,11 @@ public class ToolsProcessor : ProcessorBase
         var projectDirectory = GetProjectDirectory(projectName);
         var outputDirectory = GetProjectOutputDirectory(BuildContext, projectName);
 
+        var legalDirectory = System.IO.Path.Combine(outputDirectory, "legal");
+        System.IO.Directory.CreateDirectory(legalDirectory);
+
         // Check if it already exists
-        var fileName = System.IO.Path.Combine(outputDirectory, "LICENSE.txt");
+        var fileName = System.IO.Path.Combine(legalDirectory, "LICENSE.txt");
         if (!CakeContext.FileExists(fileName))
         {
             CakeContext.Information("Creating Chocolatey license file for '{0}'", projectName);
@@ -48,9 +51,12 @@ public class ToolsProcessor : ProcessorBase
 
         var projectDirectory = GetProjectDirectory(projectName);
         var outputDirectory = GetProjectOutputDirectory(BuildContext, projectName);
+        
+        var legalDirectory = System.IO.Path.Combine(outputDirectory, "legal");
+        System.IO.Directory.CreateDirectory(legalDirectory);
 
         // Check if it already exists
-        var fileName = System.IO.Path.Combine(outputDirectory, "VERIFICATION.txt");
+        var fileName = System.IO.Path.Combine(legalDirectory, "VERIFICATION.txt");
         if (!CakeContext.FileExists(fileName))
         {
             CakeContext.Information("Creating Chocolatey verification file for '{0}'", projectName);

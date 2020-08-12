@@ -7,18 +7,32 @@
 
   <PropertyGroup>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);GetToolsPackageFiles</TargetsForTfmSpecificBuildOutput>
+    <PackageSummary>$(Description)</PackageSummary>
+    <ProjectSourceUrl>$(PackageProjectUrl)</ProjectSourceUrl>
   </PropertyGroup>
 
   <ItemGroup>
+    <ToolLegalFiles Include="$(OutputPath)\**\legal\*.txt" />
     <ToolDllFiles Include="$(OutputPath)\**\*.dll" />
     <ToolExeFiles Include="$(OutputPath)\**\*.exe" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="@(ToolLegalFiles)" 
+          Pack="true" 
+          PackagePath="\" />
+  </ItemGroup>
+
   <Target Name="GetToolsPackageFiles">
     <ItemGroup>
+      <!--<BuildOutputInPackage Include="@(LegalFiles)">
+          <TargetPath>$([MSBuild]::MakeRelative($([MSBuild]::NormalizePath('$(OutputPath)\..\')), %(LegalFiles.FullPath)))</TargetPath>
+      </BuildOutputInPackage>-->
+      
       <BuildOutputInPackage Include="@(ToolDllFiles)">
           <TargetPath>$([MSBuild]::MakeRelative('$(OutputPath)', %(ToolDllFiles.FullPath)))</TargetPath>
       </BuildOutputInPackage>
+      
       <BuildOutputInPackage Include="@(ToolExeFiles)">
           <TargetPath>$([MSBuild]::MakeRelative('$(OutputPath)', %(ToolExeFiles.FullPath)))</TargetPath>
       </BuildOutputInPackage>
