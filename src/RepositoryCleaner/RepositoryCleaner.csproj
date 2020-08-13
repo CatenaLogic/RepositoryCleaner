@@ -4,6 +4,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <AssemblyName>RepositoryCleaner</AssemblyName>
     <RootNamespace>RepositoryCleaner</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -29,6 +30,7 @@
     <StartupObject />
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <ApplicationIcon>Resources\Icons\logo.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,7 +38,7 @@
     <PackageReference Include="Catel.Fody" Version="4.4.4" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Fody" Version="6.2.0" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="6.2.4" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -56,10 +58,10 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="Orc.CommandLine" Version="4.0.0" />
-    <PackageReference Include="Orc.Controls" Version="4.0.2" />
+    <PackageReference Include="Orc.Controls" Version="4.0.4" />
     <PackageReference Include="Orc.LogViewer" Version="4.0.0" />
     <PackageReference Include="Orc.Notifications" Version="4.0.0" />
-    <PackageReference Include="Orchestra.Core" Version="6.0.0-alpha0296" />
+    <PackageReference Include="Orchestra.Core" Version="6.0.2" />
     <PackageReference Include="semver" Version="2.0.6" />
   </ItemGroup>
 
