@@ -61,7 +61,7 @@
     <PackageReference Include="Orc.Controls" Version="4.2.9" />
     <PackageReference Include="Orc.LogViewer" Version="4.1.0" />
     <PackageReference Include="Orc.Notifications" Version="4.1.0" />
-    <PackageReference Include="Orchestra.Core" Version="6.2.3" />
+    <PackageReference Include="Orchestra.Core" Version="6.2.4" />
     <PackageReference Include="semver" Version="2.0.6" />
   </ItemGroup>
 
