@@ -32,7 +32,7 @@ namespace RepositoryCleaner
             Argument.IsNotNull(() => project);
 
             var relativeIntermediateDirectory = GetRelativeIntermediateDirectory(project);
-            if (relativeIntermediateDirectory == null)
+            if (relativeIntermediateDirectory is null)
             {
                 return null;
             }

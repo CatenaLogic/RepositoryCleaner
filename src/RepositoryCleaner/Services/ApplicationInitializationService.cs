@@ -30,7 +30,7 @@ namespace RepositoryCleaner.Services
             _serviceLocator = serviceLocator;
         }
 
-        public async Task Initialize()
+        public async Task InitializeAsync()
         {
             await TaskHelper.RunAndWaitAsync(new Func<Task>[]
             {

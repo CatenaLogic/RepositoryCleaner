@@ -48,12 +48,12 @@ namespace RepositoryCleaner.Markup
             viewbox.Stretch = Stretch.Uniform;
 
             var canvas = System.Windows.Application.Current.FindResource(PathName) as Canvas;
-            if (canvas != null && Foreground != Brushes.Transparent)
+            if (canvas is not null && Foreground != Brushes.Transparent)
             {
                 foreach (var child in canvas.Children)
                 {
                     var path = child as Path;
-                    if (path != null)
+                    if (path is not null)
                     {
                         path.SetCurrentValue(Shape.FillProperty, Foreground);
                     }

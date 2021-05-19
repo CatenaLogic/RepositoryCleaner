@@ -96,7 +96,7 @@ namespace RepositoryCleaner
                     }
 
                     var project = LoadProject(projectFile, configurationName, platformName, solutionDirectory);
-                    if (project != null)
+                    if (project is not null)
                     {
                         projects.Add(project);
                     }

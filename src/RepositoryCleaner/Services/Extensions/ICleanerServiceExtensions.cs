@@ -45,7 +45,7 @@ namespace RepositoryCleaner.Services
 
                 cleanedUpRepositories.Add(repository);
 
-                if (completedCallback != null)
+                if (completedCallback is not null)
                 {
                     completedCallback();
                 }

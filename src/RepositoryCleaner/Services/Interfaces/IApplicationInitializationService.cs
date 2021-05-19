@@ -11,6 +11,6 @@ namespace RepositoryCleaner.Services
 
     public interface IApplicationInitializationService
     {
-        Task Initialize();
+        Task InitializeAsync();
     }
 }

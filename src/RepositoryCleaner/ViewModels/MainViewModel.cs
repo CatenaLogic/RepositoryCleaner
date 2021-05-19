@@ -100,21 +100,21 @@ namespace RepositoryCleaner.ViewModels
 
         private async void OnAnalyzeExecute()
         {
-            await FindRepositories(true);
+            await FindRepositoriesAsync(true);
         }
 
         public Command FakeCleanUp { get; private set; }
 
         private async void OnFakeCleanUpExecute()
         {
-            await Clean(true);
+            await CleanAsync(true);
         }
 
         public Command CleanUp { get; private set; }
 
         private bool OnCleanUpCanExecute()
         {
-            if (Repositories == null || Repositories.Count == 0)
+            if (Repositories is null || Repositories.Count == 0)
             {
                 return false;
             }
@@ -129,7 +129,7 @@ namespace RepositoryCleaner.ViewModels
 
         private async void OnCleanUpExecute()
         {
-            await Clean(false);
+            await CleanAsync(false);
         }
         #endregion
 
@@ -138,7 +138,7 @@ namespace RepositoryCleaner.ViewModels
         {
             RepositoriesRoot = _configurationService.GetRoamingValue<string>(Settings.Application.LastRepositoriesRoot);
 
-            await FindRepositories(false);
+            await FindRepositoriesAsync(false);
         }
 
         private void OnRepositoryFilterChanged()
@@ -146,7 +146,7 @@ namespace RepositoryCleaner.ViewModels
             FilterRepositories();
         }
 
-        private async Task FindRepositories(bool calculateSize)
+        private async Task FindRepositoriesAsync(bool calculateSize)
         {
             var repositoriesRoot = RepositoriesRoot;
             if (string.IsNullOrWhiteSpace(repositoriesRoot))
@@ -166,7 +166,7 @@ namespace RepositoryCleaner.ViewModels
                     foreach (var repository in repositories)
                     {
                         var existingRepository = existingRepositories.FirstOrDefault(x => x.Directory.EqualsIgnoreCase(repository.Directory));
-                        if (existingRepository != null)
+                        if (existingRepository is not null)
                         {
                             repository.IsIncluded = existingRepository.IsIncluded;
                         }
@@ -218,7 +218,7 @@ namespace RepositoryCleaner.ViewModels
             Progress = 100;
         }
 
-        private async Task Clean(bool isFakeClean)
+        private async Task CleanAsync(bool isFakeClean)
         {
             Progress = 0;
 
@@ -252,7 +252,7 @@ namespace RepositoryCleaner.ViewModels
         private void FilterRepositories()
         {
             var repositories = Repositories;
-            if (repositories == null)
+            if (repositories is null)
             {
                 using (FilteredRepositories.SuspendChangeNotifications())
                 {
