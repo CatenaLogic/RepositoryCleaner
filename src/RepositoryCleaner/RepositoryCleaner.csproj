@@ -42,7 +42,7 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Humanizer" Version="2.10.1" />
+    <PackageReference Include="Humanizer" Version="2.11.10" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.5.0" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
