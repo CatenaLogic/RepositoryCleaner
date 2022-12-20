@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DirectoryPickerViewModel.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.ViewModels
+﻿namespace RepositoryCleaner.ViewModels
 {
+    using System;
     using System.IO;
     using System.Threading.Tasks;
     using Catel;
@@ -18,8 +12,8 @@ namespace RepositoryCleaner.ViewModels
         #region Constructors
         public DirectoryPickerViewModel(ISelectDirectoryService selectDirectoryService, IProcessService processService)
         {
-            Argument.IsNotNull(() => selectDirectoryService);
-            Argument.IsNotNull(() => processService);
+            ArgumentNullException.ThrowIfNull(selectDirectoryService);
+            ArgumentNullException.ThrowIfNull(processService);
 
             _selectDirectoryService = selectDirectoryService;
             _processService = processService;

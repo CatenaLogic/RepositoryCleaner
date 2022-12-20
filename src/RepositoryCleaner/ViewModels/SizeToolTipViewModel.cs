@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SizeToolTipViewModel.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.ViewModels
+﻿namespace RepositoryCleaner.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
@@ -22,7 +15,7 @@ namespace RepositoryCleaner.ViewModels
 
         public SizeToolTipViewModel(Repository repository)
         {
-            Argument.IsNotNull(() => repository);
+            ArgumentNullException.ThrowIfNull(repository);
 
             _repository = repository;
 

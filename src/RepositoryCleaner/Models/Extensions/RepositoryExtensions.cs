@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RepositoryExtensions.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Models
+﻿namespace RepositoryCleaner.Models
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
@@ -21,7 +15,7 @@ namespace RepositoryCleaner.Models
         [Time]
         public static async Task<ulong> CalculateCleanableSpaceAsync(this Repository repository)
         {
-            Argument.IsNotNull(() => repository);
+            ArgumentNullException.ThrowIfNull(repository);
 
             Log.Debug($"Calculating cleanable space for {repository}");
 

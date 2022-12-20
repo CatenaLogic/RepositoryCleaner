@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterfaceFinderServiceBase.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Services
+﻿namespace RepositoryCleaner.Services
 {
     using System;
     using System.Collections.Generic;

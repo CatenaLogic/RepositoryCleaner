@@ -1,17 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProjectExtensions.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner
+﻿namespace RepositoryCleaner
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using Catel;
     using Catel.Logging;
     using Microsoft.Build.Evaluation;
 
@@ -21,7 +11,7 @@ namespace RepositoryCleaner
 
         public static string GetProjectName(this Project project)
         {
-            Argument.IsNotNull(() => project);
+            ArgumentNullException.ThrowIfNull(project);
 
             var projectName = project.GetPropertyValue("MSBuildProjectName");
             return projectName ?? Path.GetFileName(project.FullPath);
@@ -29,7 +19,7 @@ namespace RepositoryCleaner
 
         public static string GetIntermediateDirectory(this Project project)
         {
-            Argument.IsNotNull(() => project);
+            ArgumentNullException.ThrowIfNull(project);
 
             var relativeIntermediateDirectory = GetRelativeIntermediateDirectory(project);
             if (relativeIntermediateDirectory is null)
@@ -43,7 +33,7 @@ namespace RepositoryCleaner
 
         public static string GetRelativeIntermediateDirectory(this Project project)
         {
-            Argument.IsNotNull(() => project);
+            ArgumentNullException.ThrowIfNull(project);
 
             var projectIntermediateDirectory = project.GetPropertyValue("IntermediateOutputPath");
             if (!string.IsNullOrWhiteSpace(projectIntermediateDirectory))
@@ -66,7 +56,7 @@ namespace RepositoryCleaner
 
         public static string GetTargetDirectory(this Project project)
         {
-            Argument.IsNotNull(() => project);
+            ArgumentNullException.ThrowIfNull(project);
 
             var targetDirectory = project.GetPropertyValue("TargetDir");
             if (string.IsNullOrWhiteSpace(targetDirectory))
@@ -85,7 +75,7 @@ namespace RepositoryCleaner
 
         public static string GetRelativeTargetDirectory(this Project project)
         {
-            Argument.IsNotNull(() => project);
+            ArgumentNullException.ThrowIfNull(project);
 
             var projectOutputDirectory = project.GetPropertyValue("OutputPath");
             if (!string.IsNullOrWhiteSpace(projectOutputDirectory))
@@ -114,7 +104,7 @@ namespace RepositoryCleaner
 
         public static void DumpProperties(this Project project)
         {
-            Log.Debug("");
+            Log.Debug(string.Empty);
             Log.Debug("Properties for project '{0}'", project.FullPath);
             Log.Debug("-----------------------------------------------------------");
 
@@ -123,8 +113,8 @@ namespace RepositoryCleaner
                 Log.Debug("  {0} => {1} ({2})", property.Name, property.EvaluatedValue, property.UnevaluatedValue);
             }
 
-            Log.Debug("");
-            Log.Debug("");
+            Log.Debug(string.Empty);
+            Log.Debug(string.Empty);
         }
     }
 }

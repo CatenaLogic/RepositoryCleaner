@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IRepositoryServiceExtensions.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Services
+﻿namespace RepositoryCleaner.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Catel;
@@ -16,7 +10,7 @@ namespace RepositoryCleaner.Services
     {
         public static async Task<IEnumerable<Repository>> FindRepositoriesAsync(this IRepositoryService repositoryService, string repositoriesRoot)
         {
-            Argument.IsNotNull(() => repositoryService);
+            ArgumentNullException.ThrowIfNull(repositoryService);
 
             return await Task.Factory.StartNew(() => repositoryService.FindRepositories(repositoriesRoot));
         }

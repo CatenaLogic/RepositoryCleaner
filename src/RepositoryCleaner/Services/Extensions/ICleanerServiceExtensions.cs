@@ -1,20 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICleanerServiceExtensions.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Services
+﻿namespace RepositoryCleaner.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Catel;
-    using Catel.Data;
     using Catel.Logging;
-    using Catel.Threading;
     using Models;
 
     internal static class ICleanerServiceExtensions
@@ -23,7 +13,7 @@ namespace RepositoryCleaner.Services
 
         public static async Task CleanAsync(this ICleanerService cleanerService, IEnumerable<Repository> repositories, bool isDryRun, Action completedCallback = null)
         {
-            Argument.IsNotNull(nameof(cleanerService), cleanerService);
+            ArgumentNullException.ThrowIfNull(cleanerService);
 
             var cleanedUpRepositories = new List<Repository>();
 

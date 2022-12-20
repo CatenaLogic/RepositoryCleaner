@@ -1,17 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RepositoryViewModel.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.ViewModels
+﻿namespace RepositoryCleaner.ViewModels
 {
+    using System;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Fody;
     using Catel.MVVM;
-    using Catel.Threading;
     using Models;
     using Services;
 
@@ -21,8 +13,8 @@ namespace RepositoryCleaner.ViewModels
 
         public RepositoryViewModel(Repository repository, ICleanerService cleanerService)
         {
-            Argument.IsNotNull(() => repository);
-            Argument.IsNotNull(() => cleanerService);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(cleanerService);
 
             Repository = repository;
             _cleanerService = cleanerService;

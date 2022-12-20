@@ -1,19 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CleanContext.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2018 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Models
+﻿namespace RepositoryCleaner.Models
 {
+    using System;
     using Catel;
 
     public class CleanContext
     {
         public CleanContext(Repository repository)
         {
-            Argument.IsNotNull(() => repository);
+            ArgumentNullException.ThrowIfNull(repository);
 
             Repository = repository;
         }

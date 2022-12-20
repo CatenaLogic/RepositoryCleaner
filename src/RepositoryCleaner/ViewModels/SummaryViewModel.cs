@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SummaryViewModel.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.ViewModels
+﻿namespace RepositoryCleaner.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -34,8 +27,8 @@ namespace RepositoryCleaner.ViewModels
 
         public SummaryViewModel(FastObservableCollection<Repository> repositories, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => repositories);
-            Argument.IsNotNull(() => dispatcherService);
+            ArgumentNullException.ThrowIfNull(repositories);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
 
             _repositories = repositories;
             _dispatcherService = dispatcherService;

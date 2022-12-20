@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Repository.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Models
+﻿namespace RepositoryCleaner.Models
 {
     using System.Collections.Generic;
     using System.IO;
@@ -13,12 +6,13 @@ namespace RepositoryCleaner.Models
     using System.Linq;
     using Catel;
     using Catel.Data;
+    using System;
 
     public class Repository : ModelBase
     {
         public Repository(string directory, IEnumerable<ICleaner> cleaners)
         {
-            Argument.IsNotNull(() => directory);
+            ArgumentNullException.ThrowIfNull(directory);
 
             var directoryInfo = new DirectoryInfo(directory);
 

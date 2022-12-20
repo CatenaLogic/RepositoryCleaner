@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ApplicationInitializationService.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Services
+﻿namespace RepositoryCleaner.Services
 {
     using System;
     using System.Threading.Tasks;
@@ -23,8 +16,8 @@ namespace RepositoryCleaner.Services
 
         public ApplicationInitializationService(ITypeFactory typeFactory, IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull(() => typeFactory);
-            Argument.IsNotNull(() => serviceLocator);
+            ArgumentNullException.ThrowIfNull(typeFactory);
+            ArgumentNullException.ThrowIfNull(serviceLocator);
 
             _typeFactory = typeFactory;
             _serviceLocator = serviceLocator;

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProjectHelper.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#pragma warning disable 0168
+﻿#pragma warning disable 0168
 // ReSharper disable UnusedVariable
 //#define LOG_WARNINGS
 
@@ -114,10 +108,10 @@ namespace RepositoryCleaner
 
         public static Project LoadProject(string projectFile, string configurationName, string platformName, string solutionDirectory)
         {
-            Argument.IsNotNull(() => projectFile);
-            Argument.IsNotNull(() => configurationName);
-            Argument.IsNotNull(() => platformName);
-            Argument.IsNotNull(() => solutionDirectory);
+            ArgumentNullException.ThrowIfNull(projectFile);
+            ArgumentNullException.ThrowIfNull(configurationName);
+            ArgumentNullException.ThrowIfNull(platformName);
+            ArgumentNullException.ThrowIfNull(solutionDirectory);
 
             var key = $"{projectFile}_{configurationName}_{platformName}";
 
@@ -135,10 +129,12 @@ namespace RepositoryCleaner
                     collections["Platform"] = platformName;
                     collections["SolutionDir"] = solutionDirectory;
 
+#pragma warning disable IDISP001 // Dispose created
                     var projectCollection = new ProjectCollection
                     {
                         
                     };
+#pragma warning restore IDISP001 // Dispose created
 
                     var project = new Project(projectFile, collections, null, projectCollection, ProjectLoadSettings.IgnoreMissingImports | ProjectLoadSettings.IgnoreInvalidImports);
                     return project;

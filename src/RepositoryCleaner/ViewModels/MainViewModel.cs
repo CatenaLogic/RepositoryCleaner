@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.ViewModels
+﻿namespace RepositoryCleaner.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -44,10 +37,10 @@ namespace RepositoryCleaner.ViewModels
         public MainViewModel(ICleanerService cleanerService, IDispatcherService dispatcherService,
             IConfigurationService configurationService, IRepositoryService repositoryService)
         {
-            Argument.IsNotNull(() => cleanerService);
-            Argument.IsNotNull(() => dispatcherService);
-            Argument.IsNotNull(() => configurationService);
-            Argument.IsNotNull(() => repositoryService);
+            ArgumentNullException.ThrowIfNull(cleanerService);
+            ArgumentNullException.ThrowIfNull(dispatcherService);
+            ArgumentNullException.ThrowIfNull(configurationService);
+            ArgumentNullException.ThrowIfNull(repositoryService);
 
             _cleanerService = cleanerService;
             _dispatcherService = dispatcherService;

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CleanerBase.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Cleaners
+﻿namespace RepositoryCleaner.Cleaners
 {
     using System;
     using System.IO;
@@ -25,7 +18,7 @@ namespace RepositoryCleaner.Cleaners
 
         protected CleanerBase(IDirectoryService directoryService)
         {
-            Argument.IsNotNull(() => directoryService);
+            ArgumentNullException.ThrowIfNull(directoryService);
 
             _directoryService = directoryService;
 
@@ -47,7 +40,7 @@ namespace RepositoryCleaner.Cleaners
 
         public bool CanClean(CleanContext context)
         {
-            Argument.IsNotNull(() => context);
+            ArgumentNullException.ThrowIfNull(context);
 
             Log.Debug("Checking if cleaner '{0}' can clean repository '{1}'", GetType(), context.Repository);
 
@@ -61,7 +54,7 @@ namespace RepositoryCleaner.Cleaners
         [Time]
         public ulong CalculateCleanableSpace(CleanContext context)
         {
-            Argument.IsNotNull(() => context);
+            ArgumentNullException.ThrowIfNull(context);
 
             if (!CanClean(context))
             {
@@ -80,7 +73,7 @@ namespace RepositoryCleaner.Cleaners
         [Time]
         public void Clean(CleanContext context)
         {
-            Argument.IsNotNull(() => context);
+            ArgumentNullException.ThrowIfNull(context);
 
             if (!CanClean(context))
             {
@@ -96,7 +89,7 @@ namespace RepositoryCleaner.Cleaners
 
         protected string GetRelativePath(Repository repository, string path)
         {
-            Argument.IsNotNull(() => repository);
+            ArgumentNullException.ThrowIfNull(repository);
 
             return Path.Combine(repository.Directory, path);
         }

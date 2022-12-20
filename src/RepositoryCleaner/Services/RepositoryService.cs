@@ -1,12 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RepositoryService.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner.Services
+﻿namespace RepositoryCleaner.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -25,8 +19,8 @@ namespace RepositoryCleaner.Services
 
         public RepositoryService(ICleanerService cleanerService, IDirectoryService directoryService)
         {
-            Argument.IsNotNull(() => cleanerService);
-            Argument.IsNotNull(() => directoryService);
+            ArgumentNullException.ThrowIfNull(cleanerService);
+            ArgumentNullException.ThrowIfNull(directoryService);
 
             _cleanerService = cleanerService;
             _directoryService = directoryService;

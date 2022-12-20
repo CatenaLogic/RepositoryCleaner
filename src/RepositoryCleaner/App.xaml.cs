@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="App.xaml.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2015 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace RepositoryCleaner
+﻿namespace RepositoryCleaner
 {
     using System.Windows;
     using System.Windows.Controls;
-    using Catel.IoC;
     using Catel.Logging;
-    using Catel.Reflection;
-    using Catel.Windows.Threading;
     using Orchestra;
-    using Services;
-    using Views;
 
     /// <summary>
     /// Interaction logic for App.xaml
