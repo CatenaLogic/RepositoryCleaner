@@ -49,7 +49,7 @@
     <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Build" Version="17.7.0" />
+    <PackageReference Include="Microsoft.Build" Version="17.7.2" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.7.0" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
