@@ -1,7 +1,6 @@
 ﻿namespace RepositoryCleaner.Cleaners
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using Catel.Logging;
     using Models;

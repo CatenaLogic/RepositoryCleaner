@@ -1,6 +1,5 @@
 ﻿namespace RepositoryCleaner.Cleaners
 {
-    using System.Threading.Tasks;
     using Models;
 
     public interface ICleaner

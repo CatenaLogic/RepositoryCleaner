@@ -1,7 +1,6 @@
 ﻿namespace RepositoryCleaner.Models
 {
     using System;
-    using Catel;
 
     public class CleanContext
     {

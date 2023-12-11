@@ -1,23 +1,17 @@
 ﻿namespace RepositoryCleaner.ViewModels
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Collections;
     using Catel.Configuration;
-    using Catel.Data;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Reflection;
     using Catel.Services;
-    using Catel.Threading;
     using Humanizer;
     using Models;
-    using Orc.SystemInfo;
     using Services;
 
     internal class MainViewModel : ViewModelBase

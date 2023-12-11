@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using System.IO;
     using Cleaners;
-    using System.Linq;
-    using Catel;
     using Catel.Data;
     using System;
 

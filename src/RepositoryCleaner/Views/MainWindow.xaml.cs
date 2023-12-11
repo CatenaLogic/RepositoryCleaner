@@ -1,9 +1,7 @@
 ﻿namespace RepositoryCleaner.Views
 {
-    using System.Data;
     using System.Windows;
     using System.Windows.Controls;
-    using Catel.Logging;
     using Models;
 
     /// <summary>

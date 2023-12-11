@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
     using Catel;
     using Catel.MVVM;
-    using Catel.Threading;
     using Humanizer;
     using Models;
 
@@ -43,7 +42,7 @@
 
                 foreach (var cleaner in _repository.Cleaners)
                 {
-                    var size = await TaskHelper.Run(() => cleaner.CalculateCleanableSpace(cleanContext));
+                    var size = await Task.Run(() => cleaner.CalculateCleanableSpace(cleanContext));
                     var line = $"{cleaner.Name} => {((size == 0L) ? "0 bytes" : ((long)size).Bytes().Humanize("#.#"))}";
 
                     Items.Add(line);

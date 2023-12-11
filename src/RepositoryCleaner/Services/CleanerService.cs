@@ -2,12 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading;
     using System.Threading.Tasks;
-    using Catel;
-    using Catel.Data;
     using Catel.Logging;
-    using Catel.Threading;
     using Cleaners;
     using MethodTimer;
     using Models;
@@ -34,7 +30,7 @@
 
             var cleaners = GetAvailableCleaners();
 
-            await TaskShim.Run(() =>
+            await Task.Run(() =>
             {
                 foreach (var cleaner in cleaners)
                 {
@@ -64,7 +60,7 @@
             Log.Info("Cleaning repository '{0}'", context.Repository);
             Log.Indent();
 
-            await TaskHelper.RunAndWaitAsync(() =>
+            await Task.Run(() =>
             {
                 var cleaners = GetAvailableCleaners();
                 foreach (var cleaner in cleaners)

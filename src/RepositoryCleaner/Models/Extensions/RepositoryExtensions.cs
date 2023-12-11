@@ -3,9 +3,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Logging;
-    using Catel.Threading;
     using MethodTimer;
 
     public static class RepositoryExtensions
@@ -21,8 +19,8 @@
 
             if (!repository.CleanableSize.HasValue)
             {
-                // Actual caclulation goes on a separate thread
-                var cleanableSize = await TaskShim.Run(() => (ulong)repository.Cleaners.Sum(x => (long)x.CalculateCleanableSpace(new CleanContext(repository))));
+                // Actual calculation goes on a separate thread
+                var cleanableSize = await Task.Run(() => (ulong)repository.Cleaners.Sum(x => (long)x.CalculateCleanableSpace(new CleanContext(repository))));
                 repository.CleanableSize = cleanableSize;
             }
 

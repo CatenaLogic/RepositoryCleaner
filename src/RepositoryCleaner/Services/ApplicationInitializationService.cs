@@ -2,10 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.IoC;
     using Catel.Logging;
-    using Catel.Threading;
 
     public class ApplicationInitializationService : IApplicationInitializationService
     {
@@ -25,19 +23,7 @@
 
         public async Task InitializeAsync()
         {
-            await TaskHelper.RunAndWaitAsync(new Func<Task>[]
-            {
-                //InitializeAnalytics
-            });
+
         }
-
-        //[Time]
-        //private async Task InitializeAnalytics()
-        //{
-        //    Log.Info("Initializing analytics");
-
-        //    var googleAnalyticsService = _serviceLocator.ResolveType<IGoogleAnalyticsService>();
-        //    googleAnalyticsService.AccountId = Analytics.AccountId;
-        //}
     }
 }

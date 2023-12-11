@@ -2,7 +2,6 @@
 {
     using System.ComponentModel;
     using System.Windows;
-    using Catel.Windows.Threading;
 
     public partial class RepositoryView
     {

@@ -2,8 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Linq;
-    using Catel;
     using Catel.Logging;
     using Catel.Reflection;
     using MethodTimer;

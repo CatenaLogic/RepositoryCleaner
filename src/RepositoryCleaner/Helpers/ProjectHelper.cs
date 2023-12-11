@@ -8,7 +8,6 @@ namespace RepositoryCleaner
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Catel;
     using Catel.Caching;
     using Catel.Logging;
     using Microsoft.Build.Construction;
