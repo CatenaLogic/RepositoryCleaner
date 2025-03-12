@@ -2,8 +2,10 @@
 {
     using System.Windows;
     using System.Windows.Controls;
+    using Catel.IoC;
     using Catel.Logging;
     using Orchestra;
+    using RepositoryCleaner.Services;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -21,9 +23,13 @@
         /// Raises the <see cref="E:System.Windows.Application.Startup"/> event.
         /// </summary>
         /// <param name="e">A <see cref="T:System.Windows.StartupEventArgs"/> that contains the event data.</param>
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            var serviceLocator = ServiceLocator.Default;
+            var applicationInitializationService = serviceLocator.ResolveRequiredType<IApplicationInitializationService>();
+            await applicationInitializationService.InitializeAsync();
 
             this.ApplyTheme();
 

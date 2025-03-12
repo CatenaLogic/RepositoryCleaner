@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Catel.Configuration;
     using Catel.IoC;
     using Catel.Logging;
 
@@ -23,7 +24,8 @@
 
         public async Task InitializeAsync()
         {
-
+            var configurationService = _serviceLocator.ResolveRequiredType<IConfigurationService>();
+            await configurationService.LoadAsync();
         }
     }
 }
