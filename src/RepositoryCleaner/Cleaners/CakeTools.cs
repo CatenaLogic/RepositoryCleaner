@@ -21,6 +21,18 @@
         {
             var toolsDirectory = Path.Combine(context.Repository.Directory, "tools");
 
+            var cakeAddinsDirectory = Path.Combine(toolsDirectory, "Addins");
+            if (_directoryService.Exists(cakeAddinsDirectory))
+            {
+                return true;
+            }
+
+            var cakeCacheDirectory = Path.Combine(toolsDirectory, "Cache");
+            if (_directoryService.Exists(cakeCacheDirectory))
+            {
+                return true;
+            }
+
             var cakeDirectory = Path.Combine(toolsDirectory, "Cake");
             if (_directoryService.Exists(cakeDirectory))
             {
@@ -66,9 +78,13 @@
 
             var toolsDirectory = Path.Combine(context.Repository.Directory, "tools");
 
+            var cakeAddinsDirectory = Path.Combine(toolsDirectory, "Addins");
+            var cakeCacheDirectory = Path.Combine(toolsDirectory, "Cache");
             var cakeDirectory = Path.Combine(toolsDirectory, "Cake");
             var cakeCoreClrDirectory = Path.Combine(toolsDirectory, "Cake.CoreCLR");
-            if (!_directoryService.Exists(cakeDirectory) && 
+            if (!_directoryService.Exists(cakeAddinsDirectory) &&
+                !_directoryService.Exists(cakeCacheDirectory) && 
+                !_directoryService.Exists(cakeDirectory) && 
                 !_directoryService.Exists(cakeCoreClrDirectory))
             {
                 return directories;
