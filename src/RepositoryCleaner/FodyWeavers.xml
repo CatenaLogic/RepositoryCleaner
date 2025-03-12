@@ -3,5 +3,9 @@
     <ModuleInit />
     <MethodTimer />
     <Catel />
-    <LoadAssembliesOnStartup />
+    <LoadAssembliesOnStartup>
+        <IncludeAssemblies>
+            
+        </IncludeAssemblies>
+    </LoadAssembliesOnStartup>
 </Weavers>
