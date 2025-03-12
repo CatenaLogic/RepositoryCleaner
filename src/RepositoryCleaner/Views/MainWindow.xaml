@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="3*" />
             <RowDefinition Height="2*" />
             <RowDefinition Height="Auto" />
@@ -57,6 +58,17 @@
                 <catel:UpdateBindingOnTextChanged />
             </xamlbehaviors:Interaction.Behaviors>
         </TextBox>
+
+        <WrapPanel Orientation="Horizontal">
+            <Button Content="Select all"
+                    Command="{Binding SelectAll}" />
+            <Button Content="Select visible"
+                    Command="{Binding SelectVisible}" />
+            <Button Content="Deselect all"
+                    Command="{Binding DeselectAll}" />
+            <Button Content="Deselect visible"
+                    Command="{Binding DeselectVisible}" />
+        </WrapPanel>
 
         <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False"
                   IsReadOnly="True" EnableRowVirtualization="False">

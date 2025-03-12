@@ -44,6 +44,10 @@
             Repositories = new FastObservableCollection<Repository>();
             FilteredRepositories = new FastObservableCollection<Repository>();
 
+            SelectAll = new Command(OnSelectAllExecute);
+            SelectVisible = new Command(OnSelectVisibleExecute);
+            DeselectAll = new Command(OnDeselectAllExecute);
+            DeselectVisible = new Command(OnDeselectVisibleExecute);
             Analyze = new Command(OnAnalyzeExecute, OnAnalyzeCanExecute);
             FakeCleanUp = new Command(OnFakeCleanUpExecute, OnCleanUpCanExecute);
             CleanUp = new Command(OnCleanUpExecute, OnCleanUpCanExecute);
@@ -53,7 +57,6 @@
         }
         #endregion
 
-        #region Properties
         public string RepositoriesRoot { get; set; }
 
         public string RepositoryFilter { get; set; }
@@ -65,9 +68,37 @@
         public bool IsBusy { get; private set; }
 
         public int Progress { get; private set; }
-        #endregion
 
         #region Commands
+        public Command SelectAll { get; private set; }
+
+        private void OnSelectAllExecute()
+        {
+            Repositories.ForEach(x => x.IsIncluded = true);
+        }
+
+
+        public Command SelectVisible { get; private set; }
+
+        private void OnSelectVisibleExecute()
+        {
+            FilteredRepositories.ForEach(x => x.IsIncluded = true);
+        }
+
+        public Command DeselectAll { get; private set; }
+        
+        private void OnDeselectAllExecute()
+        {
+            Repositories.ForEach(x => x.IsIncluded = false);
+        }
+
+        public Command DeselectVisible { get; private set; }
+
+        private void OnDeselectVisibleExecute()
+        {
+            FilteredRepositories.ForEach(x => x.IsIncluded = false);
+        }
+
         public Command Analyze { get; private set; }
 
         private bool OnAnalyzeCanExecute()
