@@ -8,9 +8,10 @@
               xmlns:xamlbehaviors="http://schemas.microsoft.com/xaml/behaviors"
               xmlns:converters="clr-namespace:RepositoryCleaner.Converters"
               xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
-              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer" 
+              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer"
               xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
-              mc:Ignorable="d" MinWidth="800">
+              mc:Ignorable="d"
+              MinWidth="800">
 
     <orccontrols:StackGrid>
         <Grid.RowDefinitions>
@@ -31,7 +32,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <orctheming:ThemeSwitcherView />
+        <StackPanel Orientation="Horizontal">
+            <orctheming:ThemeSwitcherView />
+            <orctheming:FontSizeSwitcherView />
+        </StackPanel>
 
         <Label>
             <TextBlock TextWrapping="Wrap">
@@ -43,17 +47,20 @@
             </TextBlock>
         </Label>
 
-        <Label Style="{StaticResource LabelInfoStyle}" Tag="Warning">
+        <Label Style="{StaticResource LabelInfoStyle}"
+               Tag="Warning">
             We have tested this software, but you are using this at your own risk. Make sure that all repositories have been committed 
             and there are no local pending changes before trying to use this software. Don't blame us when you lose your data, you are 
             responsible for your own backups.
         </Label>
 
-        <views:DirectoryPickerView LabelText="Repositories root" SelectedDirectory="{Binding RepositoriesRoot}" />
+        <views:DirectoryPickerView LabelText="Repositories root"
+                                   SelectedDirectory="{Binding RepositoriesRoot}" />
 
         <views:SummaryView DataContext="{Binding Repositories}" />
 
-        <TextBox Text="{Binding RepositoryFilter}" Margin="0,4,0,4">
+        <TextBox Text="{Binding RepositoryFilter}"
+                 Margin="0,4,0,4">
             <xamlbehaviors:Interaction.Behaviors>
                 <catel:UpdateBindingOnTextChanged />
             </xamlbehaviors:Interaction.Behaviors>
@@ -70,36 +77,51 @@
                     Command="{Binding DeselectVisible}" />
         </WrapPanel>
 
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding FilteredRepositories}" AutoGenerateColumns="False"
-                  IsReadOnly="True" EnableRowVirtualization="False">
+        <DataGrid x:Name="dataGrid"
+                  ItemsSource="{Binding FilteredRepositories}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  EnableRowVirtualization="False">
             <DataGrid.Resources>
-                <Style TargetType="TextBlock" x:Key="MultiLineColumnViewStyle">
-                    <Setter Property="TextWrapping" Value="Wrap" />
+                <Style TargetType="TextBlock"
+                       x:Key="MultiLineColumnViewStyle">
+                    <Setter Property="TextWrapping"
+                            Value="Wrap" />
                 </Style>
 
-                <Style TargetType="TextBox" x:Key="MultiLineColumnEditStyle">
-                    <Setter Property="TextWrapping" Value="Wrap" />
-                    <Setter Property="AcceptsReturn" Value="True" />
+                <Style TargetType="TextBox"
+                       x:Key="MultiLineColumnEditStyle">
+                    <Setter Property="TextWrapping"
+                            Value="Wrap" />
+                    <Setter Property="AcceptsReturn"
+                            Value="True" />
                 </Style>
 
                 <DataTemplate x:Key="IsIncludedCheckBoxDataTemplate">
-                    <CheckBox IsChecked="{Binding IsIncluded}" Unchecked="OnCheckBoxCheckedChanged" Checked="OnCheckBoxCheckedChanged"
-                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <CheckBox IsChecked="{Binding IsIncluded}"
+                              Unchecked="OnCheckBoxCheckedChanged"
+                              Checked="OnCheckBoxCheckedChanged"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
                 </DataTemplate>
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Include" CellTemplate="{StaticResource IsIncludedCheckBoxDataTemplate}" />
+                <DataGridTemplateColumn Header="Include"
+                                        CellTemplate="{StaticResource IsIncludedCheckBoxDataTemplate}" />
 
-                <DataGridTemplateColumn Header="Name" Width="200">
+                <DataGridTemplateColumn Header="Name"
+                                        Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Directory}" />
+                            <TextBlock Text="{Binding Name}"
+                                       ToolTip="{Binding Directory}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Cleanable size" Width="200">
+                <DataGridTemplateColumn Header="Cleanable size"
+                                        Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding CleanableSize, Converter={converters:SpaceToTextConverter}}">
@@ -113,23 +135,40 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Expander IsExpanded="True" Header="Output" Margin="0 20 0 0">
+        <Expander IsExpanded="True"
+                  Header="Output"
+                  Margin="0 20 0 0">
             <orclogviewer:AdvancedLogViewerControl IgnoreCatelLogging="True" />
         </Expander>
 
-        <ProgressBar Height="5" Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
-                     Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" Margin="0,4,0,4"/>
+        <ProgressBar Height="5"
+                     Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}"
+                     Minimum="0"
+                     Maximum="100"
+                     Value="{Binding Progress, Mode=OneWay}"
+                     Margin="0,4,0,4" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <orccontrols:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" 
-                             GifSource="/Resources/Images/Loading.gif" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                             Width="24" Height="24" Margin="4,8,4,4" />
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <orccontrols:AnimatedGif Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}"
+                                     GifSource="/Resources/Images/Loading.gif"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Width="24"
+                                     Height="24"
+                                     Margin="4,8,4,4" />
 
-            <Button Content="Analyze" Command="{Binding Analyze}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
-            <Button Content="Clean up (dry run)" Command="{Binding FakeCleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
+            <Button Content="Analyze"
+                    Command="{Binding Analyze}"
+                    Style="{StaticResource RightAlignedFixedSizeButtonStyle}" />
+            <Button Content="Clean up (dry run)"
+                    Command="{Binding FakeCleanUp}"
+                    Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
                     ToolTip="Run the whole clean up in fake mode -> not actually cleaning up anything" />
-            <Button Content="Clean up" Command="{Binding CleanUp}" Style="{StaticResource RightAlignedFixedSizeButtonStyle}" 
-                    ToolTip="Run the whole clean up in real mode -> actually cleaning up everything"/>
+            <Button Content="Clean up"
+                    Command="{Binding CleanUp}"
+                    Style="{StaticResource RightAlignedFixedSizeButtonStyle}"
+                    ToolTip="Run the whole clean up in real mode -> actually cleaning up everything" />
         </StackPanel>
     </orccontrols:StackGrid>
 

@@ -34,20 +34,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.MVVM" Version="6.0.5" />
+    <PackageReference Include="Catel.MVVM" Version="6.0.7" />
     <PackageReference Include="Catel.Fody" Version="4.9.0" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="6.9.2" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Humanizer" Version="2.14.1" />
-    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.6.0" PrivateAssets="all">
+    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.7.0" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MethodTimer.Fody" Version="3.2.2" PrivateAssets="all">
+    <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Build" Version="17.12.6" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.12.6" />
@@ -55,10 +57,10 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="Orc.CommandLine" Version="5.0.0" />
-    <PackageReference Include="Orc.Controls" Version="5.1.1" />
+    <PackageReference Include="Orc.Controls" Version="5.2.0" />
     <PackageReference Include="Orc.LogViewer" Version="5.0.0" />
     <PackageReference Include="Orc.Notifications" Version="5.1.0" />
-    <PackageReference Include="Orchestra.Core" Version="7.0.5" />
+    <PackageReference Include="Orchestra.Core" Version="7.1.0" />
     <PackageReference Include="semver" Version="3.0.0" />
   </ItemGroup>
 
