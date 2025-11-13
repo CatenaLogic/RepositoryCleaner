@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/lib/">
+    <File Path="../lib/repositories.config" />
+  </Folder>
+  <Folder Name="/misc/">
+    <File Path="nuget.config" />
+    <File Path="RepositoryCleaner.sln.DotSettings" />
+    <File Path="SolutionAssemblyInfo.cs" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="RepositoryCleaner/RepositoryCleaner.csproj" />
+  </Folder>
+  <Folder Name="/src/Tests/">
+    <Project Path="RepositoryCleaner.Tests/RepositoryCleaner.Tests.csproj" />
+  </Folder>
+  <Properties Name="Performance">
+    <Property Name="HasPerformanceSessions" Value="true" />
+  </Properties>
+</Solution>
