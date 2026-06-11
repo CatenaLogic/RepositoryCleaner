@@ -13,7 +13,6 @@
 
   <PropertyGroup>
     <UseWpf>true</UseWpf>
-    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>
   
