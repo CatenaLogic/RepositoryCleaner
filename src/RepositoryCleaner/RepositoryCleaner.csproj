@@ -47,7 +47,7 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Build" Version="18.7.*" />
+    <PackageReference Include="Microsoft.Build" Version="18.8.*" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.8.*" />
     <PackageReference Include="Orc.CommandLine" Version="5.0.0" />
     <PackageReference Include="Orc.Controls" Version="5.4.1" />
