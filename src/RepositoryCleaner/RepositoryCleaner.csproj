@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Catel.MVVM" Version="7.0.0" />
+    <PackageReference Include="Catel.MVVM" Version="7.0.1" />
     <PackageReference Include="Catel.Fody" Version="7.1.0" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
