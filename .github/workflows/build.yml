@@ -220,47 +220,50 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "NuGetPackageSourcesTokens=$nuGetPackageSourcesTokens"
           Add-Content -Path $env:GITHUB_ENV -Value "NuGetPackageSourcesUsernames=$nuGetPackageSourcesUsernames"
 
-      # Build & test
-      - name: Build and test via Cake
-        id: cake-action-build-test
-        if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && env.Deploy != 'true') }}
-        uses: cake-build/cake-action@d218f1133bb74a1df0b08c89cfd8fc100c09e1a0 #v3.0.1
-        with:
-          target: 'BuildAndTest'
-          arguments: |
-            IsCiBuild: true
-            NuGetPackageSources: ${{ env.NuGetPackageSources }}
-            NuGetPackageSourcesNames: ${{ env.NuGetPackageSourcesNames }}
-            NuGetPackageSourcesTokens: ${{ env.NuGetPackageSourcesTokens }}
-            NuGetPackageSourcesUsernames: ${{ env.NuGetPackageSourcesUsernames }}
-            SonarOrganization: ${{ env.SonarOrganization }}
-            SonarUrl: ${{ env.SonarUrl }}
-            SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
-            SonarToken: ${{ env.SonarToken }}
+      - name: Determine version
+        id: gitversion
+        shell: pwsh
+        run: |
+          dotnet tool restore
 
-      # Build & deploy
-      - name: Build and deploy via Cake
-        id: cake-action-build-deploy
-        if: ${{ github.event_name == 'workflow_dispatch' && env.Deploy == 'true' }}
-        uses: cake-build/cake-action@d218f1133bb74a1df0b08c89cfd8fc100c09e1a0 #v3.0.1
-        with:
-          target: 'BuildAndDeploy'
-          arguments: |
-            AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
-            AzureCodeSignClientId: ${{ env.AzureCodeSignClientId }}
-            AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
-            AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
-            AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
-            AzureDeploymentsStorageConnectionString: ${{ env.AzureDeploymentsStorageConnectionString }}
-            IsCiBuild: false
-            NuGetPackageSources: ${{ env.NuGetPackageSources }}
-            NuGetPackageSourcesNames: ${{ env.NuGetPackageSourcesNames }}
-            NuGetPackageSourcesTokens: ${{ env.NuGetPackageSourcesTokens }}
-            NuGetPackageSourcesUsernames: ${{ env.NuGetPackageSourcesUsernames }}
-            NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
-            NuGetRepositoryApiKey: ${{ env.NuGetRepositoryApiKey }}
-            SonarOrganization: ${{ env.SonarOrganization }}
-            SonarUrl: ${{ env.SonarUrl }}
-            SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
-            SonarToken: ${{ env.SonarToken }}
-            VeloPackUpdateUrl: ${{ env.VeloPackUpdateUrl }}
+          $gitVersion = dotnet tool run dotnet-gitversion /output json | ConvertFrom-Json
+
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "fullSemVer=$($gitVersion.FullSemVer)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "majorMinorPatch=$($gitVersion.MajorMinorPatch)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetVersion=$($gitVersion.NuGetVersionV2)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "commitsSinceVersionSource=$($gitVersion.CommitsSinceVersionSource)"
+
+      # Build, test & deploy
+      - name: ${{ github.event_name == 'workflow_dispatch' && inputs.Deploy && format('Build and deploy {0} via Cake', steps.gitversion.outputs.fullSemVer) || format('Build and test {0} via Cake', steps.gitversion.outputs.fullSemVer) }}
+        id: cake-build
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        shell: pwsh
+        env:
+          # Generic
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IsCiBuild: ${{ github.event_name != 'workflow_dispatch' || inputs.Deploy != true }}
+
+          # Specific
+          AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
+          AzureCodeSignClientId: ${{ env.AzureCodeSignClientId }}
+          AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
+          AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
+          AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
+          AzureDeploymentsStorageConnectionString: ${{ env.AzureDeploymentsStorageConnectionString }}
+          NuGetPackageSources: ${{ env.NuGetPackageSources }}
+          NuGetPackageSourcesNames: ${{ env.NuGetPackageSourcesNames }}
+          NuGetPackageSourcesTokens: ${{ env.NuGetPackageSourcesTokens }}
+          NuGetPackageSourcesUsernames: ${{ env.NuGetPackageSourcesUsernames }}
+          NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
+          NuGetRepositoryApiKey: ${{ env.NuGetRepositoryApiKey }}
+          SonarOrganization: ${{ env.SonarOrganization }}
+          SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
+          SonarToken: ${{ env.SonarToken }}
+          SonarUrl: ${{ env.SonarUrl }}
+          VeloPackUpdateUrl: ${{ env.VeloPackUpdateUrl }}
+        run: |
+          $deploy = $env:Deploy -eq 'true'
+          $target = if ($deploy) { 'BuildAndDeploy' } else { 'BuildAndTest' }
+
+          dotnet tool restore
+          dotnet tool run dotnet-cake --target="$target"
