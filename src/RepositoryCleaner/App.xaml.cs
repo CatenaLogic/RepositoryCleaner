@@ -30,12 +30,17 @@
                 {
                     services.AddCatelCore();
                     services.AddCatelMvvm();
+
                     services.AddOrcControls();
                     services.AddOrcFileSystem();
                     services.AddOrcLogViewer();
                     services.AddOrcNotifications();
+                    services.AddOrcSerializationJson();
+                    services.AddOrcSystemInfo();
                     services.AddOrcTheming();
+
                     services.AddOrchestraCore();
+
                     services.AddLogging(loggingBuilder => loggingBuilder.AddDebug());
 
                     services.AddTransient<ICleaner, CakeToolsCleaner>();

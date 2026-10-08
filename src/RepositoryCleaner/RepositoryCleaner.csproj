@@ -38,7 +38,7 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Catel.SourceGenerators" Version="7.0.1" PrivateAssets="all" />
+    <PackageReference Include="Catel.SourceGenerators" Version="7.1.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all">
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>build; native; contentfiles; analyzers</IncludeAssets>
@@ -50,7 +50,7 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Build" Version="18.9.*" />
+    <PackageReference Include="Microsoft.Build" Version="18.10.1" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.10.*" />
     <PackageReference Include="Orc.CommandLine" Version="5.0.0" />
     <PackageReference Include="Orc.Controls" Version="6.0.0" />

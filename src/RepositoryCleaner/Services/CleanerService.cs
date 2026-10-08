@@ -7,24 +7,26 @@
     using Cleaners;
     using MethodTimer;
     using Models;
+    using System.Linq;
 
-    internal class CleanerService : InterfaceFinderServiceBase<ICleaner>, ICleanerService
+    internal class CleanerService : ICleanerService
     {
         private readonly ILogger<CleanerService> _logger;
+        private readonly IReadOnlyList<ICleaner> _cleaners;
 
-        public CleanerService(IServiceProvider serviceProvider, ILogger<CleanerService> logger)
-            : base(serviceProvider)
+        public CleanerService(IServiceProvider serviceProvider, ILogger<CleanerService> logger,
+            IEnumerable<ICleaner> cleaners)
         {
-            ArgumentNullException.ThrowIfNull(logger);
             _logger = logger;
+            _cleaners = cleaners.ToArray();
         }
 
         public event EventHandler<RepositoryEventArgs> RepositoryCleaning;
         public event EventHandler<RepositoryEventArgs> RepositoryCleaned;
 
-        public IEnumerable<ICleaner> GetAvailableCleaners()
+        public IReadOnlyList<ICleaner> GetAvailableCleaners()
         {
-            return GetAvailableItems();
+            return _cleaners;
         }
 
         [Time]

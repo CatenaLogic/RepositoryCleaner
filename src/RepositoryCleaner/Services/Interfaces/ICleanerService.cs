@@ -11,11 +11,9 @@
         event EventHandler<RepositoryEventArgs> RepositoryCleaning;
         event EventHandler<RepositoryEventArgs> RepositoryCleaned;
 
-        #region Methods
-        IEnumerable<ICleaner> GetAvailableCleaners();
+        IReadOnlyList<ICleaner> GetAvailableCleaners();
 
         Task CleanAsync(CleanContext context);
-        #endregion
 
         Task<bool> CanCleanAsync(Repository repository);
     }
