@@ -231,10 +231,6 @@ jobs:
         id: calculate-nuget-variables
         shell: pwsh
         run: |
-          if ([string]::IsNullOrWhiteSpace($env:NuGetUser)) {
-            throw "NuGetUser is not configured"
-          }
-
           $nuGetPackageSourceDefinitions = @(
             @{ Url = 'https://api.nuget.org/v3/index.json'; Name = 'nuget.org'; Token = ''; Username = '' }
           )
