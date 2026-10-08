@@ -22,7 +22,7 @@ jobs:
   build:
     runs-on: windows-latest # Required for some (WPF) projects
     env:
-      Category: 'Private'
+      Category: 'Public'
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
       AzureCodeSignCertificateName: ''
       AzureCodeSignClientId: ''
@@ -105,7 +105,6 @@ jobs:
         shell: pwsh
         run: |
           $secretVariables = @(
-            @{ VariableName = 'NuGetUser'; MaskValue = $false }
             @{ VariableName = 'SonarOrganization'; MaskValue = $false }
             @{ VariableName = 'SonarUrl'; MaskValue = $false }
             @{ VariableName = 'SonarToken'; MaskValue = $true }
