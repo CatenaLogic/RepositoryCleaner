@@ -2,9 +2,5 @@
 {
     public partial class SizeToolTipView
     {
-        public SizeToolTipView()
-        {
-            InitializeComponent();
-        }
     }
 }

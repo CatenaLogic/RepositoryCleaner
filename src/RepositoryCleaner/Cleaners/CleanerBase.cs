@@ -2,15 +2,16 @@
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using Catel.Logging;
-    using Catel.Reflection;
     using MethodTimer;
+    using Microsoft.Extensions.Logging;
     using Models;
     using Orc.FileSystem;
 
     public abstract class CleanerBase : ICleaner
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CleanerBase));
 
         protected readonly IDirectoryService _directoryService;
 
@@ -20,7 +21,8 @@
 
             _directoryService = directoryService;
 
-            if (GetType().TryGetAttribute(out CleanerAttribute cleanerAttribute))
+            var cleanerAttribute = GetType().GetCustomAttribute<CleanerAttribute>();
+            if (cleanerAttribute is not null)
             {
                 Name = cleanerAttribute.Name;
                 Description = cleanerAttribute.Description;
@@ -40,11 +42,11 @@
         {
             ArgumentNullException.ThrowIfNull(context);
 
-            Log.Debug("Checking if cleaner '{0}' can clean repository '{1}'", GetType(), context.Repository);
+            Logger.LogDebug("Checking if cleaner {CleanerType} can clean repository {Repository}", GetType(), context.Repository);
 
             var canClean = CanCleanRepository(context);
 
-            Log.Debug("Cleaner '{0}' can clean repository '{1}': {2}", GetType(), context.Repository, canClean);
+            Logger.LogDebug("Cleaner {CleanerType} can clean repository {Repository}: {CanClean}", GetType(), context.Repository, canClean);
 
             return canClean;
         }
@@ -59,11 +61,11 @@
                 return 0L;
             }
 
-            Log.Debug("Calculating cleanable space using cleaner '{0}' and repository '{1}'", GetType(), context.Repository);
+            Logger.LogDebug("Calculating cleanable space using cleaner {CleanerType} and repository {Repository}", GetType(), context.Repository);
 
             var cleanableSpace = CalculateCleanableSpaceForRepository(context);
 
-            Log.Debug("Calculated cleanable space using cleaner '{0}' and repository '{1}': {2}", GetType(), context.Repository, cleanableSpace);
+            Logger.LogDebug("Calculated cleanable space using cleaner {CleanerType} and repository {Repository}: {CleanableSpace}", GetType(), context.Repository, cleanableSpace);
 
             return cleanableSpace;
         }
@@ -78,11 +80,11 @@
                 return;
             }
 
-            Log.Info("Cleaning up repository '{0}' using cleaner '{1}'", context.Repository, GetType());
+            Logger.LogInformation("Cleaning up repository {Repository} using cleaner {CleanerType}", context.Repository, GetType());
 
             CleanRepository(context);
 
-            Log.Info("Cleaned up repository '{0}' using cleaner '{1}'", context.Repository, GetType());
+            Logger.LogInformation("Cleaned up repository {Repository} using cleaner {CleanerType}", context.Repository, GetType());
         }
 
         protected string GetRelativePath(Repository repository, string path)
@@ -99,7 +101,7 @@
                 return;
             }
 
-            Log.Debug("Deleting directory '{0}'", directory);
+            Logger.LogDebug("Deleting directory {Directory}", directory);
 
             if (!context.IsDryRun)
             {
@@ -109,7 +111,7 @@
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "Failed to delete directory '{0}'", directory);
+                    Logger.LogWarning(ex, "Failed to delete directory {Directory}", directory);
                 }
             }
         }

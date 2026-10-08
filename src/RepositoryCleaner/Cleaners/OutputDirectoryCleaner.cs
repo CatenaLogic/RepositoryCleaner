@@ -2,15 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     [Cleaner("OutputDirectoryCleaner", Description = "Delete output directories such as the bin\\debug directory")]
     public class OutputDirectoryCleaner : MsProjectsCleanerBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public OutputDirectoryCleaner(IDirectoryService directoryService) 
             : base(directoryService)
         {

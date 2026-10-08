@@ -3,15 +3,12 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     [Cleaner("CakeToolsCleaner", Description = "Delete tools in the .\tools directory if Cake is detected")]
     public class CakeToolsCleaner : CleanerBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public CakeToolsCleaner(IDirectoryService directoryService) 
             : base(directoryService)
         {

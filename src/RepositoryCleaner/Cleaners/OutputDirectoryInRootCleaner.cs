@@ -1,15 +1,12 @@
 ﻿namespace RepositoryCleaner.Cleaners
 {
     using System.IO;
-    using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     [Cleaner("OutputDirectoryInRootCleaner", Description = "Delete output directory in the root (thus [repository]\\output")]
     public class OutputDirectoryInRootCleaner : CleanerBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public OutputDirectoryInRootCleaner(IDirectoryService directoryService) 
             : base(directoryService)
         {

@@ -5,17 +5,18 @@
     using System.Threading.Tasks;
     using Catel.Logging;
     using MethodTimer;
+    using Microsoft.Extensions.Logging;
 
     public static class RepositoryExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(RepositoryExtensions));
 
         [Time]
         public static async Task<ulong> CalculateCleanableSpaceAsync(this Repository repository)
         {
             ArgumentNullException.ThrowIfNull(repository);
 
-            Log.Debug($"Calculating cleanable space for {repository}");
+            Logger.LogDebug("Calculating cleanable space for {Repository}", repository);
 
             if (!repository.CleanableSize.HasValue)
             {

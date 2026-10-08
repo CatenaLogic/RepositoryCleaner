@@ -6,21 +6,18 @@
     using Catel;
     using Catel.Collections;
     using Catel.Configuration;
-    using Catel.Logging;
     using Catel.MVVM;
     using Catel.Reflection;
     using Catel.Services;
     using Humanizer;
+    using Microsoft.Extensions.Logging;
     using Models;
     using Services;
 
     internal class MainViewModel : ViewModelBase
     {
-        #region Constants
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
         #region Fields
+        private readonly ILogger<MainViewModel> _logger;
         private readonly ICleanerService _cleanerService;
         private readonly IDispatcherService _dispatcherService;
         private readonly IConfigurationService _configurationService;
@@ -28,29 +25,32 @@
         #endregion
 
         #region Constructors
-        public MainViewModel(ICleanerService cleanerService, IDispatcherService dispatcherService,
+        public MainViewModel(IServiceProvider serviceProvider, ILogger<MainViewModel> logger, ICleanerService cleanerService, IDispatcherService dispatcherService,
             IConfigurationService configurationService, IRepositoryService repositoryService)
+            : base(serviceProvider)
         {
+            ArgumentNullException.ThrowIfNull(logger);
             ArgumentNullException.ThrowIfNull(cleanerService);
             ArgumentNullException.ThrowIfNull(dispatcherService);
             ArgumentNullException.ThrowIfNull(configurationService);
             ArgumentNullException.ThrowIfNull(repositoryService);
 
+            _logger = logger;
             _cleanerService = cleanerService;
             _dispatcherService = dispatcherService;
             _configurationService = configurationService;
             _repositoryService = repositoryService;
 
-            Repositories = new FastObservableCollection<Repository>();
-            FilteredRepositories = new FastObservableCollection<Repository>();
+            Repositories = new FastObservableCollection<Repository>(dispatcherService);
+            FilteredRepositories = new FastObservableCollection<Repository>(dispatcherService);
 
-            SelectAll = new Command(OnSelectAllExecute);
-            SelectVisible = new Command(OnSelectVisibleExecute);
-            DeselectAll = new Command(OnDeselectAllExecute);
-            DeselectVisible = new Command(OnDeselectVisibleExecute);
-            Analyze = new Command(OnAnalyzeExecute, OnAnalyzeCanExecute);
-            FakeCleanUp = new Command(OnFakeCleanUpExecute, OnCleanUpCanExecute);
-            CleanUp = new Command(OnCleanUpExecute, OnCleanUpCanExecute);
+            SelectAll = new Command(serviceProvider, OnSelectAllExecute);
+            SelectVisible = new Command(serviceProvider, OnSelectVisibleExecute);
+            DeselectAll = new Command(serviceProvider, OnDeselectAllExecute);
+            DeselectVisible = new Command(serviceProvider, OnDeselectVisibleExecute);
+            Analyze = new Command(serviceProvider, OnAnalyzeExecute, OnAnalyzeCanExecute);
+            FakeCleanUp = new Command(serviceProvider, OnFakeCleanUpExecute, OnCleanUpCanExecute);
+            CleanUp = new Command(serviceProvider, OnCleanUpExecute, OnCleanUpCanExecute);
 
             var entryAssembly = AssemblyHelper.GetEntryAssembly();
             Title = string.Format("{0} - v{1}", entryAssembly.Title(), entryAssembly.InformationalVersion());
@@ -213,17 +213,17 @@
 
                 if (calculateSize)
                 {
-                    Log.Info($"Initializing {includedRepositories.Count} repositories");
+                    _logger.LogInformation("Initializing {RepositoryCount} repositories", includedRepositories.Count);
 
                     for (var i = 0; i < includedRepositories.Count; i++)
                     {
                         var repository = includedRepositories[i];
                         var prefix = $"[{i + 1} / {includedRepositories.Count}] ";
 
-                        Log.Info($"{prefix}Initializing repository {repository}");
+                        _logger.LogInformation("{Prefix}Initializing repository {Repository}", prefix, repository);
 
                         var spaceToClean = await repository.CalculateCleanableSpaceAsync();
-                        Log.Info($"{prefix}Potential disk space savings for {repository}: {((long) spaceToClean).Bytes().Humanize("#.#")}");
+                        _logger.LogInformation("{Prefix}Potential disk space savings for {Repository}: {CleanableSpace}", prefix, repository, ((long)spaceToClean).Bytes().Humanize("#.#"));
 
                         completedRepositories++;
 

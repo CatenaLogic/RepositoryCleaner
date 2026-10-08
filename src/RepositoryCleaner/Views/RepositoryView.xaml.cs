@@ -5,11 +5,6 @@
 
     public partial class RepositoryView
     {
-        public RepositoryView()
-        {
-            InitializeComponent();
-        }
-
         /// <summary>
         /// Called when a property on the current <see cref="P:Catel.Windows.Controls.UserControl.ViewModel"/> has changed.
         /// </summary>

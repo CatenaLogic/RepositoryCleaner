@@ -1,4 +1,4 @@
-﻿namespace RepositoryCleaner.Views
+namespace RepositoryCleaner.Views
 {
     using System.Windows;
     using Catel.MVVM.Views;
@@ -8,20 +8,6 @@
     /// </summary>
     public partial class DirectoryPickerView
     {
-        static DirectoryPickerView()
-        {
-            typeof (DirectoryPickerView).AutoDetectViewPropertiesToSubscribe();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DirectoryPickerView"/> class.
-        /// </summary>
-        /// <remarks>This method is required for design time support.</remarks>
-        public DirectoryPickerView()
-        {
-            InitializeComponent();
-        }
-
         #region Properties
         [ViewToViewModel(MappingType = ViewToViewModelMappingType.TwoWayViewWins)]
         public double LabelWidth

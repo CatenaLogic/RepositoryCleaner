@@ -8,26 +8,28 @@
     using Catel;
     using Catel.Collections;
     using Catel.Data;
-    using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
+    using Microsoft.Extensions.Logging;
     using Models;
 
     internal class SummaryViewModel : ViewModelBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+        private readonly ILogger<SummaryViewModel> _logger;
         private readonly FastObservableCollection<Repository> _repositories;
         private readonly IDispatcherService _dispatcherService;
         private readonly ChangeNotificationWrapper _changeNotificationWrapper;
 
         private bool _hasPendingUpdates;
 
-        public SummaryViewModel(FastObservableCollection<Repository> repositories, IDispatcherService dispatcherService)
+        public SummaryViewModel(FastObservableCollection<Repository> repositories, IServiceProvider serviceProvider, ILogger<SummaryViewModel> logger, IDispatcherService dispatcherService)
+            : base(serviceProvider)
         {
+            ArgumentNullException.ThrowIfNull(logger);
             ArgumentNullException.ThrowIfNull(repositories);
             ArgumentNullException.ThrowIfNull(dispatcherService);
 
+            _logger = logger;
             _repositories = repositories;
             _dispatcherService = dispatcherService;
 
@@ -78,7 +80,7 @@
 
             using (CreateIsBusyScope())
             {
-                Log.Debug("Updating summary");
+                _logger.LogDebug("Updating summary");
 
                 var repositories = _repositories.Where(x => x.IsIncluded).ToList();
 
@@ -96,7 +98,7 @@
 
                 TotalSize = totalSize;
 
-                Log.Debug("Updated summary");
+                _logger.LogDebug("Updated summary");
             }
 
             if (_hasPendingUpdates)

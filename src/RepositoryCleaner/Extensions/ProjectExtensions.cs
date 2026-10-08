@@ -4,10 +4,11 @@
     using System.IO;
     using Catel.Logging;
     using Microsoft.Build.Evaluation;
+    using Microsoft.Extensions.Logging;
 
     public static class ProjectExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ProjectExtensions));
 
         public static string GetProjectName(this Project project)
         {
@@ -104,17 +105,17 @@
 
         public static void DumpProperties(this Project project)
         {
-            Log.Debug(string.Empty);
-            Log.Debug("Properties for project '{0}'", project.FullPath);
-            Log.Debug("-----------------------------------------------------------");
+            Logger.LogDebug(string.Empty);
+            Logger.LogDebug("Properties for project {ProjectPath}", project.FullPath);
+            Logger.LogDebug("-----------------------------------------------------------");
 
             foreach (var property in project.Properties)
             {
-                Log.Debug("  {0} => {1} ({2})", property.Name, property.EvaluatedValue, property.UnevaluatedValue);
+                Logger.LogDebug("  {PropertyName} => {EvaluatedValue} ({UnevaluatedValue})", property.Name, property.EvaluatedValue, property.UnevaluatedValue);
             }
 
-            Log.Debug(string.Empty);
-            Log.Debug(string.Empty);
+            Logger.LogDebug(string.Empty);
+            Logger.LogDebug(string.Empty);
         }
     }
 }
