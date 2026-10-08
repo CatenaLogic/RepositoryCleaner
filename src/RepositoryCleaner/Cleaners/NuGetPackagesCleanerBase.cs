@@ -3,14 +3,11 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     public abstract class NuGetPackagesCleanerBase : CleanerBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         protected NuGetPackagesCleanerBase(IDirectoryService directoryService) 
             : base(directoryService)
         {

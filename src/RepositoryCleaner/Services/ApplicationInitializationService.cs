@@ -3,29 +3,20 @@
     using System;
     using System.Threading.Tasks;
     using Catel.Configuration;
-    using Catel.IoC;
-    using Catel.Logging;
 
     public class ApplicationInitializationService : IApplicationInitializationService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly IConfigurationService _configurationService;
 
-        private readonly IServiceLocator _serviceLocator;
-        private readonly ITypeFactory _typeFactory;
-
-        public ApplicationInitializationService(ITypeFactory typeFactory, IServiceLocator serviceLocator)
+        public ApplicationInitializationService(IConfigurationService configurationService)
         {
-            ArgumentNullException.ThrowIfNull(typeFactory);
-            ArgumentNullException.ThrowIfNull(serviceLocator);
-
-            _typeFactory = typeFactory;
-            _serviceLocator = serviceLocator;
+            ArgumentNullException.ThrowIfNull(configurationService);
+            _configurationService = configurationService;
         }
 
         public async Task InitializeAsync()
         {
-            var configurationService = _serviceLocator.ResolveRequiredType<IConfigurationService>();
-            await configurationService.LoadAsync();
+            await _configurationService.LoadAsync();
         }
     }
 }

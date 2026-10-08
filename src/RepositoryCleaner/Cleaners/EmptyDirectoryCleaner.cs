@@ -3,15 +3,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using Catel;
-    using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     [Cleaner("EmptyDirectoryCleaner", Description = "Delete empty directories inside subfolders of the repositories (root will stay intact)")]
     public class EmptyDirectoryCleaner : CleanerBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public EmptyDirectoryCleaner(IDirectoryService directoryService) 
             : base(directoryService)
         {

@@ -11,11 +11,6 @@
     {
         private bool _isUpdatingCheckboxes;
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
         private void OnCheckBoxCheckedChanged(object sender, RoutedEventArgs e)
         {
             if (_isUpdatingCheckboxes)

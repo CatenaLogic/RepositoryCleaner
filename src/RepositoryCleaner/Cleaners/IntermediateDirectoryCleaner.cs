@@ -2,15 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Catel.Logging;
     using Models;
     using Orc.FileSystem;
 
     [Cleaner("IntermediateDirectoryCleaner", Description = "Delete intermediate directories such as the obj\\debug directory")]
     public class IntermediateDirectoryCleaner : MsProjectsCleanerBase
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public IntermediateDirectoryCleaner(IDirectoryService directoryService) 
             : base(directoryService)
         {

@@ -3,35 +3,24 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Catel.IoC;
     using Catel.Logging;
-    using Catel.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public abstract class InterfaceFinderServiceBase<TInterface>
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(InterfaceFinderServiceBase<TInterface>));
 
-        private readonly List<TInterface> _implementations = new List<TInterface>();
+        private readonly List<TInterface> _implementations;
 
-        protected InterfaceFinderServiceBase()
+        protected InterfaceFinderServiceBase(IServiceProvider serviceProvider)
         {
-#pragma warning disable IDISP001 // Dispose created
-            var typeFactory = this.GetTypeFactory();
-#pragma warning restore IDISP001 // Dispose created
+            ArgumentNullException.ThrowIfNull(serviceProvider);
 
-            var types = TypeCache.GetTypes(x => x.ImplementsInterfaceEx<TInterface>() && !x.IsAbstractEx());
-            foreach (var type in types)
+            _implementations = serviceProvider.GetServices<TInterface>().ToList();
+            foreach (var implementation in _implementations)
             {
-                try
-                {
-                    Log.Debug("Found type '{0}'", type.Name);
-
-                    _implementations.Add((TInterface) typeFactory.CreateInstance(type));
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to instantiate '{0}'", type.FullName);
-                }
+                Logger.LogDebug("Found implementation {ImplementationType}", implementation.GetType().Name);
             }
         }
 

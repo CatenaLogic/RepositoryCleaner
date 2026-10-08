@@ -12,10 +12,11 @@ namespace RepositoryCleaner
     using Catel.Logging;
     using Microsoft.Build.Construction;
     using Microsoft.Build.Evaluation;
+    using Microsoft.Extensions.Logging;
 
     internal static class ProjectHelper
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ProjectHelper));
 
         private static readonly ICacheStorage<string, Project> ProjectsCache = new CacheStorage<string, Project>(storeNullValues: true);
 
@@ -44,7 +45,7 @@ namespace RepositoryCleaner
             catch (Exception ex)
             {
 #if LOG_WARNINGS
-                Log.Warning(ex, "Failed to retrieve the configurations and platforms for solution '{0}'", solutionFile);
+                Logger.LogWarning(ex, "Failed to retrieve the configurations and platforms for solution {SolutionFile}", solutionFileName);
 #endif
             }
 
@@ -98,7 +99,7 @@ namespace RepositoryCleaner
             catch (Exception ex)
             {
 #if LOG_WARNINGS
-                Log.Warning(ex, "Failed to retrieve the projects for solution '{0}'", solutionFile);
+                Logger.LogWarning(ex, "Failed to retrieve the projects for solution {SolutionFile}", solutionFileName);
 #endif
             }
 
@@ -141,7 +142,7 @@ namespace RepositoryCleaner
                 catch (Exception ex)
                 {
 #if LOG_WARNINGS
-                    Log.Warning("Failed to load project '{0}': {1}", projectFile, ex.Message);
+                    Logger.LogWarning(ex, "Failed to load project {ProjectFile}", projectFile);
 #endif
                     return null;
                 }

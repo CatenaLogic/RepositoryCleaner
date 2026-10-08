@@ -5,11 +5,12 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Catel.Logging;
+    using Microsoft.Extensions.Logging;
     using Models;
 
     internal static class ICleanerServiceExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(ICleanerServiceExtensions));
 
         public static async Task CleanAsync(this ICleanerService cleanerService, IEnumerable<Repository> repositories, bool isDryRun, Action completedCallback = null)
         {
@@ -21,7 +22,7 @@
                                          where repository.IsIncluded
                                          select repository).ToList();
 
-            Log.Info("Cleaning up '{0}' repositories", repositoriesToCleanUp.Count);
+            Logger.LogInformation("Cleaning up {RepositoryCount} repositories", repositoriesToCleanUp.Count);
 
             foreach (var repository in repositoriesToCleanUp)
             {
@@ -41,7 +42,7 @@
                 }
             }
 
-            Log.Info("Cleaned up '{0}' repositories", cleanedUpRepositories.Count);
+            Logger.LogInformation("Cleaned up {RepositoryCount} repositories", cleanedUpRepositories.Count);
         }
     }
 }

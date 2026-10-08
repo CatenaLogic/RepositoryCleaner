@@ -12,7 +12,8 @@
     {
         private readonly Repository _repository;
 
-        public SizeToolTipViewModel(Repository repository)
+        public SizeToolTipViewModel(Repository repository, IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
             ArgumentNullException.ThrowIfNull(repository);
 

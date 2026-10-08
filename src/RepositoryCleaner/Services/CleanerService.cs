@@ -3,14 +3,21 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Catel.Logging;
+    using Microsoft.Extensions.Logging;
     using Cleaners;
     using MethodTimer;
     using Models;
 
     internal class CleanerService : InterfaceFinderServiceBase<ICleaner>, ICleanerService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<CleanerService> _logger;
+
+        public CleanerService(IServiceProvider serviceProvider, ILogger<CleanerService> logger)
+            : base(serviceProvider)
+        {
+            ArgumentNullException.ThrowIfNull(logger);
+            _logger = logger;
+        }
 
         public event EventHandler<RepositoryEventArgs> RepositoryCleaning;
         public event EventHandler<RepositoryEventArgs> RepositoryCleaned;
@@ -25,8 +32,7 @@
         {
             var canClean = false;
 
-            Log.Debug("Checking if repository '{0}' can be cleaned", repository);
-            Log.Indent();
+            _logger.LogDebug("Checking if repository {Repository} can be cleaned", repository);
 
             var cleaners = GetAvailableCleaners();
 
@@ -34,11 +40,11 @@
             {
                 foreach (var cleaner in cleaners)
                 {
-                    Log.Debug("Checking if repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
+                    _logger.LogDebug("Checking if repository {Repository} can be cleaned by cleaner {Cleaner}", repository, cleaner);
 
                     if (cleaner.CanClean(new CleanContext(repository)))
                     {
-                        Log.Debug("Repository '{0}' can be cleaned by cleaner '{1}'", repository, cleaner);
+                        _logger.LogDebug("Repository {Repository} can be cleaned by cleaner {Cleaner}", repository, cleaner);
 
                         canClean = true;
                         break;
@@ -46,8 +52,7 @@
                 }
             });
 
-            Log.Unindent();
-            Log.Debug("Checked if repository '{0}' can be cleaned, result = {1}", repository, canClean);
+            _logger.LogDebug("Checked if repository {Repository} can be cleaned, result = {CanClean}", repository, canClean);
 
             return canClean;
         }
@@ -57,8 +62,7 @@
         {
             RepositoryCleaning?.Invoke(this, new RepositoryEventArgs(context.Repository));
 
-            Log.Info("Cleaning repository '{0}'", context.Repository);
-            Log.Indent();
+            _logger.LogInformation("Cleaning repository {Repository}", context.Repository);
 
             await Task.Run(() =>
             {
@@ -67,17 +71,16 @@
                 {
                     if (cleaner.CanClean(context))
                     {
-                        Log.Debug("Cleaning repository '{0}' using cleaner '{1}'", context.Repository, cleaner);
+                        _logger.LogDebug("Cleaning repository {Repository} using cleaner {Cleaner}", context.Repository, cleaner);
 
                         cleaner.Clean(context);
 
-                        Log.Debug("Cleaned repository '{0}' using cleaner '{1}'", context.Repository, cleaner);
+                        _logger.LogDebug("Cleaned repository {Repository} using cleaner {Cleaner}", context.Repository, cleaner);
                     }
                 }
             });
 
-            Log.Unindent();
-            Log.Info("Cleaned repository '{0}'", context.Repository);
+            _logger.LogInformation("Cleaned repository {Repository}", context.Repository);
 
             RepositoryCleaned?.Invoke(this, new RepositoryEventArgs(context.Repository));
         }

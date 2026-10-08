@@ -9,7 +9,8 @@
     public class DirectoryPickerViewModel : ViewModelBase
     {
         #region Constructors
-        public DirectoryPickerViewModel(ISelectDirectoryService selectDirectoryService, IProcessService processService)
+        public DirectoryPickerViewModel(IServiceProvider serviceProvider, ISelectDirectoryService selectDirectoryService, IProcessService processService)
+            : base(serviceProvider)
         {
             ArgumentNullException.ThrowIfNull(selectDirectoryService);
             ArgumentNullException.ThrowIfNull(processService);
@@ -17,8 +18,8 @@
             _selectDirectoryService = selectDirectoryService;
             _processService = processService;
 
-            OpenDirectory = new TaskCommand(OnOpenDirectoryExecuteAsync, OnOpenDirectoryCanExecute);
-            SelectDirectory = new TaskCommand(OnSelectDirectoryExecuteAsync);
+            OpenDirectory = new TaskCommand(serviceProvider, OnOpenDirectoryExecuteAsync, OnOpenDirectoryCanExecute);
+            SelectDirectory = new TaskCommand(serviceProvider, OnSelectDirectoryExecuteAsync);
         }
         #endregion
 

@@ -7,11 +7,12 @@
     using Models;
     using Services;
 
-    internal class RepositoryViewModel : ViewModelBase
+    internal class RepositoryViewModel : FeaturedViewModelBase
     {
         private readonly ICleanerService _cleanerService;
 
-        public RepositoryViewModel(Repository repository, ICleanerService cleanerService)
+        public RepositoryViewModel(Repository repository, IServiceProvider serviceProvider, ICleanerService cleanerService)
+            : base(serviceProvider)
         {
             ArgumentNullException.ThrowIfNull(repository);
             ArgumentNullException.ThrowIfNull(cleanerService);
