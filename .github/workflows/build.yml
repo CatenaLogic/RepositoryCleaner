@@ -105,9 +105,13 @@ jobs:
         shell: pwsh
         run: |
           $secretVariables = @(
-            @{ VariableName = 'SonarOrganization'; MaskValue = $false }
-            @{ VariableName = 'SonarUrl'; MaskValue = $false }
-            @{ VariableName = 'SonarToken'; MaskValue = $true }
+            @{ VariableName = 'NuGetPackageSources'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'NuGetPackageSourcesNames'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'NuGetPackageSourcesTokens'; MaskValue = $true; IsOptional = $true }
+            @{ VariableName = 'NuGetPackageSourcesUsernames'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'SonarOrganization'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'SonarUrl'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'SonarToken'; MaskValue = $true; IsOptional = $true }
           )
 
           if ($env:Deploy -eq 'true') {
@@ -117,7 +121,10 @@ jobs:
               @{ VariableName = 'AzureCodeSignClientId'; MaskValue = $true }
               @{ VariableName = 'AzureCodeSignClientSecret'; MaskValue = $true }
               @{ VariableName = 'AzureDeploymentsStorageConnectionString'; MaskValue = $true }
-              @{ VariableName = 'VeloPackUpdateUrl'; MaskValue = $false }
+              @{ VariableName = 'NuGetRepositoryUrl'; MaskValue = $false; IsOptional = $true }
+              @{ VariableName = 'NuGetRepositoryApiKey'; MaskValue = $true; IsOptional = $true }
+              @{ VariableName = 'NuGetUser'; MaskValue = $true; IsOptional = $true }
+              @{ VariableName = 'VeloPackUpdateUrl'; MaskValue = $false; IsOptional = $true }
             )
           }
 
@@ -157,7 +164,8 @@ jobs:
           function Resolve-SecretName {
             param(
               [Parameter(Mandatory = $true)]
-              [string] $VariableName
+              [string] $VariableName,
+              [bool] $IsOptional = $false
             )
 
             $secretName = $VariableName -replace '_', '--'
@@ -173,14 +181,26 @@ jobs:
               }
             }
 
+            if ($IsOptional) {
+              return $null
+            }
+
             throw "Unable to find a Key Vault secret for '$VariableName' in '$vaultName'. Tried: $($candidateNames -join ', ')"
           }
 
           $resolvedSecrets = foreach ($secretVariable in $secretVariables) {
-            [pscustomobject]@{
-              EnvName    = if ($secretVariable.EnvironmentVariableName) { $secretVariable.EnvironmentVariableName } else { $secretVariable.VariableName }
-              MaskValue  = $secretVariable.MaskValue
-              SecretName = Resolve-SecretName -VariableName $secretVariable.VariableName
+            $isOptional = $false
+            if ($null -ne $secretVariable.IsOptional) {
+              $isOptional = [bool]$secretVariable.IsOptional
+            }
+
+            $secretName = Resolve-SecretName -VariableName $secretVariable.VariableName -IsOptional $isOptional
+            if ($null -ne $secretName) {
+              [pscustomobject]@{
+                EnvName    = if ($secretVariable.EnvironmentVariableName) { $secretVariable.EnvironmentVariableName } else { $secretVariable.VariableName }
+                MaskValue  = $secretVariable.MaskValue
+                SecretName = $secretName
+              }
             }
           }
 
